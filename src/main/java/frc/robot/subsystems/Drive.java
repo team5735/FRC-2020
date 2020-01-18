@@ -21,7 +21,6 @@ public class Drive extends Subsystem {
   // here. Call these from Commands.
   private TalonSRX leftMaster, rightMaster, normalMaster;
   private Pose pose;
-  private 
 
   public Drive() {
 
