@@ -20,7 +20,7 @@ public class Translation implements State {
     protected final double y;
 
     public Translation() {
-        this(0, 0);
+        this(0.0, 0.0);
     }
 
     public Translation(double x, double y) {
@@ -44,6 +44,10 @@ public class Translation implements State {
 
     public double y() {
         return y;
+    }
+
+    public Translation scale(double scalar) {
+        return new Translation(x * scalar, y * scalar);
     }
 
     public Translation translateBy(final Translation other) {

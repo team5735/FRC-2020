@@ -15,6 +15,11 @@ public class Util {
     private Util() {
     }
 
+    public static double deadband(double input, double deadband) {
+        if (Math.abs(input) < deadband) return 0;
+        return input;
+    }
+
     /**
      * Limits the given input to the given magnitude.
      */

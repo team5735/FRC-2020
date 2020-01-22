@@ -11,7 +11,7 @@ public class Rotation implements State{
     protected final double radians;
 
     public Rotation() {
-        this(1, 0);
+        this(1.0, 0.0);
     }
 
     public Rotation(final Rotation other) {
@@ -38,12 +38,20 @@ public class Rotation implements State{
         return fromRadians(degrees / 360.0 * 2.0 * Math.PI);
     }
 
+    public double degrees() {
+        return Math.toDegrees(radians);
+    }
+
     public double cosine() {
         return cosine;
     }
 
     public double sine() {
         return sine;
+    }
+
+    public Rotation inverse() {
+        return new Rotation(cosine, -sine);
     }
 
     public double radians() {

@@ -21,11 +21,11 @@ public class HDriveHelper {
     // translation is direction of travel with magnitute
     // rotation is rotating 
 
-    public DriveSignal xyLockedDrive(Translation translation) {
+    public static DriveSignal xyLockedDrive(Translation translation) {
         return hDrive(translation, Rotation.Identity);
     }
 
-    public DriveSignal hDrive(Translation translation, Rotation rotation) {
+    public static DriveSignal hDrive(Translation translation, Rotation rotation) {
         double left = translation.y()  - rotation.radians() * RobotConstants.WHEELBASEANGULAR;
         double right = translation.y() + rotation.radians() * RobotConstants.WHEELBASEANGULAR;
         double normal = translation.x();
@@ -36,7 +36,7 @@ public class HDriveHelper {
         return new DriveSignal(left, right, normal);
     }
 
-    public DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
+    public static DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
         return hDrive(translation.rotateBy(Rotation.fromDegrees(fieldAngle)), rotation);
     }
 }
