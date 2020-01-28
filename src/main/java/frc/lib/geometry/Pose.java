@@ -7,10 +7,12 @@
 
 package frc.lib.geometry;
 
+import frc.lib.util.Util;
+
 /**
  * Add your docs here.
  */
-public class Pose {
+public class Pose implements IPose2d<Pose>{
 
     public static final Pose Identity = new Pose();
 
@@ -44,4 +46,86 @@ public class Pose {
         return new Pose(new Translation(), rotation);
     }
 
+    public Pose getPose() {
+        return this;
+    }
+
+    public Pose transformBy(final Pose other) {
+        return new Pose(translation.translateBy(other.translation.rotateBy(rotation)),
+                rotation.rotateBy(other.rotation));
+    }
+
+    public Pose inverse() {
+        Rotation rotation_inverted = rotation.inverse();
+        return new Pose(translation.inverse().rotateBy(rotation_inverted), rotation_inverted);
+    }
+
+    public static Pose exp(final Twist delta) {
+        double sin_theta = Math.sin(delta.dtheta);
+        double cos_theta = Math.cos(delta.dtheta);
+        double s, c;
+        if (Math.abs(delta.dtheta) < Util.Epsilon) {
+            s = 1.0 - 1.0 / 6.0 * delta.dtheta * delta.dtheta;
+            c = .5 * delta.dtheta;
+        } else {
+            s = sin_theta / delta.dtheta;
+            c = (1.0 - cos_theta) / delta.dtheta;
+        }
+        return new Pose(new Translation(delta.dx * s - delta.dy * c, delta.dx * c + delta.dy * s),
+                new Rotation(cos_theta, sin_theta));
+    }
+
+    /**
+     * Logical inverse of the above.
+     */
+    public static Twist log(final Pose transform) {
+        final double dtheta = transform.getRotation().radians();
+        final double half_dtheta = 0.5 * dtheta;
+        final double cos_minus_one = transform.getRotation().cosine - 1.0;
+        double halftheta_by_tan_of_halfdtheta;
+        if (Math.abs(cos_minus_one) < Util.Epsilon) {
+            halftheta_by_tan_of_halfdtheta = 1.0 - 1.0 / 12.0 * dtheta * dtheta;
+        } else {
+            halftheta_by_tan_of_halfdtheta = -(half_dtheta * transform.getRotation().sine / cos_minus_one);
+        }
+        final Translation translation_part = transform.getTranslation()
+                .rotateBy(new Rotation(halftheta_by_tan_of_halfdtheta, -half_dtheta));
+        return new Twist(translation_part.x(), translation_part.y(), dtheta);
+    }
+
+    @Override
+    public Pose interpolate(final Pose other, double x) {
+        if (x <= 0) {
+            return new Pose(this);
+        } else if (x >= 1) {
+            return new Pose(other);
+        }
+        final Twist twist = Pose.log(inverse().transformBy(other));
+        return transformBy(Pose.exp(twist.scaled(x)));
+    }
+
+    @Override
+    public Translation getTranslation() {
+        return translation;
+    }
+
+    @Override
+    public Rotation getRotation() {
+        return rotation;
+    }
+
+    @Override
+    public double distance(final Pose other) {
+        return Pose.log(inverse().transformBy(other)).norm();
+    }
+
+    @Override
+    public String toCSV() {
+        return translation.toCSV() + "," + rotation.toCSV();
+    }
+
+    @Override
+    public Pose mirror() {
+        return new Pose(new Translation(getTranslation().x(), -getTranslation().y()), getRotation().inverse());
+    }
 }

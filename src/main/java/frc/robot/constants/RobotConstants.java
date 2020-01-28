@@ -39,6 +39,12 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 0.0;
 
-    // H Drive Constants
+    // Robot Constants
     public static final double WHEELBASEANGULAR = 0.3; // TODO TUNE
+
+    // Vision Constants
+    public static final double CAMERAHEIGHTFROMGROUND = 1;
+    public static final double CAMERAANGLEFROMPARALLEL = 0; // Radians
+    public static final double TARGETHEIGHTFROMGROUND = 8; // 8 feet and 2 1/4 inches
+
 }

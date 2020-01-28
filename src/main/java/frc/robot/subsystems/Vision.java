@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.RobotConstants;
 
 public class Vision extends SubsystemBase {
   /**
@@ -29,6 +30,7 @@ public class Vision extends SubsystemBase {
    * Rotation(pitch,yaw,roll)
    */
 
+  // From NetworkTables
   public double tv;
   public double tx;
   public double ty;
@@ -41,6 +43,9 @@ public class Vision extends SubsystemBase {
   public double tvert;
   public double getpipe;
   public double camtran;
+
+  // Calculated
+  public double distanceFromCamera;
 
   public Vision() {
 
@@ -61,5 +66,9 @@ public class Vision extends SubsystemBase {
     double tvert = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tvert").getDouble(0);
     double getpipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0);
     double camtran = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran").getDouble(0);
+
+    distanceFromCamera = (RobotConstants.TARGETHEIGHTFROMGROUND - RobotConstants.CAMERAHEIGHTFROMGROUND)
+        / Math.tan(Math.toRadians(ty) + RobotConstants.CAMERAANGLEFROMPARALLEL);
+        
   }
 }

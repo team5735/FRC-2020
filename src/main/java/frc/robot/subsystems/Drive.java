@@ -11,7 +11,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 import frc.lib.geometry.Pose;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
@@ -29,6 +31,13 @@ public class Drive extends SubsystemBase {
   public Rotation gyro_heading;
   private Rotation gyroOffset;
   private TalonSRX leftMaster, rightMaster, normalMaster;
+
+  public enum DriveControlState {
+    OPEN_LOOP, // open loop voltage control
+    PATH_FOLLOWING // velocity PID control
+  }
+
+  private DriveControlState driveControlState;
 
   public Drive() {
 
@@ -108,6 +117,29 @@ public class Drive extends SubsystemBase {
     normalMaster.set(ControlMode.Velocity, driveSignal.getNormal());
   }
 
+  public void followPath() {
+    if (driveControlState == DriveControlState.PATH_FOLLOWING) {
+      final double now = Timer.getFPGATimestamp();
+      
+
+      Output output = update(now, Robot.robotState.getFieldToVehicle(now));
+
+      // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
+      // demand.right_feedforward_voltage / 12.0);
+
+      error = error();
+      path_setpoint = setpoint();
+
+      if (!overrideTrajectory) {
+        drive(get
+      } else { // BRAAAAAKEEE
+        drive(DriveSignal.NEUTRAL);
+      }
+    } else {
+      // Shuffleboard.reportError("Drive is not in path following state", false);
+    }
+  }
+
   public synchronized void resetEncoders() {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
@@ -129,6 +161,116 @@ public class Drive extends SubsystemBase {
 
     gyroOffset = heading.add(Rotation.fromDegrees(pigeon.getFusedHeading()).inverse());
     System.out.println("Gyro offset: " + gyroOffset.degrees());
+  }
+
+  public static class Output {
+    public Output() {
+    }
+
+    public Output(double left_velocity, double right_velocity, double left_accel, double right_accel,
+        double left_feedforward_voltage, double right_feedforward_voltage) {
+      this.left_velocity = left_velocity;
+      this.right_velocity = right_velocity;
+      this.left_accel = left_accel;
+      this.right_accel = right_accel;
+      this.left_feedforward_voltage = left_feedforward_voltage;
+      this.right_feedforward_voltage = right_feedforward_voltage;
+    }
+
+    public double left_velocity; // rad/s
+    public double right_velocity; // rad/s
+
+    public double left_accel; // rad/s^2
+    public double right_accel; // rad/s^2
+
+    public double left_feedforward_voltage;
+    public double right_feedforward_voltage;
+
+    public void flip() {
+      double tmp_left_velocity = left_velocity;
+      left_velocity = -right_velocity;
+      right_velocity = -tmp_left_velocity;
+
+      double tmp_left_accel = left_accel;
+      left_accel = -right_accel;
+      right_accel = -tmp_left_accel;
+
+      double tmp_left_feedforward = left_feedforward_voltage;
+      left_feedforward_voltage = -right_feedforward_voltage;
+      right_feedforward_voltage = -tmp_left_feedforward;
+    }
+  }
+
+  protected Output updatePID(DifferentialDrive.DriveDynamics dynamics, Pose2d current_state) {
+    DifferentialDrive.ChassisState adjusted_velocity = new DifferentialDrive.ChassisState();
+    // Feedback on longitudinal error (distance).
+    final double kPathKX = 5.0;
+    final double kPathKY = 1.0;
+    final double kPathKTheta = 5.0;
+    adjusted_velocity.linear = dynamics.chassis_velocity.linear
+        + kPathKX * Units.inches_to_meters(mError.getTranslation().x());
+    adjusted_velocity.angular = dynamics.chassis_velocity.angular
+        + dynamics.chassis_velocity.linear * kPathKY * Units.inches_to_meters(mError.getTranslation().y())
+        + kPathKTheta * mError.getRotation().getRadians();
+
+    double curvature = adjusted_velocity.angular / adjusted_velocity.linear;
+    if (Double.isInfinite(curvature)) {
+      adjusted_velocity.linear = 0.0;
+      adjusted_velocity.angular = dynamics.chassis_velocity.angular;
+    }
+
+    // Compute adjusted left and right wheel velocities.
+    final DifferentialDrive.WheelState wheel_velocities = mModel.solveInverseKinematics(adjusted_velocity);
+    final double left_voltage = dynamics.voltage.left
+        + (wheel_velocities.left - dynamics.wheel_velocity.left) / mModel.left_transmission().speed_per_volt();
+    final double right_voltage = dynamics.voltage.right
+        + (wheel_velocities.right - dynamics.wheel_velocity.right) / mModel.right_transmission().speed_per_volt();
+
+    return new Output(wheel_velocities.left, wheel_velocities.right, dynamics.wheel_acceleration.left,
+        dynamics.wheel_acceleration.right, left_voltage, right_voltage);
+  }
+
+  public Output update(double timestamp, Pose2d current_state) {
+    if (mCurrentTrajectory == null)
+      return new Output();
+
+    if (mCurrentTrajectory.getProgress() == 0.0 && !Double.isFinite(mLastTime)) {
+      mLastTime = timestamp;
+    }
+
+    mDt = timestamp - mLastTime;
+    mLastTime = timestamp;
+    TrajectorySamplePoint<TimedState<Pose2dWithCurvature>> sample_point = mCurrentTrajectory.advance(mDt);
+    mSetpoint = sample_point.state();
+
+    if (!mCurrentTrajectory.isDone()) {
+      // Generate feedforward voltages.
+      final double velocity_m = Units.inches_to_meters(mSetpoint.velocity());
+      final double curvature_m = Units.meters_to_inches(mSetpoint.state().getCurvature());
+      final double dcurvature_ds_m = Units
+          .meters_to_inches(Units.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
+      final double acceleration_m = Units.inches_to_meters(mSetpoint.acceleration());
+      final DifferentialDrive.DriveDynamics dynamics = mModel.solveInverseDynamics(
+          new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m), new DifferentialDrive.ChassisState(
+              acceleration_m, acceleration_m * curvature_m + velocity_m * velocity_m * dcurvature_ds_m));
+      mError = current_state.inverse().transformBy(mSetpoint.state().getPose());
+
+      if (mFollowerType == FollowerType.FEEDFORWARD_ONLY) {
+        mOutput = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
+            dynamics.wheel_acceleration.left, dynamics.wheel_acceleration.right, dynamics.voltage.left,
+            dynamics.voltage.right);
+      } else if (mFollowerType == FollowerType.PURE_PURSUIT) {
+        mOutput = updatePurePursuit(dynamics, current_state);
+      } else if (mFollowerType == FollowerType.PID) {
+        mOutput = updatePID(dynamics, current_state);
+      } else if (mFollowerType == FollowerType.NONLINEAR_FEEDBACK) {
+        mOutput = updateNonlinearFeedback(dynamics, current_state);
+      }
+    } else {
+      // TODO Possibly switch to a pose stabilizing controller?
+      mOutput = new Output();
+    }
+    return mOutput;
   }
 
   private static double rotationsToInches(double rotations) {

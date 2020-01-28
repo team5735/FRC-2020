@@ -1,8 +1,10 @@
 package frc.lib.geometry;
 
+import java.text.DecimalFormat;
+
 import frc.lib.util.Util;
 
-public class Rotation implements State{
+public class Rotation implements IRotation2d<Rotation>{
 
     public static final Rotation Identity = new Rotation();
 
@@ -58,7 +60,7 @@ public class Rotation implements State{
         return radians;
     }
 
-    public Rotation add(final Rotation other) {
+    public Rotation rotateBy(final Rotation other) {
         return new Rotation(cosine * other.cosine - sine * other.sine, cosine * other.sine + sine * other.cosine);
     }
 
@@ -68,6 +70,42 @@ public class Rotation implements State{
 
     public Translation toTranslation() {
         return new Translation(cosine, sine);
+    }
+
+    private boolean hasTrig() {
+        return !Double.isNaN(sine) && !Double.isNaN(cosine);
+    }
+
+    public Rotation getRotation() {
+        return this;
+    }
+
+    @Override
+    public Rotation interpolate(final Rotation other, double x) {
+        if (x <= 0) {
+            return new Rotation(this);
+        } else if (x >= 1) {
+            return new Rotation(other);
+        }
+        double angle_diff = inverse().rotateBy(other).radians();
+        return this.rotateBy(Rotation.fromRadians(angle_diff * x));
+    }
+
+    @Override
+    public String toCSV() {
+        final DecimalFormat fmt = new DecimalFormat("#0.000");
+        return fmt.format(degrees());
+    }
+
+    @Override
+    public double distance(final Rotation other) {
+        return inverse().rotateBy(other).radians();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other == null || !(other instanceof Rotation)) return false;
+        return distance((Rotation) other) < Util.Epsilon;
     }
 
     // public Rotation getIdentity() {
