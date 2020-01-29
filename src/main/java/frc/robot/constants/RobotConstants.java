@@ -39,6 +39,9 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 0.0;
 
+    public static final double TRANSLATE_KP = 0.0;
+    public static final double TURNING_kP = 0.0;
+
     // Robot Constants
     public static final double WHEELBASEANGULAR = 0.3; // TODO TUNE
 
