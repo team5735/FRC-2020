@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.lib.geometry.Pose;
 import frc.lib.geometry.Rotation;
-import frc.lib.geometry.Translation;
 import frc.lib.geometry.Twist;
 import frc.lib.util.DriveSignal;
 import frc.robot.constants.RobotConstants;
@@ -32,8 +31,6 @@ public class Drive extends SubsystemBase {
   public Rotation gyro_heading;
   private Rotation gyroOffset;
   private TalonSRX leftMaster, rightMaster, normalMaster;
-  
-  private double leftCurrentPos, rightCurrentPos, normalCurrentPos;
 
   public enum DriveControlState {
     OPEN_LOOP, // open loop voltage control
@@ -121,24 +118,11 @@ public class Drive extends SubsystemBase {
   }
 
   public void followPath() {
-
-    // say, followPath(translation = (5m, 5m), angle = pi/3 radians)
-    Pose destination = new Pose(new Translation(5, 5), new Rotation(Rotation.fromRadians(Math.PI / 3)));
-
     if (driveControlState == DriveControlState.PATH_FOLLOWING) {
       final double now = Timer.getFPGATimestamp();
       
-      Pose poseError = [getCurrentPose].distance(destination);
-      double translateXError = poseError.getTranslation().x();
-      double translateYError = poseError.getTranslation().y();
-      double rotateAngleError = poseError.getRotation().radians();
-      Twist correction = new Twist( translateXError * RobotConstants.TRANSLATE_KP,
-                                    translateYError * RobotConstants.TRANSLATE_KP,
-                                    rotateAngleError * RobotConstants.TURNING_kP);
-                                    
-      drive(correction);
-      
-      // Output output = update(now, Robot.robotState.getFieldToVehicle(now));
+
+      Output output = update(now, Robot.robotState.getFieldToVehicle(now));
 
       // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
       // demand.right_feedforward_voltage / 12.0);
