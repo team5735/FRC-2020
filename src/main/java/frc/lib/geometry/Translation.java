@@ -72,6 +72,10 @@ public class Translation implements ITranslation2d<Translation> {
         return Util.epsilonEquals(x(), other.x(), epsilon) && Util.epsilonEquals(y(), other.y(), epsilon);
     }
 
+    public Rotation direction() {
+        return new Rotation(x, y);
+    }
+
     public Translation inverse() {
         return new Translation(-x, -y);
     }
@@ -82,6 +86,14 @@ public class Translation implements ITranslation2d<Translation> {
 
     public double norm2() {
         return x * x + y * y;
+    }
+
+    public static Rotation getAngle(final Translation a, final Translation b) {
+        double cos_angle = dot(a, b) / (a.norm() * b.norm());
+        if (Double.isNaN(cos_angle)) {
+            return new Rotation();
+        }
+        return Rotation.fromRadians(Math.acos(Math.min(1.0, Math.max(cos_angle, -1.0))));
     }
 
     @Override

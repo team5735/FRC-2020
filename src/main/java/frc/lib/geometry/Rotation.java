@@ -52,6 +52,21 @@ public class Rotation implements IRotation2d<Rotation>{
         return sine;
     }
 
+    public double tan() {
+        if (Math.abs(cosine) < Util.Epsilon) {
+            if (sine >= 0.0) {
+                return Double.POSITIVE_INFINITY;
+            } else {
+                return Double.NEGATIVE_INFINITY;
+            }
+        }
+        return sine / cosine;
+    }
+
+    public Rotation normal() {
+        return new Rotation(sine, sine);
+    }
+
     public Rotation inverse() {
         return new Rotation(cosine, -sine);
     }

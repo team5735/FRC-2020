@@ -15,11 +15,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.lib.geometry.Pose;
+import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
 import frc.lib.util.DriveSignal;
+import frc.lib.trajectory.timing.TimedState;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -27,10 +30,14 @@ import frc.robot.helper.HDriveHelper;
 public class Drive extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  private boolean overrideTrajectory = false;
   private PigeonIMU pigeon;
   public Rotation gyro_heading;
   private Rotation gyroOffset;
+
+  public TimedState<PoseWithCurvature> path_setpoint;
   private TalonSRX leftMaster, rightMaster, normalMaster;
+  private Pose error;
 
   public enum DriveControlState {
     OPEN_LOOP, // open loop voltage control
@@ -123,12 +130,11 @@ public class Drive extends SubsystemBase {
       
 
       Output output = update(now, Robot.robotState.getFieldToVehicle(now));
-
       // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
       // demand.right_feedforward_voltage / 12.0);
 
       error = error();
-      path_setpoint = setpoint();
+      // path_setpoint = setpoint();
 
       if (!overrideTrajectory) {
         drive(get
@@ -153,13 +159,13 @@ public class Drive extends SubsystemBase {
   }
 
   public synchronized Rotation getHeading() {
-    return Rotation.fromDegrees(pigeon.getFusedHeading()).add(gyroOffset);
+    return Rotation.fromDegrees(pigeon.getFusedHeading()).rotateBy(gyroOffset);
   }
 
   public synchronized void setHeading(Rotation heading) {
     System.out.println("SET HEADING: " + heading.degrees());
 
-    gyroOffset = heading.add(Rotation.fromDegrees(pigeon.getFusedHeading()).inverse());
+    gyroOffset = heading.rotateBy(Rotation.fromDegrees(pigeon.getFusedHeading()).inverse());
     System.out.println("Gyro offset: " + gyroOffset.degrees());
   }
 
@@ -201,7 +207,7 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  protected Output updatePID(DifferentialDrive.DriveDynamics dynamics, Pose2d current_state) {
+  protected Output updatePID(DifferentialDrive.DriveDynamics dynamics, Pose current_state) {
     DifferentialDrive.ChassisState adjusted_velocity = new DifferentialDrive.ChassisState();
     // Feedback on longitudinal error (distance).
     final double kPathKX = 5.0;
@@ -230,7 +236,7 @@ public class Drive extends SubsystemBase {
         dynamics.wheel_acceleration.right, left_voltage, right_voltage);
   }
 
-  public Output update(double timestamp, Pose2d current_state) {
+  public Output update(double timestamp, Pose current_state) {
     if (mCurrentTrajectory == null)
       return new Output();
 
@@ -240,7 +246,7 @@ public class Drive extends SubsystemBase {
 
     mDt = timestamp - mLastTime;
     mLastTime = timestamp;
-    TrajectorySamplePoint<TimedState<Pose2dWithCurvature>> sample_point = mCurrentTrajectory.advance(mDt);
+    TrajectorySamplePoint<TimedState<PoseWithCurvature>> sample_point = mCurrentTrajectory.advance(mDt);
     mSetpoint = sample_point.state();
 
     if (!mCurrentTrajectory.isDone()) {
@@ -273,8 +279,27 @@ public class Drive extends SubsystemBase {
     return mOutput;
   }
 
+  public void overrideTrajectory(boolean value) {
+    overrideTrajectory = value;
+  }
+
+  public boolean isDone() {
+    return mCurrentTrajectory != null && mCurrentTrajectory.isDone();
+  }
+
+  public boolean isDoneWithTrajectory() {
+    if (driveControlState != DriveControlState.PATH_FOLLOWING) {
+      return false;
+    }
+    return this.isDone() || overrideTrajectory;
+  }
+
+  public Pose error() {
+    return error;
+  }
+
   private static double rotationsToInches(double rotations) {
-    return rotations * (RobotConstants.WHEELBASEANGULAR * Math.PI);
+    return rotations * (RobotConstants.WHEELBASEINCHES * Math.PI);
   }
 
   private static double rpmToInchesPerSecond(double rpm) {
@@ -282,7 +307,7 @@ public class Drive extends SubsystemBase {
   }
 
   private static double inchesToRotations(double inches) {
-    return inches / (RobotConstants.WHEELBASEANGULAR * Math.PI);
+    return inches / (RobotConstants.WHEELBASEINCHES * Math.PI);
   }
 
   private static double inchesPerSecondToRpm(double inches_per_second) {

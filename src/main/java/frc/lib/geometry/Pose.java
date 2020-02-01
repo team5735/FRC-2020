@@ -50,6 +50,13 @@ public class Pose implements IPose2d<Pose>{
         return this;
     }
 
+    public boolean isColinear(final Pose other) {
+        if (!getRotation().isParallel(other.getRotation()))
+            return false;
+        final Twist twist = log(inverse().transformBy(other));
+        return (Util.epsilonEquals(twist.dy, 0.0) && Util.epsilonEquals(twist.dtheta, 0.0));
+    }
+
     public Pose transformBy(final Pose other) {
         return new Pose(translation.translateBy(other.translation.rotateBy(rotation)),
                 rotation.rotateBy(other.rotation));
@@ -58,6 +65,10 @@ public class Pose implements IPose2d<Pose>{
     public Pose inverse() {
         Rotation rotation_inverted = rotation.inverse();
         return new Pose(translation.inverse().rotateBy(rotation_inverted), rotation_inverted);
+    }
+
+    public Pose normal() {
+        return new Pose(translation, rotation.normal());
     }
 
     public static Pose exp(final Twist delta) {
@@ -102,6 +113,34 @@ public class Pose implements IPose2d<Pose>{
         }
         final Twist twist = Pose.log(inverse().transformBy(other));
         return transformBy(Pose.exp(twist.scaled(x)));
+    }
+
+    public Translation intersection(final Pose other) {
+        final Rotation other_rotation = other.getRotation();
+        if (rotation.isParallel(other_rotation)) {
+            // Lines are parallel.
+            return new Translation(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        }
+        if (Math.abs(rotation.cosine()) < Math.abs(other_rotation.cosine())) {
+            return intersectionInternal(this, other);
+        } else {
+            return intersectionInternal(other, this);
+        }
+    }
+
+    private static Translation intersectionInternal(final Pose a, final Pose b) {
+        final Rotation a_r = a.getRotation();
+        final Rotation b_r = b.getRotation();
+        final Translation a_t = a.getTranslation();
+        final Translation b_t = b.getTranslation();
+
+        final double tan_b = b_r.tan();
+        final double t = ((a_t.x() - b_t.x()) * tan_b + b_t.y() - a_t.y())
+                / (a_r.sine() - a_r.cosine() * tan_b);
+        if (Double.isNaN(t)) {
+            return new Translation(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        }
+        return a_t.translateBy(a_r.toTranslation().scale(t));
     }
 
     @Override

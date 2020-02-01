@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.robot.subsystems.Drive;
+import frc.robot.constants.RobotConstants;
 import frc.lib.geometry.Pose;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Translation;
@@ -15,9 +15,9 @@ public class RobotState {
 
     private static final int kObservationBufferSize = 100;
 
-    // private static final Pose kVehicleToLidar = new Pose(
-    //         new Translation(Constants.kLidarXOffset, Constants.kLidarYOffset), Rotation.fromDegrees(Constants
-    //         .kLidarYawAngleDegrees));
+    private static final Pose kVehicleToLidar = new Pose(
+    new Translation(RobotConstants.CAMERAXOFFSET, RobotConstants.CAMERAYOFFSET),
+    Rotation.fromDegrees(RobotConstants.CAMERAYAWANGLEDEGREES));
 
     // FPGATimestamp -> RigidTransform or Rotation
     private InterpolatingTreeMap<InterpolatingDouble, Pose> field_to_vehicle_;
@@ -46,8 +46,8 @@ public class RobotState {
     }
 
     /**
-     * Returns the robot's position on the field at a certain time. Linearly interpolates between stored robot positions
-     * to fill in the gaps.
+     * Returns the robot's position on the field at a certain time. Linearly
+     * interpolates between stored robot positions to fill in the gaps.
      */
     public synchronized Pose getFieldToVehicle(double timestamp) {
         return field_to_vehicle_.getInterpolated(new InterpolatingDouble(timestamp));
@@ -63,28 +63,26 @@ public class RobotState {
     }
 
     // public synchronized Pose getFieldToLidar(double timestamp) {
-    //     return getFieldToVehicle(timestamp).transformBy(kVehicleToLidar);
+    // return getFieldToVehicle(timestamp).transformBy(kVehicleToLidar);
     // }
 
     public synchronized void addFieldToVehicleObservation(double timestamp, Pose observation) {
         field_to_vehicle_.put(new InterpolatingDouble(timestamp), observation);
     }
 
-    public synchronized void addObservations(double timestamp, Twist measured_velocity,
-                                             Twist predicted_velocity) {
+    public synchronized void addObservations(double timestamp, Twist measured_velocity, Twist predicted_velocity) {
         addFieldToVehicleObservation(timestamp,
                 Kinematics.integrateForwardKinematics(getLatestFieldToVehicle().getValue(), measured_velocity));
         vehicle_velocity_measured_ = measured_velocity;
         vehicle_velocity_predicted_ = predicted_velocity;
     }
 
-    public synchronized Twist generateOdometryFromSensors(double left_encoder_delta_distance, double
-            right_encoder_delta_distance, Rotation current_gyro_angle) {
+    public synchronized Twist generateOdometryFromSensors(double left_encoder_delta_distance,
+            double right_encoder_delta_distance, Rotation current_gyro_angle) {
         final Pose last_measurement = getLatestFieldToVehicle().getValue();
-        final Twist delta = Kinematics.forwardKinematics(last_measurement.getRotation(),
-                left_encoder_delta_distance, right_encoder_delta_distance,
-                current_gyro_angle);
-        distance_driven_ += delta.dx; //do we care about dy here?
+        final Twist delta = Kinematics.forwardKinematics(last_measurement.getRotation(), left_encoder_delta_distance,
+                right_encoder_delta_distance, current_gyro_angle);
+        distance_driven_ += delta.dx; // do we care about dy here?
         return delta;
     }
 
@@ -104,7 +102,7 @@ public class RobotState {
         Pose odometry = getLatestFieldToVehicle().getValue();
         SmartDashboard.putNumber("Robot Pose X", odometry.getTranslation().x());
         SmartDashboard.putNumber("Robot Pose Y", odometry.getTranslation().y());
-        SmartDashboard.putNumber("Robot Pose Theta", odometry.getRotation().getDegrees());
+        SmartDashboard.putNumber("Robot Pose Theta", odometry.getRotation().degrees());
         SmartDashboard.putNumber("Robot Linear Velocity", vehicle_velocity_measured_.dx);
     }
 }

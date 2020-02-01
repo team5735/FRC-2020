@@ -26,8 +26,8 @@ public class HDriveHelper {
     }
 
     public static DriveSignal hDrive(Translation translation, Rotation rotation) {
-        double left = translation.y()  - rotation.radians() * RobotConstants.WHEELBASEANGULAR;
-        double right = translation.y() + rotation.radians() * RobotConstants.WHEELBASEANGULAR;
+        double left = translation.y()  - rotation.radians() * RobotConstants.WHEELBASEINCHES;
+        double right = translation.y() + rotation.radians() * RobotConstants.WHEELBASEINCHES;
         double normal = translation.x();
 
         // System.out.println("[D] Forward Percentage: " + leftPercentage);
