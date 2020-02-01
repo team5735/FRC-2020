@@ -62,8 +62,8 @@ public class DriveCharacterization {
         }
         LinearRegression p = new LinearRegression(points);
         System.out.println("r^2: " + p.R2());
-        constants.ks = p.slope();
-        constants.kv = p.intercept();
+        constants.ks = p.intercept();
+        constants.kv = p.slope();
         return constants;
     }
 
@@ -74,7 +74,7 @@ public class DriveCharacterization {
 
         LinearRegression p = new LinearRegression(points);
         System.out.println("r^2: " + p.R2());
-        velocityChacterization.ka = p.beta(1);
+        velocityChacterization.ka = p.slope();
         return velocityChacterization;
     }
 

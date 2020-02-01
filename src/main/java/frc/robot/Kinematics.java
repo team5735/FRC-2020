@@ -17,7 +17,7 @@ public class Kinematics {
      * motion)
      */
     public static Twist forwardKinematics(double left_wheel_delta, double right_wheel_delta) {
-        double delta_rotation = (right_wheel_delta - left_wheel_delta) / (RobotConstants.WHEELBASEINCHES * RobotConstants.TRACKSCRUB);
+        double delta_rotation = (right_wheel_delta - left_wheel_delta) / (RobotConstants.DriveWheelRadiusInches * RobotConstants.DriveWheelRadiusInches);
         return forwardKinematics(left_wheel_delta, right_wheel_delta, delta_rotation);
     }
 

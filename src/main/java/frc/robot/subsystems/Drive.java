@@ -18,9 +18,12 @@ import frc.lib.geometry.Pose;
 import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
+import frc.lib.physics.DCMotorTransmission;
 import frc.lib.physics.DifferentialDrive;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
+import frc.lib.trajectory.TrajectoryIterator;
+import frc.lib.trajectory.TrajectorySamplePoint;
 import frc.lib.trajectory.timing.TimedState;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
@@ -39,7 +42,18 @@ public class Drive extends SubsystemBase {
 
   public TimedState<PoseWithCurvature> path_setpoint;
   private TalonSRX leftMaster, rightMaster, normalMaster;
-  private Pose error;
+  private Pose error = Pose.Identity;
+
+  private TrajectoryIterator<TimedState<PoseWithCurvature>> currentTrajectory;
+  private boolean isReversed = false;
+  private double lastTime = Double.POSITIVE_INFINITY;
+  public TimedState<PoseWithCurvature> mSetpoint = new TimedState<>(PoseWithCurvature.identity());
+  private Output output = new Output();
+  final DifferentialDrive model;
+
+  private DifferentialDrive.ChassisState prev_velocity_ = new DifferentialDrive.ChassisState();
+  private double dt = 0.0;
+
 
   public enum DriveControlState {
     OPEN_LOOP, // open loop voltage control
@@ -107,6 +121,23 @@ public class Drive extends SubsystemBase {
     // normalFollower.configNeutralDeadband(0.04, 0);
 
     pigeon = new PigeonIMU(normalMaster); // TODO TALON HOST
+
+    final DCMotorTransmission transmission = new DCMotorTransmission(1.0 / RobotConstants.DriveKv,
+        Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches)
+            * Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches) * RobotConstants.RobotLinearInertia
+            / (2.0 * RobotConstants.DriveKa),
+        RobotConstants.DriveVIntercept);
+
+    model = new DifferentialDrive(RobotConstants.RobotLinearInertia, RobotConstants.RobotAngularInertia,
+        RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelDiameterInches / 2.0),
+        Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor), transmission,
+        transmission);
+    // leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, 10, 10);
+
+    error = Pose.Identity;
+    gyro_heading = Rotation.Identity;
+    gyroOffset = Rotation.Identity;
+    path_setpoint = new TimedState<PoseWithCurvature>(PoseWithCurvature.identity());
   }
 
   @Override
@@ -139,7 +170,7 @@ public class Drive extends SubsystemBase {
       // path_setpoint = setpoint();
 
       if (!overrideTrajectory) {
-        drive(get
+        // drive(get TODO yeet
       } else { // BRAAAAAKEEE
         drive(DriveSignal.NEUTRAL);
       }
@@ -152,6 +183,12 @@ public class Drive extends SubsystemBase {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
     normalMaster.setSelectedSensorPosition(0);
+  }
+
+  public void reset() {
+    error = Pose.Identity;
+    output = new Output();
+    lastTime = Double.POSITIVE_INFINITY;
   }
 
   public void zeroSensors() {
@@ -216,10 +253,10 @@ public class Drive extends SubsystemBase {
     final double kPathKY = 1.0;
     final double kPathKTheta = 5.0;
     adjusted_velocity.linear = dynamics.chassis_velocity.linear
-        + kPathKX * Util.inches_to_meters(mError.getTranslation().x());
+        + kPathKX * Util.inches_to_meters(error.getTranslation().x());
     adjusted_velocity.angular = dynamics.chassis_velocity.angular
-        + dynamics.chassis_velocity.linear * kPathKY * Util.inches_to_meters(mError.getTranslation().y())
-        + kPathKTheta * mError.getRotation().getRadians();
+        + dynamics.chassis_velocity.linear * kPathKY * Util.inches_to_meters(error.getTranslation().y())
+        + kPathKTheta * error.getRotation().radians();
 
     double curvature = adjusted_velocity.angular / adjusted_velocity.linear;
     if (Double.isInfinite(curvature)) {
@@ -228,57 +265,61 @@ public class Drive extends SubsystemBase {
     }
 
     // Compute adjusted left and right wheel velocities.
-    final DifferentialDrive.WheelState wheel_velocities = mModel.solveInverseKinematics(adjusted_velocity);
+    final DifferentialDrive.WheelState wheel_velocities = model.solveInverseKinematics(adjusted_velocity);
     final double left_voltage = dynamics.voltage.left
-        + (wheel_velocities.left - dynamics.wheel_velocity.left) / mModel.left_transmission().speed_per_volt();
+        + (wheel_velocities.left - dynamics.wheel_velocity.left) / model.left_transmission().speed_per_volt();
     final double right_voltage = dynamics.voltage.right
-        + (wheel_velocities.right - dynamics.wheel_velocity.right) / mModel.right_transmission().speed_per_volt();
+        + (wheel_velocities.right - dynamics.wheel_velocity.right) / model.right_transmission().speed_per_volt();
 
     return new Output(wheel_velocities.left, wheel_velocities.right, dynamics.wheel_acceleration.left,
         dynamics.wheel_acceleration.right, left_voltage, right_voltage);
   }
 
   public Output update(double timestamp, Pose current_state) {
-    if (mCurrentTrajectory == null)
+    if (currentTrajectory == null)
       return new Output();
 
-    if (mCurrentTrajectory.getProgress() == 0.0 && !Double.isFinite(mLastTime)) {
-      mLastTime = timestamp;
+    if (currentTrajectory.getProgress() == 0.0 && !Double.isFinite(lastTime)) {
+      lastTime = timestamp;
     }
 
-    mDt = timestamp - mLastTime;
-    mLastTime = timestamp;
-    TrajectorySamplePoint<TimedState<PoseWithCurvature>> sample_point = mCurrentTrajectory.advance(mDt);
+    dt = timestamp - lastTime;
+    lastTime = timestamp;
+    TrajectorySamplePoint<TimedState<PoseWithCurvature>> sample_point = currentTrajectory.advance(dt);
     mSetpoint = sample_point.state();
 
-    if (!mCurrentTrajectory.isDone()) {
+    if (!currentTrajectory.isDone()) {
       // Generate feedforward voltages.
-      final double velocity_m = Util3.inches_to_meters(mSetpoint.velocity());
+      final double velocity_m = Util.inches_to_meters(mSetpoint.velocity());
       final double curvature_m = Util.meters_to_inches(mSetpoint.state().getCurvature());
       final double dcurvature_ds_m = Util
           .meters_to_inches(Util.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
       final double acceleration_m = Util.inches_to_meters(mSetpoint.acceleration());
-      final DifferentialDrive.DriveDynamics dynamics = mModel.solveInverseDynamics(
+      final DifferentialDrive.DriveDynamics dynamics = model.solveInverseDynamics(
           new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m), new DifferentialDrive.ChassisState(
               acceleration_m, acceleration_m * curvature_m + velocity_m * velocity_m * dcurvature_ds_m));
-      mError = current_state.inverse().transformBy(mSetpoint.state().getPose());
+      error = current_state.inverse().transformBy(mSetpoint.state().getPose());
 
-      if (mFollowerType == FollowerType.FEEDFORWARD_ONLY) {
-        mOutput = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
+      // if (mFollowerType == FollowerType.FEEDFORWARD_ONLY) {
+      //   mOutput = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
+      //       dynamics.wheel_acceleration.left, dynamics.wheel_acceleration.right, dynamics.voltage.left,
+      //       dynamics.voltage.right);
+      // } else if (mFollowerType == FollowerType.PURE_PURSUIT) {
+      //   mOutput = updatePurePursuit(dynamics, current_state);
+      // } else if (mFollowerType == FollowerType.PID) {
+      //   mOutput = updatePID(dynamics, current_state);
+      // } else if (mFollowerType == FollowerType.NONLINEAR_FEEDBACK) {
+      //   mOutput = updateNonlinearFeedback(dynamics, current_state);
+      // }
+
+      output = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
             dynamics.wheel_acceleration.left, dynamics.wheel_acceleration.right, dynamics.voltage.left,
             dynamics.voltage.right);
-      } else if (mFollowerType == FollowerType.PURE_PURSUIT) {
-        mOutput = updatePurePursuit(dynamics, current_state);
-      } else if (mFollowerType == FollowerType.PID) {
-        mOutput = updatePID(dynamics, current_state);
-      } else if (mFollowerType == FollowerType.NONLINEAR_FEEDBACK) {
-        mOutput = updateNonlinearFeedback(dynamics, current_state);
-      }
     } else {
       // TODO Possibly switch to a pose stabilizing controller?
-      mOutput = new Output();
+      output = new Output();
     }
-    return mOutput;
+    return output;
   }
 
   public void overrideTrajectory(boolean value) {
@@ -286,7 +327,7 @@ public class Drive extends SubsystemBase {
   }
 
   public boolean isDone() {
-    return mCurrentTrajectory != null && mCurrentTrajectory.isDone();
+    return currentTrajectory != null && currentTrajectory.isDone();
   }
 
   public boolean isDoneWithTrajectory() {
@@ -301,7 +342,7 @@ public class Drive extends SubsystemBase {
   }
 
   private static double rotationsToInches(double rotations) {
-    return rotations * (RobotConstants.WHEELBASEINCHES * Math.PI);
+    return rotations * (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
   private static double rpmToInchesPerSecond(double rpm) {
@@ -309,7 +350,7 @@ public class Drive extends SubsystemBase {
   }
 
   private static double inchesToRotations(double inches) {
-    return inches / (RobotConstants.WHEELBASEINCHES * Math.PI);
+    return inches / (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
   private static double inchesPerSecondToRpm(double inches_per_second) {

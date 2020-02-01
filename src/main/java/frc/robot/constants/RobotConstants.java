@@ -39,9 +39,20 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 0.0;
 
-    // Robot Constants
-    public static final double WHEELBASEINCHES = 0.3; // TODO TUNE
-    public static final double TRACKSCRUB = 1;
+    // Wheel stuff for pose
+    public static final double DriveWheelTrackWidthInches = 25.54;
+    public static final double DriveWheelDiameterInches = 3.92820959548 * 0.99; // TODO TUNE
+    public static final double DriveWheelRadiusInches =DriveWheelDiameterInches / 2.0;
+    public static final double TrackScrubFactor = 1.0;
+
+     // Tuned dynamics
+     public static final double RobotLinearInertia = 60.0; // kg TODO tune
+     public static final double RobotAngularInertia = 10.0; // kg m^2 TODO tune
+     public static final double RobotAngularDrag = 12.0; // N*m / (rad/sec) TODO tune
+     public static final double DriveVIntercept = 1.055; // V
+     public static final double DriveKv = 0.135; // V per rad/s
+     public static final double DriveKa = 0.012; // V per rad/s^2
+ 
 
     // Vision Constants
     public static final double CAMERAHEIGHTFROMGROUND = 1;
