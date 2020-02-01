@@ -18,7 +18,9 @@ import frc.lib.geometry.Pose;
 import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
+import frc.lib.physics.DifferentialDrive;
 import frc.lib.util.DriveSignal;
+import frc.lib.util.Util;
 import frc.lib.trajectory.timing.TimedState;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
@@ -214,9 +216,9 @@ public class Drive extends SubsystemBase {
     final double kPathKY = 1.0;
     final double kPathKTheta = 5.0;
     adjusted_velocity.linear = dynamics.chassis_velocity.linear
-        + kPathKX * Units.inches_to_meters(mError.getTranslation().x());
+        + kPathKX * Util.inches_to_meters(mError.getTranslation().x());
     adjusted_velocity.angular = dynamics.chassis_velocity.angular
-        + dynamics.chassis_velocity.linear * kPathKY * Units.inches_to_meters(mError.getTranslation().y())
+        + dynamics.chassis_velocity.linear * kPathKY * Util.inches_to_meters(mError.getTranslation().y())
         + kPathKTheta * mError.getRotation().getRadians();
 
     double curvature = adjusted_velocity.angular / adjusted_velocity.linear;
@@ -251,11 +253,11 @@ public class Drive extends SubsystemBase {
 
     if (!mCurrentTrajectory.isDone()) {
       // Generate feedforward voltages.
-      final double velocity_m = Units.inches_to_meters(mSetpoint.velocity());
-      final double curvature_m = Units.meters_to_inches(mSetpoint.state().getCurvature());
-      final double dcurvature_ds_m = Units
-          .meters_to_inches(Units.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
-      final double acceleration_m = Units.inches_to_meters(mSetpoint.acceleration());
+      final double velocity_m = Util3.inches_to_meters(mSetpoint.velocity());
+      final double curvature_m = Util.meters_to_inches(mSetpoint.state().getCurvature());
+      final double dcurvature_ds_m = Util
+          .meters_to_inches(Util.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
+      final double acceleration_m = Util.inches_to_meters(mSetpoint.acceleration());
       final DifferentialDrive.DriveDynamics dynamics = mModel.solveInverseDynamics(
           new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m), new DifferentialDrive.ChassisState(
               acceleration_m, acceleration_m * curvature_m + velocity_m * velocity_m * dcurvature_ds_m));

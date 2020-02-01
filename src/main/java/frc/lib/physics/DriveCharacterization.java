@@ -1,6 +1,7 @@
 package frc.lib.physics;
 
-import frc.lib.util.LinearRegression;;
+
+import frc.lib.util.LinearRegression;
 import frc.lib.util.Util;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class DriveCharacterization {
         double[][] output = null;
         int startTrim = 0;
         for (int i = 0; i < input.size(); ++i) {
-            if (input.get(i).velocity > Util.kEpsilon) {
+            if (input.get(i).velocity > Util.Epsilon) {
                 if (output == null) {
                     output = new double[input.size() - i][2];
                     startTrim = i;
