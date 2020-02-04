@@ -35,7 +35,7 @@ public class ColorMatcher extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public Color getColor() {
+  public String getColor() {
     /**
      * The method getColor() returns a normalized color value from the sensor and
      * can be useful if outputting the color to an RGB LED or similar. To read the
@@ -75,7 +75,7 @@ public class ColorMatcher extends SubsystemBase {
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString);
 
-    return match.color;
+    return colorString;
   }
 
 }
