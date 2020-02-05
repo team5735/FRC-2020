@@ -19,6 +19,7 @@ public class ColorSpinner extends SubsystemBase {
   private double ratio, deltaCompensation;
 
   private static final int OFFSET = 2;
+  private static final double tolerance = 10;
   private static final int DRIVE_DIAMETER = 4;
 
   /**
@@ -50,12 +51,20 @@ public class ColorSpinner extends SubsystemBase {
     talon.setSelectedSensorPosition(0);
   }
 
+  public double getSelectedSensorPosition() {
+    return talon.getSelectedSensorPosition();
+  }
+
   public void spin(double revolutions) {
-    talon.set(ControlMode.MotionMagic, talon.getSelectedSensorPosition() + revolutionsToEncoderTicks(revolutions));
+    talon.set(ControlMode.MotionMagic, revolutionsToEncoderTicks(revolutions));
   }
 
   public void stop() {
     talon.set(ControlMode.PercentOutput, 0);
+  }
+
+  public boolean withinTolerance(double revolutions) {
+    return Math.abs(getSelectedSensorPosition() - revolutionsToEncoderTicks(revolutions)) < tolerance;
   }
 
   @Override
