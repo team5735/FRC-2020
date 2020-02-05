@@ -19,7 +19,7 @@ public class ColorSpinner extends SubsystemBase {
   private double ratio, deltaCompensation;
 
   private static final int OFFSET = 2;
-  private static final double tolerance = 10;
+  private static final double tolerance = 30;
   private static final int DRIVE_DIAMETER = 4;
 
   /**
