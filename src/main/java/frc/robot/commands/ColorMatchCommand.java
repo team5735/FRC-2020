@@ -50,6 +50,9 @@ public class ColorMatchCommand extends CommandBase {
   public void execute() {
     String color = colorMatcher.getColor();
 
+    if (expectedColor == null || expectedColor.equalsIgnoreCase(""))
+      return;
+
     if (color.startsWith(expectedColor)) {
       return;
     } else {
@@ -67,7 +70,10 @@ public class ColorMatchCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    String color = colorMatcher.getColor();
+    if (expectedColor == null || expectedColor.equalsIgnoreCase(""))
+      return true;
+
+      String color = colorMatcher.getColor();
     return color.startsWith(expectedColor);
   }
 
