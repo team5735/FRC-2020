@@ -11,14 +11,15 @@ package frc.robot.constants;
  * Add your docs here.
  */
 public class RobotConstants {
-
+    public static double JOYSTICK_DEADBAND = 0.1;
+ 
     /*
     * ROBOT
     *
     **/
 
-
     // Motor Identification
+    public static final int COLOR_SPINNER_MOTOR_ID = 1;
     public static final int LEFT_MASTER_ID = 0;
     public static final int RIGHT_MASTER_ID = 1;
     public static final int NORMAL_MASTER_ID = 2;

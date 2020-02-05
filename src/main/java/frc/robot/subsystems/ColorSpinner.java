@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.RobotConstants;
 
 public class ColorSpinner extends SubsystemBase {
   private TalonSRX talon;
@@ -26,7 +27,7 @@ public class ColorSpinner extends SubsystemBase {
    * Creates a new ExampleSubsystem.
    */
   public ColorSpinner() {
-    talon = new TalonSRX(1);
+    talon = new TalonSRX(RobotConstants.COLOR_SPINNER_MOTOR_ID);
     talon.configFactoryDefault();
     talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     talon.setInverted(false);
