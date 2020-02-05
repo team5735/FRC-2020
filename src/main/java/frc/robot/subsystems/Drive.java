@@ -7,6 +7,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -22,9 +26,15 @@ import frc.lib.physics.DCMotorTransmission;
 import frc.lib.physics.DifferentialDrive;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
+import frc.lib.trajectory.DistanceView;
+import frc.lib.trajectory.Trajectory;
 import frc.lib.trajectory.TrajectoryIterator;
 import frc.lib.trajectory.TrajectorySamplePoint;
+import frc.lib.trajectory.TrajectoryUtil;
+import frc.lib.trajectory.timing.DifferentialDriveDynamicsConstraint;
 import frc.lib.trajectory.timing.TimedState;
+import frc.lib.trajectory.timing.TimingConstraint;
+import frc.lib.trajectory.timing.TimingUtil;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
 import frc.robot.Robot;
@@ -42,6 +52,10 @@ public class Drive extends SubsystemBase {
 
   public TimedState<PoseWithCurvature> path_setpoint;
   private TalonSRX leftMaster, rightMaster, normalMaster;
+
+  private static final double kMaxDx = 2.0;
+  private static final double kMaxDy = 0.25;
+  private static final double kMaxDTheta = Math.toRadians(5.0);
   private Pose error = Pose.Identity;
 
   private TrajectoryIterator<TimedState<PoseWithCurvature>> currentTrajectory;
@@ -320,6 +334,55 @@ public class Drive extends SubsystemBase {
       output = new Output();
     }
     return output;
+  }
+
+  public Trajectory<TimedState<PoseWithCurvature>> generateTrajectory(boolean reversed, final List<Pose> waypoints,
+      final List<TimingConstraint<PoseWithCurvature>> constraints, double max_vel, // inches/s
+      double max_accel, // inches/s^2
+      double max_voltage) {
+    return generateTrajectory(reversed, waypoints, constraints, 0.0, 0.0, max_vel, max_accel, max_voltage);
+  }
+
+  public Trajectory<TimedState<PoseWithCurvature>> generateTrajectory(boolean reversed, final List<Pose> waypoints,
+      final List<TimingConstraint<PoseWithCurvature>> constraints, double start_vel, double end_vel, double max_vel, // inches/s
+      double max_accel, // inches/s^2
+      double max_voltage) {
+    List<Pose> waypoints_maybe_flipped = waypoints;
+    final Pose flip = Pose.fromRotation(new Rotation(-1, 0));
+    // TODO re-architect the spline generator to support reverse.
+    if (reversed) {
+      waypoints_maybe_flipped = new ArrayList<>(waypoints.size());
+      for (int i = 0; i < waypoints.size(); ++i) {
+        waypoints_maybe_flipped.add(waypoints.get(i).transformBy(flip));
+      }
+    }
+
+    // Create a trajectory from splines.
+    Trajectory<PoseWithCurvature> trajectory = TrajectoryUtil.trajectoryFromSplineWaypoints(waypoints_maybe_flipped,
+        kMaxDx, kMaxDy, kMaxDTheta);
+
+    if (reversed) {
+      List<PoseWithCurvature> flipped = new ArrayList<>(trajectory.length());
+      for (int i = 0; i < trajectory.length(); ++i) {
+        flipped.add(new PoseWithCurvature(trajectory.getState(i).getPose().transformBy(flip),
+            -trajectory.getState(i).getCurvature(), trajectory.getState(i).getDCurvatureDs()));
+      }
+      trajectory = new Trajectory<>(flipped);
+    }
+    // Create the constraint that the robot must be able to traverse the trajectory
+    // without ever applying more
+    // than the specified voltage.
+    final DifferentialDriveDynamicsConstraint<PoseWithCurvature> drive_constraints = new DifferentialDriveDynamicsConstraint<>(
+        model, max_voltage);
+    List<TimingConstraint<PoseWithCurvature>> all_constraints = new ArrayList<>();
+    all_constraints.add(drive_constraints);
+    if (constraints != null) {
+      all_constraints.addAll(constraints);
+    }
+    // Generate the timed trajectory.
+    Trajectory<TimedState<PoseWithCurvature>> timed_trajectory = TimingUtil.timeParameterizeTrajectory(reversed,
+        new DistanceView<>(trajectory), kMaxDx, all_constraints, start_vel, end_vel, max_vel, max_accel);
+    return timed_trajectory;
   }
 
   public void overrideTrajectory(boolean value) {

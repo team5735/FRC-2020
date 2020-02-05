@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.RobotConstants;
 
 /**
  * Add your docs here.
@@ -22,8 +23,8 @@ public class Gyro extends SubsystemBase {
   private PigeonIMU gyro;
   protected double[] ypr = new double[3];
 
-  public Gyro(TalonSRX talon) {
-    gyro = new PigeonIMU(talon);
+  public Gyro() {
+    gyro = new PigeonIMU(RobotConstants.GYRO_TALON_HOST_ID);
   }
 
   public void getIMUYPR() {

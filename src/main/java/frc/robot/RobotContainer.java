@@ -13,6 +13,10 @@ import frc.robot.commands.ColorMatchCommand;
 import frc.robot.commands.ColorSpinCommand;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -26,6 +30,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ColorMatcher colorMatcher = new ColorMatcher();
   private final ColorSpinner colorSpinner = new ColorSpinner();
+  private final Drive drive = new Drive();
+  private final Gyro gyro = new Gyro();
+  private final Shooter shooter = new Shooter();
+  private final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
+
 
   private BobXboxController subsystemController = new BobXboxController(0);
 

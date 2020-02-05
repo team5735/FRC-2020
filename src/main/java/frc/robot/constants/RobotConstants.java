@@ -24,6 +24,8 @@ public class RobotConstants {
     public static final int RIGHT_MASTER_ID = 1;
     public static final int NORMAL_MASTER_ID = 2;
 
+    public static final int GYRO_TALON_HOST_ID = 4; //TODO tune
+
     // PID
     public static final double LEFT_kP = 0.0;
     public static final double LEFT_kI = 0.0;
