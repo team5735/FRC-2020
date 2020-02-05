@@ -19,7 +19,6 @@ public class ColorSpinner extends SubsystemBase {
   private TalonSRX talon;
   private double ratio, deltaCompensation;
 
-  private static final int OFFSET = 2;
   private static final double tolerance = 30;
   private static final int DRIVE_DIAMETER = 4;
 
@@ -48,12 +47,13 @@ public class ColorSpinner extends SubsystemBase {
     SmartDashboard.putNumber("Revolutions", 1);
   }
 
-  public void init() {
-    talon.setSelectedSensorPosition(0);
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 
-  public double getSelectedSensorPosition() {
-    return talon.getSelectedSensorPosition();
+  public void init() {
+    talon.setSelectedSensorPosition(0);
   }
 
   public void spin(double revolutions) {
@@ -64,13 +64,12 @@ public class ColorSpinner extends SubsystemBase {
     talon.set(ControlMode.PercentOutput, 0);
   }
 
-  public boolean withinTolerance(double revolutions) {
-    return Math.abs(getSelectedSensorPosition() - revolutionsToEncoderTicks(revolutions)) < tolerance;
+  public double getSelectedSensorPosition() {
+    return talon.getSelectedSensorPosition();
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public boolean withinTolerance(double revolutions) {
+    return Math.abs(getSelectedSensorPosition() - revolutionsToEncoderTicks(revolutions)) < tolerance;
   }
 
   public double revolutionsToEncoderTicks(double revolutions){

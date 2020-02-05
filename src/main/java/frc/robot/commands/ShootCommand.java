@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
+public class ShootCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Shooter shooter;
 
@@ -19,7 +19,7 @@ public class ShooterCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(Shooter shooter) {
+  public ShootCommand(Shooter shooter) {
     this.shooter = shooter;
  
     // Use addRequirements() here to declare subsystem dependencies.

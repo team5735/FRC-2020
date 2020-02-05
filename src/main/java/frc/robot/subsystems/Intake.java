@@ -7,23 +7,18 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.commands.*;
-
-public class Shooter extends SubsystemBase {
-
+public class Intake extends SubsystemBase {
   /**
-   * Creates a new ExampleSubsystem.
+   * Creates a new Climber.
    */
-  public Shooter() {
-    CommandScheduler.getInstance().setDefaultCommand(this, new ShootCommand(this));
+  public Intake() {
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-
 }
