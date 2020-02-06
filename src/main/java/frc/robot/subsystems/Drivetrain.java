@@ -23,20 +23,20 @@ import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
 import frc.lib.physics.DCMotorTransmission;
-import frc.lib.physics.DifferentialDrivetrain;
-import frc.lib.util.DrivetrainSignal;
+import frc.lib.physics.DifferentialDrive;
+import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
 import frc.lib.trajectory.DistanceView;
 import frc.lib.trajectory.Trajectory;
 import frc.lib.trajectory.TrajectoryIterator;
 import frc.lib.trajectory.TrajectorySamplePoint;
 import frc.lib.trajectory.TrajectoryUtil;
-import frc.lib.trajectory.timing.DifferentialDrivetrainDynamicsConstraint;
+import frc.lib.trajectory.timing.DifferentialDriveDynamicsConstraint;
 import frc.lib.trajectory.timing.TimedState;
 import frc.lib.trajectory.timing.TimingConstraint;
 import frc.lib.trajectory.timing.TimingUtil;
 import frc.robot.constants.RobotConstants;
-import frc.robot.helper.HDrivetrainHelper;
+import frc.robot.helper.HDriveHelper;
 import frc.robot.Robot;
 
 /**
@@ -63,27 +63,21 @@ public class Drivetrain extends SubsystemBase {
   private double lastTime = Double.POSITIVE_INFINITY;
   public TimedState<PoseWithCurvature> mSetpoint = new TimedState<>(PoseWithCurvature.identity());
   private Output output = new Output();
-  final DifferentialDrivetrain
+  final DifferentialDrive
  model;
 
-  private DifferentialDrivetrain
-.ChassisState prev_velocity_ = new DifferentialDrivetrain
-.ChassisState();
+  private DifferentialDrive.ChassisState prev_velocity_ = new DifferentialDrive.ChassisState();
   private double dt = 0.0;
 
 
-  public enum Drivetrain
-ControlState {
+  public enum DriveControlState {
     OPEN_LOOP, // open loop voltage control
     PATH_FOLLOWING // velocity PID control
   }
 
-  private Drivetrain
-ControlState Drivetrain
-ControlState;
+  private DriveControlState DriveControlState;
 
-  public Drivetrain
-() {
+  public Drivetrain() {
 
     /**
      *
@@ -103,8 +97,7 @@ ControlState;
     leftMaster.config_kD(0, RobotConstants.LEFT_kD);
     leftMaster.config_kF(0, RobotConstants.LEFT_kF);
     leftMaster.configNeutralDeadband(0.04, 0);
-    // leftFollower = new TalonSRX(Constants.Drivetrain
-  TRAIN_LEFT_FOLLOWER_MOTOR_ID);
+    // leftFollower = new TalonSRX(Constants.DRIVETRAIN_LEFT_FOLLOWER_MOTOR_ID);
     // leftFollower.setInverted(false);
     // leftFollower.configFactoryDefault();
     // leftFollower.follow(leftMaster);
@@ -120,8 +113,7 @@ ControlState;
     rightMaster.config_kD(0, RobotConstants.RIGHT_kD);
     rightMaster.config_kF(0, RobotConstants.RIGHT_kF);
     rightMaster.configNeutralDeadband(0.04, 0);
-    // rightFollower = new TalonSRX(Constants.Drivetrain
-  TRAIN_RIGHT_FOLLOWER_MOTOR_ID);
+    // rightFollower = new TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
     // rightFollower.configFactoryDefault();
     // rightFollower.setInverted(true);
     // rightFollower.follow(rightMaster);
@@ -137,8 +129,7 @@ ControlState;
     normalMaster.config_kD(0, RobotConstants.NORMAL_kD);
     normalMaster.config_kF(0, RobotConstants.NORMAL_kF);
     normalMaster.configNeutralDeadband(0.04, 0);
-    // normalFollower = new TalonSRX(Constants.Drivetrain
-  TRAIN_RIGHT_FOLLOWER_MOTOR_ID);
+    // normalFollower = new TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
     // normalFollower.configFactoryDefault();
     // normalFollower.setInverted(true);
     // normalFollower.follow(rightMaster);
@@ -146,23 +137,15 @@ ControlState;
 
     pigeon = new PigeonIMU(normalMaster); // TODO TALON HOST
 
-    final DCMotorTransmission transmission = new DCMotorTransmission(1.0 / RobotConstants.Drivetrain
-  Kv,
-        Util.inches_to_meters(RobotConstants.Drivetrain
-      WheelRadiusInches)
-            * Util.inches_to_meters(RobotConstants.Drivetrain
-          WheelRadiusInches) * RobotConstants.RobotLinearInertia
-            / (2.0 * RobotConstants.Drivetrain
-          Ka),
-        RobotConstants.Drivetrain
-      VIntercept);
+    final DCMotorTransmission transmission = new DCMotorTransmission(1.0 / RobotConstants.DriveKv,
+        Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches)
+            * Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches) * RobotConstants.RobotLinearInertia
+            / (2.0 * RobotConstants.DriveKa),
+        RobotConstants.DriveVIntercept);
 
-    model = new DifferentialDrivetrain
-  (RobotConstants.RobotLinearInertia, RobotConstants.RobotAngularInertia,
-        RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.Drivetrain
-      WheelDiameterInches / 2.0),
-        Util.inches_to_meters(RobotConstants.Drivetrain
-      WheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor), transmission,
+    model = new DifferentialDrive(RobotConstants.RobotLinearInertia, RobotConstants.RobotAngularInertia,
+        RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelDiameterInches / 2.0),
+        Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor), transmission,
         transmission);
     // leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, 10, 10);
 
@@ -179,53 +162,35 @@ ControlState;
   }
 
 
-  public void Drivetrain
-(Twist velocity) {
-    Drivetrain
-  (HDrivetrain
-  Helper.hDrivetrain
-  (velocity.getTranslation(), velocity.getRotation()));
+  public void drive(Twist velocity) {
+    drive(HDriveHelper.hDrive(velocity.getTranslation(), velocity.getRotation()));
   }
 
-  public void Drivetrain
-(Drivetrain
-Signal Drivetrain
-Signal) {
-    leftMaster.set(ControlMode.Velocity, Drivetrain
-  Signal.getLeft());
-    rightMaster.set(ControlMode.Velocity, Drivetrain
-  Signal.getRight());
-    normalMaster.set(ControlMode.Velocity, Drivetrain
-  Signal.getNormal());
+  public void drive(DriveSignal DriveSignal) {
+    leftMaster.set(ControlMode.Velocity, DriveSignal.getLeft());
+    rightMaster.set(ControlMode.Velocity, DriveSignal.getRight());
+    normalMaster.set(ControlMode.Velocity, DriveSignal.getNormal());
   }
 
   public void followPath() {
-    if (Drivetrain
-  ControlState == Drivetrain
-  ControlState.PATH_FOLLOWING) {
+    if (DriveControlState == DriveControlState.PATH_FOLLOWING) {
       final double now = Timer.getFPGATimestamp();
       
 
       Output output = update(now, Robot.robotState.getFieldToVehicle(now));
-      // Drivetrain
-    Signal signal = new Drivetrain
-    Signal(demand.left_feedforward_voltage / 12.0,
+      // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
       // demand.right_feedforward_voltage / 12.0);
 
       error = error();
       // path_setpoint = setpoint();
 
       if (!overrideTrajectory) {
-        // Drivetrain
-      (get TODO yeet
+        // drive(get TODO yeet
       } else { // BRAAAAAKEEE
-        Drivetrain
-      (Drivetrain
-      Signal.NEUTRAL);
+        drive(DriveSignal.NEUTRAL);
       }
     } else {
-      // Shuffleboard.reportError("Drivetrain
-     is not in path following state", false);
+      // Shuffleboard.reportError("Driveis not in path following state", false);
     }
   }
 
@@ -296,12 +261,8 @@ Signal) {
     }
   }
 
-  protected Output updatePID(DifferentialDrivetrain
-.Drivetrain
-Dynamics dynamics, Pose current_state) {
-    DifferentialDrivetrain
-  .ChassisState adjusted_velocity = new DifferentialDrivetrain
-  .ChassisState();
+  protected Output updatePID(DifferentialDrive.DriveDynamics dynamics, Pose current_state) {
+    DifferentialDrive.ChassisState adjusted_velocity = new DifferentialDrive.ChassisState();
     // Feedback on longitudinal error (distance).
     final double kPathKX = 5.0;
     final double kPathKY = 1.0;
@@ -319,8 +280,7 @@ Dynamics dynamics, Pose current_state) {
     }
 
     // Compute adjusted left and right wheel velocities.
-    final DifferentialDrivetrain
-  .WheelState wheel_velocities = model.solveInverseKinematics(adjusted_velocity);
+    final DifferentialDrive.WheelState wheel_velocities = model.solveInverseKinematics(adjusted_velocity);
     final double left_voltage = dynamics.voltage.left
         + (wheel_velocities.left - dynamics.wheel_velocity.left) / model.left_transmission().speed_per_volt();
     final double right_voltage = dynamics.voltage.right
@@ -350,12 +310,9 @@ Dynamics dynamics, Pose current_state) {
       final double dcurvature_ds_m = Util
           .meters_to_inches(Util.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
       final double acceleration_m = Util.inches_to_meters(mSetpoint.acceleration());
-      final DifferentialDrivetrain
-    .Drivetrain
-    Dynamics dynamics = model.solveInverseDynamics(
-          new DifferentialDrivetrain
-        .ChassisState(velocity_m, velocity_m * curvature_m), new DifferentialDrivetrain
-        .ChassisState(
+      final DifferentialDrive.DriveDynamics dynamics = model.solveInverseDynamics(
+          new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m),
+          new DifferentialDrive.ChassisState(
               acceleration_m, acceleration_m * curvature_m + velocity_m * velocity_m * dcurvature_ds_m));
       error = current_state.inverse().transformBy(mSetpoint.state().getPose());
 
@@ -417,14 +374,10 @@ Dynamics dynamics, Pose current_state) {
     // Create the constraint that the robot must be able to traverse the trajectory
     // without ever applying more
     // than the specified voltage.
-    final DifferentialDrivetrain
-  DynamicsConstraint<PoseWithCurvature> Drivetrain
-  _constraints = new DifferentialDrivetrain
-  DynamicsConstraint<>(
+    final DifferentialDriveDynamicsConstraint<PoseWithCurvature> drive_constraints = new DifferentialDriveDynamicsConstraint<>(
         model, max_voltage);
     List<TimingConstraint<PoseWithCurvature>> all_constraints = new ArrayList<>();
-    all_constraints.add(Drivetrain
-  _constraints);
+    all_constraints.add(drive_constraints);
     if (constraints != null) {
       all_constraints.addAll(constraints);
     }
@@ -443,9 +396,7 @@ Dynamics dynamics, Pose current_state) {
   }
 
   public boolean isDoneWithTrajectory() {
-    if (Drivetrain
-  ControlState != Drivetrain
-  ControlState.PATH_FOLLOWING) {
+    if (DriveControlState != DriveControlState.PATH_FOLLOWING) {
       return false;
     }
     return this.isDone() || overrideTrajectory;
@@ -456,8 +407,7 @@ Dynamics dynamics, Pose current_state) {
   }
 
   private static double rotationsToInches(double rotations) {
-    return rotations * (RobotConstants.Drivetrain
-  WheelDiameterInches * Math.PI);
+    return rotations * (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
   private static double rpmToInchesPerSecond(double rpm) {
@@ -465,8 +415,7 @@ Dynamics dynamics, Pose current_state) {
   }
 
   private static double inchesToRotations(double inches) {
-    return inches / (RobotConstants.Drivetrain
-  WheelDiameterInches * Math.PI);
+    return inches / (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
   private static double inchesPerSecondToRpm(double inches_per_second) {
