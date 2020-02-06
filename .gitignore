@@ -1,7 +1,6 @@
 .gradle/
 .settings/
 .vscode/
-.wpilib/
 bin/
 build/
 .DS_Store/
