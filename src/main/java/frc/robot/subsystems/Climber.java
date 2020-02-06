@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -40,5 +41,13 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void moveElevator(double output) {
+    elevatorMaster.set(ControlMode.PercentOutput, output);
+  }
+
+  public void spinWinch() {
+    winchMaster.set(0.5);
   }
 }

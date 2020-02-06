@@ -39,7 +39,7 @@ public class RobotContainer {
   public final Intake intake = new Intake();
   public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator(drivetrain);
 
-  private BobXboxController subsystemController = new BobXboxController(0);
+  public static final BobXboxController subsystemController = new BobXboxController(0);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
