@@ -7,14 +7,31 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.AngleIntakeCommand;
+import frc.robot.commands.IntakeBallCommand;
 
 public class Intake extends SubsystemBase {
+
+  private final TalonSRX intakeMaster, intakeAngleMaster;
+
+  private final IntakeBallCommand c_intakeBall;
+  private final AngleIntakeCommand c_angleIntake;
+
   /**
    * Creates a new Climber.
    */
   public Intake() {
+    c_intakeBall = new IntakeBallCommand(this);
+    c_angleIntake = new AngleIntakeCommand(this);
 
+    intakeMaster = new TalonSRX(1000);
+    intakeMaster.configFactoryDefault();
+
+    intakeAngleMaster = new TalonSRX(1000);
+    intakeAngleMaster.configFactoryDefault();
   }
 
   @Override

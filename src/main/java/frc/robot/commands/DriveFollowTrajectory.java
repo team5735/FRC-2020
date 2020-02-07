@@ -8,33 +8,48 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.TrajectoryGenerator;
+import frc.robot.subsystems.TrajectoryGenerator.TrajectorySet;
 
 public class DriveFollowTrajectory extends CommandBase {
-  /**
-   * Creates a new DriveFollowTrajectory.
-   */
-  public DriveFollowTrajectory() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	private final Drivetrain drivetrain;
+	private final TrajectoryGenerator generator;
+	
+	/**
+	* Creates a new DriveFollowTrajectory.
+	*/
+	public DriveFollowTrajectory(Drivetrain drivetrain, TrajectoryGenerator generator) {
+		this.drivetrain = drivetrain;
+		this.generator = generator;
+		
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(drivetrain);
+		addRequirements(generator);
+	}
+	
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+		TrajectorySet trajectorySet = generator.getTrajectorySet();
+		if(trajectorySet != null) {
+			
+		}
+	}
+	
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+	}
+	
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+	}
+	
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

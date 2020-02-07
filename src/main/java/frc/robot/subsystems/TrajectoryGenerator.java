@@ -17,11 +17,15 @@ import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.geometry.Translation;
 import frc.lib.geometry.Rotation;
 import frc.lib.trajectory.*;
+import frc.lib.trajectory.timing.CentripetalAccelerationConstraint;
 import frc.lib.trajectory.timing.TimedState;
 import frc.lib.trajectory.timing.TimingConstraint;
 import frc.robot.RobotContainer;
 
 public class TrajectoryGenerator extends SubsystemBase {
+    
+    private final Drivetrain drivetrain;
+
     private static final double kMaxVelocity = 130.0;
     private static final double kMaxAccel = 130.0;
     private static final double kMaxCentripetalAccelElevatorDown = 110.0;
@@ -30,8 +34,10 @@ public class TrajectoryGenerator extends SubsystemBase {
 
     private TrajectorySet mTrajectorySet = null;
 
-    public TrajectoryGenerator() {
+    public TrajectoryGenerator(Drivetrain drivetrain) {
+        this.drivetrain = drivetrain;
         // mMotionPlanner = new DriveMotionPlanner();
+        generateTrajectories();
     }
 
     public void generateTrajectories() {
@@ -50,7 +56,7 @@ public class TrajectoryGenerator extends SubsystemBase {
             final List<Pose> waypoints, final List<TimingConstraint<PoseWithCurvature>> constraints, double max_vel, // inches/s
             double max_accel, // inches/s^2
             double max_voltage) {
-        return RobotContainer.drive.generateTrajectory(reversed, waypoints, constraints, max_vel, max_accel, max_voltage);
+        return drivetrain.generateTrajectory(reversed, waypoints, constraints, max_vel, max_accel, max_voltage);
     }
 
     public Trajectory<TimedState<PoseWithCurvature>> generateTrajectory(boolean reversed,
@@ -60,7 +66,7 @@ public class TrajectoryGenerator extends SubsystemBase {
             double max_vel, // inches/s
             double max_accel, // inches/s^2
             double max_voltage) {
-        return RobotContainer.drive.generateTrajectory(reversed, waypoints, constraints, start_vel, end_vel, max_vel, max_accel,
+        return drivetrain.generateTrajectory(reversed, waypoints, constraints, start_vel, end_vel, max_vel, max_accel,
                 max_voltage);
     }
 
@@ -95,7 +101,7 @@ public class TrajectoryGenerator extends SubsystemBase {
     public static final Pose kFarScaleFullPose2 = new Pose(new Translation(256.0, 200.0 - 11.0 - 10.0),
             Rotation.fromDegrees(-15.0 + 180.0));
 
-    public static final Pose kCenterToIntake = new Pose(new Translation(-24.0, 0.0), Rotation.identity());
+    public static final Pose kCenterToIntake = new Pose(new Translation(-24.0, 0.0), Rotation.Identity);
 
     public static final Pose kNearCube1Pose = new Pose(new Translation(183.0, 46.0),
             Rotation.fromDegrees(180.0 - 25.0));

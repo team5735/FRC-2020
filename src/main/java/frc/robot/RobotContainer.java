@@ -14,7 +14,7 @@ import frc.robot.commands.ColorSpinCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
@@ -30,16 +30,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ColorMatcher colorMatcher = new ColorMatcher();
-  private final ColorSpinner colorSpinner = new ColorSpinner();
-  private final Drive drive = new Drive();
-  private final Gyro gyro = new Gyro();
-  private final Climber climber = new Climber();
-  private final Shooter shooter = new Shooter();
-  private final Intake intake = new Intake();
-  private final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
+  public final ColorMatcher colorMatcher = new ColorMatcher();
+  public final ColorSpinner colorSpinner = new ColorSpinner();
+  public final Drivetrain drivetrain = new Drivetrain();
+  public final Gyro gyro = new Gyro();
+  public final Climber climber = new Climber();
+  public final Shooter shooter = new Shooter();
+  public final Intake intake = new Intake();
+  public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator(drivetrain);
 
-  private BobXboxController subsystemController = new BobXboxController(0);
+  public static final BobXboxController subsystemController = new BobXboxController(0);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
