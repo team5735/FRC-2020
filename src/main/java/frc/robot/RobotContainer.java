@@ -8,9 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.controllers.BobXboxController;
-import frc.robot.commands.ColorMatchCommand;
-import frc.robot.commands.ColorSpinCommand;
 import frc.robot.commands.DriveFollowTrajectory;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
@@ -18,12 +19,10 @@ import frc.robot.subsystems.ColorSpinner;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainTrajectory;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.TrajectoryGenerator.TrajectorySet;
-import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a

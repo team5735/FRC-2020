@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -200,16 +201,17 @@ public class DrivetrainTrajectory extends Drivetrain {
     drive(HDriveHelper.hDrive(velocity.getTranslation(), velocity.getRotation()));
   }
 
-  public void drive(DriveSignal DriveSignal) {
-    // leftMaster.getPIDController().setReference(DriveSignal.getLeft(), ControlType.kVelocity);
-    // rightMaster.getPIDController().setReference(DriveSignal.getRight(), ControlType.kVelocity);
-    // normalMaster.getPIDController().setReference(DriveSignal.getNormal(), ControlType.kVelocity);
+  public void drive(DriveSignal driveSignal) {
+    drive(driveSignal, ControlType.kVelocity);
+  }
+
+  public void drive(DriveSignal driveSignal, ControlType controlType) {
+    leftMaster.getPIDController().setReference(driveSignal.getLeft(), controlType);
+    rightMaster.getPIDController().setReference(driveSignal.getRight(), controlType);
+    normalMaster.getPIDController().setReference(driveSignal.getNormal(), controlType);
     // leftMaster.set(ControlMode.Velocity, DriveSignal.getLeft());
     // rightMaster.set(ControlMode.Velocity, DriveSignal.getRight());
     // normalMaster.set(ControlMode.Velocity, DriveSignal.getNormal());
-    leftMaster.set(DriveSignal.getLeft());
-    rightMaster.set(DriveSignal.getRight());
-    normalMaster.set(DriveSignal.getNormal());
   }
 
   public void followPath() {
@@ -224,8 +226,8 @@ public class DrivetrainTrajectory extends Drivetrain {
 
       if (!overrideTrajectory) {
         System.out.println("foobar");
-        drive(new DriveSignal(0.5 * radiansPerSecondToTickesPer100ms(output.left_velocity),
-          0.5 * radiansPerSecondToTickesPer100ms(output.right_velocity),
+        drive(new DriveSignal(0.5 * radiansPerSecondToRPM(output.left_velocity),
+          0.5 * radiansPerSecondToRPM(output.right_velocity),
           0));
       } else { // BRAAAAAKEEE
         drive(DriveSignal.NEUTRAL);

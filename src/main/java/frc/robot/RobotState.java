@@ -15,7 +15,7 @@ public class RobotState {
 
     private static final int kObservationBufferSize = 100;
 
-    private static final Pose kVehicleToLidar = new Pose(
+    private static final Pose vehicleToCamera = new Pose(
     new Translation(RobotConstants.CAMERAXOFFSET, RobotConstants.CAMERAYOFFSET),
     Rotation.fromDegrees(RobotConstants.CAMERAYAWANGLEDEGREES));
 

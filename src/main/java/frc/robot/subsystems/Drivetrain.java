@@ -7,43 +7,10 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.Timer;
-import frc.lib.geometry.Pose;
-import frc.lib.geometry.PoseWithCurvature;
-import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Twist;
-import frc.lib.physics.DCMotorTransmission;
-import frc.lib.physics.DifferentialDrive;
 import frc.lib.util.DriveSignal;
-import frc.lib.util.Util;
-import frc.lib.trajectory.DistanceView;
-import frc.lib.trajectory.TimedView;
-import frc.lib.trajectory.Trajectory;
-import frc.lib.trajectory.TrajectoryIterator;
-import frc.lib.trajectory.TrajectorySamplePoint;
-import frc.lib.trajectory.TrajectoryUtil;
-import frc.lib.trajectory.timing.DifferentialDriveDynamicsConstraint;
-import frc.lib.trajectory.timing.TimedState;
-import frc.lib.trajectory.timing.TimingConstraint;
-import frc.lib.trajectory.timing.TimingUtil;
 import frc.robot.constants.RobotConstants;
-import frc.robot.helper.HDriveHelper;
-import frc.robot.Robot;
-import frc.robot.commands.DriveJoystick;
 
 /**
  * Add your docs here.
@@ -84,5 +51,8 @@ public abstract class Drivetrain extends SubsystemBase {
   protected static double inchesPerSecondToRpm(double inches_per_second) {
     return inchesToRotations(inches_per_second) * 60;
   }
-
+  
+  protected static double radiansPerSecondToRPM(double radians) {
+    return radians / (Math.PI * 2.0) * 60.0;
+  }
 }
