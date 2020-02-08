@@ -12,16 +12,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ElevatorMoveCommand;
-import frc.robot.commands.WinchSpinCommand;
 
 public class Climber extends SubsystemBase {
-
-  private final ElevatorMoveCommand c_elevator;
-  private final WinchSpinCommand c_winchSpin;
-
   private final TalonSRX elevatorMaster;
   private final CANSparkMax winchMaster;
 
@@ -29,9 +22,6 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
-    c_elevator = new ElevatorMoveCommand(this);
-    c_winchSpin = new WinchSpinCommand(this);
-
     elevatorMaster = new TalonSRX(1000);
     elevatorMaster.configFactoryDefault();
 
@@ -50,4 +40,5 @@ public class Climber extends SubsystemBase {
   public void spinWinch() {
     winchMaster.set(0.5);
   }
+
 }

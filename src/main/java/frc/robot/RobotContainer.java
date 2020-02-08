@@ -16,6 +16,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainTrajectory;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
@@ -34,12 +35,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final ColorMatcher colorMatcher = new ColorMatcher();
   public final ColorSpinner colorSpinner = new ColorSpinner();
-  public final Drivetrain drivetrain = new Drivetrain();
+  public final Drivetrain drivetrain = new DrivetrainTrajectory();
   public final Gyro gyro = new Gyro();
   public final Climber climber = new Climber();
   public final Shooter shooter = new Shooter();
   public final Intake intake = new Intake();
-  public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator(drivetrain);
+  public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator((DrivetrainTrajectory)drivetrain);
   public final TrajectorySet trajectorySet = trajectoryGenerator.getTrajectorySet();
 
   public static final BobXboxController subsystemController = new BobXboxController(0);
@@ -61,7 +62,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
     // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-    subsystemController.xButton.whenPressed(new DriveFollowTrajectory(trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, drivetrain, trajectoryGenerator));
+    subsystemController.xButton.whenPressed(new DriveFollowTrajectory(
+      trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
   }
 
   /**

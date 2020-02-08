@@ -14,17 +14,15 @@ import java.util.List;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.geometry.Pose;
 import frc.lib.geometry.PoseWithCurvature;
-import frc.lib.geometry.Translation;
 import frc.lib.geometry.Rotation;
 import frc.lib.trajectory.*;
 import frc.lib.trajectory.timing.CentripetalAccelerationConstraint;
 import frc.lib.trajectory.timing.TimedState;
 import frc.lib.trajectory.timing.TimingConstraint;
-import frc.robot.RobotContainer;
 
 public class TrajectoryGenerator extends SubsystemBase {
     
-    private final Drivetrain drivetrain;
+    private final DrivetrainTrajectory drivetrain;
 
     private static final double kMaxVelocity = 130.0;
     private static final double kMaxAccel = 130.0;
@@ -34,7 +32,7 @@ public class TrajectoryGenerator extends SubsystemBase {
 
     private TrajectorySet mTrajectorySet = null;
 
-    public TrajectoryGenerator(Drivetrain drivetrain) {
+    public TrajectoryGenerator(DrivetrainTrajectory drivetrain) {
         this.drivetrain = drivetrain;
         // mMotionPlanner = new DriveMotionPlanner();
         generateTrajectories();
@@ -98,7 +96,6 @@ public class TrajectoryGenerator extends SubsystemBase {
 
         private TrajectorySet() {
             sideStartToNearScale = new MirroredTrajectory(getSideStartToNearScale());
-
         }
 
         private Trajectory<TimedState<PoseWithCurvature>> getSideStartToNearScale() {

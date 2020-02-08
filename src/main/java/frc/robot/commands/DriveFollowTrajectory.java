@@ -15,37 +15,30 @@ import frc.lib.trajectory.Trajectory;
 import frc.lib.trajectory.TrajectoryIterator;
 import frc.lib.trajectory.timing.TimedState;
 import frc.robot.Robot;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.TrajectoryGenerator;
-import frc.robot.subsystems.TrajectoryGenerator.TrajectorySet;
+import frc.robot.subsystems.DrivetrainTrajectory;
 
 public class DriveFollowTrajectory extends CommandBase {
-	private final Drivetrain drivetrain;
-	private final TrajectoryGenerator generator;
+	private final DrivetrainTrajectory drivetrain;
 	private final TrajectoryIterator<TimedState<PoseWithCurvature>> trajectory;
 	
 	/**
 	* Creates a new DriveFollowTrajectory.
 	*/
-	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory, Drivetrain drivetrain, TrajectoryGenerator generator) {
+	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory,
+	    DrivetrainTrajectory drivetrain) {
 		this.drivetrain = drivetrain;
-		this.generator = generator;
 		this.trajectory = new TrajectoryIterator<>(new TimedView<>(trajectory));
+
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(drivetrain);
-		addRequirements(generator);
 	}
 	
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
 		// TrajectorySet trajectorySet = generator.getTrajectorySet();
-		if(generator.getTrajectorySet() != null) {
-			generator.generateTrajectories();
-		}
 		Robot.robotState.reset(Timer.getFPGATimestamp(), trajectory.getState().state().getPose());
 		drivetrain.setTrajectory(trajectory);
-
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
@@ -58,7 +51,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		System.out.println(generator.getTrajectorySet().sideStartToNearScale.left.toString());
+		System.out.println(trajectory);
 	}
 	
 	// Returns true when the command should end.

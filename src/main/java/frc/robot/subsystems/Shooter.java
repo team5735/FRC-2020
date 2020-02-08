@@ -15,7 +15,7 @@ import frc.robot.commands.*;
 public class Shooter extends SubsystemBase {
 
   /**
-   * Creates a new ExampleSubsystem.
+   * Creates a new Shooter.
    */
   public Shooter() {
     CommandScheduler.getInstance().setDefaultCommand(this, new ShootCommand(this));
