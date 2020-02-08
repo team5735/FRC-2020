@@ -43,8 +43,8 @@ public class RobotConstants {
     public static final double NORMAL_kF = 0.0;
 
     // Wheel stuff for pose
-    public static final double DriveWheelTrackWidthInches = 25.54;
-    public static final double DriveWheelDiameterInches = 3.92820959548 * 0.99; // TODO TUNE
+    public static final double DriveWheelTrackWidthInches = 6;
+    public static final double DriveWheelDiameterInches = 0.8; // TODO TUNE
     public static final double DriveWheelRadiusInches =DriveWheelDiameterInches / 2.0;
     public static final double TrackScrubFactor = 1.0;
 

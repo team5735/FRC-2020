@@ -167,4 +167,9 @@ public class Pose implements IPose2d<Pose>{
     public Pose mirror() {
         return new Pose(new Translation(getTranslation().x(), -getTranslation().y()), getRotation().inverse());
     }
+
+    @Override
+    public String toString() {
+        return "x: " + translation.x + " y: " + translation.y + " r: " + rotation.degrees();
+    }
 }
