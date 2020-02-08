@@ -18,6 +18,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
+import frc.robot.subsystems.TrajectoryGenerator.TrajectorySet;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,6 +39,7 @@ public class RobotContainer {
   public final Shooter shooter = new Shooter();
   public final Intake intake = new Intake();
   public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator(drivetrain);
+  public final TrajectorySet trajectorySet = trajectoryGenerator.getTrajectorySet();
 
   public static final BobXboxController subsystemController = new BobXboxController(0);
 
@@ -67,10 +69,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new InstantCommand();
-  }
-
-  public Drivetrain getDrivetrain() {
-    return drivetrain;
   }
 
 }

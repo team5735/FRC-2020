@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
