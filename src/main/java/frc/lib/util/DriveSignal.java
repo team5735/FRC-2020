@@ -33,6 +33,12 @@ public class DriveSignal {
         return normal;
     }
 
+    public void scale(double factor) {
+        left = factor * left;
+        right = factor * right;
+        normal = factor * normal;
+    }
+
     @Override
     public String toString() {
         return "L: " + left + ", R: " + right + " C:" + normal;

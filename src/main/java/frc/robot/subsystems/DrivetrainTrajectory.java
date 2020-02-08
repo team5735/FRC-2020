@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -52,7 +54,10 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   public TimedState<PoseWithCurvature> path_setpoint;
   private CANSparkMax leftMaster, rightMaster, normalMaster, leftFollower, rightFollower;
-  // private TalonSRX leftMaster, rightMaster, normalMaster, leftFollower, rightFollower;
+  private CANPIDController leftPIDController, rightPIDController, normalPIDController;
+  private CANEncoder leftEncoder, rightEncoder, normalEncoder;
+  // private TalonSRX leftMaster, rightMaster, normalMaster, leftFollower,
+  // rightFollower;
 
   private static final double kMaxDx = 0.25;
   private static final double kMaxDy = 0.25;
@@ -73,14 +78,14 @@ public class DrivetrainTrajectory extends Drivetrain {
     currentTrajectory = trajectory;
     mSetpoint = trajectory.getState();
     for (int i = 0; i < trajectory.trajectory().length(); ++i) {
-      if(trajectory.trajectory().getState(i).velocity() > Util.Epsilon) {
+      if (trajectory.trajectory().getState(i).velocity() > Util.Epsilon) {
         isReversed = false;
         break;
       } else if (trajectory.trajectory().getState(i).velocity() < -Util.Epsilon) {
         isReversed = true;
         break;
       }
-      
+
     }
   }
 
@@ -122,7 +127,8 @@ public class DrivetrainTrajectory extends Drivetrain {
     // rightMaster.config_kD(0, RobotConstants.RIGHT_kD);
     // rightMaster.config_kF(0, RobotConstants.RIGHT_kF);
     // rightMaster.configNeutralDeadband(0.04, 0);
-    // // rightFollower = new TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
+    // // rightFollower = new
+    // TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
     // // rightFollower.configFactoryDefault();
     // // rightFollower.setInverted(true);
     // // rightFollower.follow(rightMaster);
@@ -138,7 +144,8 @@ public class DrivetrainTrajectory extends Drivetrain {
     // normalMaster.config_kD(0, RobotConstants.NORMAL_kD);
     // normalMaster.config_kF(0, RobotConstants.NORMAL_kF);
     // normalMaster.configNeutralDeadband(0.04, 0);
-    // // normalFollower = new TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
+    // // normalFollower = new
+    // TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
     // // normalFollower.configFactoryDefault();
     // // normalFollower.setInverted(true);
     // // normalFollower.follow(rightMaster);
@@ -146,10 +153,13 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     leftMaster = new CANSparkMax(4, MotorType.kBrushless);
     leftMaster.setInverted(false);
-    // leftMaster.getPIDController().setP(AutoConstants.LEFT_kP);
-    // leftMaster.getPIDController().setI(AutoConstants.LEFT_kI);
-    // leftMaster.getPIDController().setD(AutoConstants.LEFT_kD);
-    // leftMaster.getPIDController().setFF(0);
+
+    leftPIDController = leftMaster.getPIDController();
+    leftPIDController.setP(0.02);
+    leftPIDController.setI(0);
+    leftPIDController.setD(0);
+    leftPIDController.setFF(0);
+    leftEncoder = leftMaster.getEncoder();
 
     leftFollower = new CANSparkMax(5, MotorType.kBrushless);
     leftFollower.follow(leftMaster);
@@ -157,16 +167,27 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     rightMaster = new CANSparkMax(1, MotorType.kBrushless);
     rightMaster.setInverted(true);
-    // rightMaster.getPIDController().setP(AutoConstants.RIGHT_kP);
-    // rightMaster.getPIDController().setI(AutoConstants.RIGHT_kI);
-    // rightMaster.getPIDController().setD(AutoConstants.RIGHT_kD);
-    // rightMaster.getPIDController().setFF(0);
+
+    rightPIDController = rightMaster.getPIDController();
+    rightPIDController.setP(0.02);
+    rightPIDController.setI(0);
+    rightPIDController.setD(0);
+    rightPIDController.setFF(0);
+    rightEncoder = rightMaster.getEncoder();
 
     rightFollower = new CANSparkMax(3, MotorType.kBrushless);
     rightFollower.follow(rightMaster);
     rightFollower.setInverted(true);
+
     normalMaster = new CANSparkMax(2, MotorType.kBrushless);
     normalMaster.setInverted(false);
+
+    normalPIDController = normalMaster.getPIDController();
+    normalPIDController.setP(0.02);
+    normalPIDController.setI(0);
+    normalPIDController.setD(0);
+    normalPIDController.setFF(0);
+    normalEncoder = normalMaster.getEncoder();
 
     // pigeon = new PigeonIMU(normalMaster); // TODO TALON HOST
 
@@ -178,9 +199,10 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     model = new DifferentialDrive(RobotConstants.RobotLinearInertia, RobotConstants.RobotAngularInertia,
         RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelDiameterInches / 2.0),
-        Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor), transmission,
-        transmission);
-    // leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, 10, 10);
+        Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor),
+        transmission, transmission);
+    // leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer,
+    // 10, 10);
 
     error = Pose.Identity;
     gyro_heading = Rotation.Identity;
@@ -192,10 +214,7 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   @Override
   public void periodic() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
   }
-
 
   public void drive(Twist velocity) {
     drive(HDriveHelper.hDrive(velocity.getTranslation(), velocity.getRotation()));
@@ -206,9 +225,11 @@ public class DrivetrainTrajectory extends Drivetrain {
   }
 
   public void drive(DriveSignal driveSignal, ControlType controlType) {
-    leftMaster.getPIDController().setReference(driveSignal.getLeft(), controlType);
-    rightMaster.getPIDController().setReference(driveSignal.getRight(), controlType);
-    normalMaster.getPIDController().setReference(driveSignal.getNormal(), controlType);
+    driveSignal.scale(10);
+    leftPIDController.setReference(driveSignal.getLeft(), controlType);
+    rightPIDController.setReference(driveSignal.getRight(), controlType);
+    normalPIDController.setReference(driveSignal.getNormal(), controlType);
+    System.out.println(driveSignal);
     // leftMaster.set(ControlMode.Velocity, DriveSignal.getLeft());
     // rightMaster.set(ControlMode.Velocity, DriveSignal.getRight());
     // normalMaster.set(ControlMode.Velocity, DriveSignal.getNormal());
@@ -216,24 +237,23 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   public void followPath() {
     // if (DriveControlState == DriveControlState.PATH_FOLLOWING) {
-      final double now = Timer.getFPGATimestamp();
-      Output output = update(now, Robot.robotState.getFieldToVehicle(now));
-      // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
-      // demand.right_feedforward_voltage / 12.0);
+    final double now = Timer.getFPGATimestamp();
+    Output output = update(now, Robot.robotState.getFieldToVehicle(now));
+    // DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
+    // demand.right_feedforward_voltage / 12.0);
 
-      error = error();
-      path_setpoint = setpoint();
+    error = error();
+    path_setpoint = setpoint();
 
-      if (!overrideTrajectory) {
-        System.out.println("foobar");
-        drive(new DriveSignal(0.5 * radiansPerSecondToRPM(output.left_velocity),
-          0.5 * radiansPerSecondToRPM(output.right_velocity),
-          0));
-      } else { // BRAAAAAKEEE
-        drive(DriveSignal.NEUTRAL);
-      }
+    if (!overrideTrajectory) {
+      System.out.println("foobar");
+      drive(new DriveSignal(0.5 * radiansPerSecondToRPM(output.left_velocity),
+          0.5 * radiansPerSecondToRPM(output.right_velocity), 0));
+    } else { // BRAAAAAKEEE
+      drive(DriveSignal.NEUTRAL);
+    }
     // } else {
-      // Shuffleboard.reportError("Driveis not in path following state", false);
+    // Shuffleboard.reportError("Driveis not in path following state", false);
     // }
   }
 
@@ -315,30 +335,26 @@ public class DrivetrainTrajectory extends Drivetrain {
       // Generate feedforward voltages.
       final double velocity_m = Util.inches_to_meters(mSetpoint.velocity());
       final double curvature_m = Util.meters_to_inches(mSetpoint.state().getCurvature());
-      final double dcurvature_ds_m = Util
-          .meters_to_inches(Util.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
+      final double dcurvature_ds_m = Util.meters_to_inches(Util.meters_to_inches(mSetpoint.state().getDCurvatureDs()));
       final double acceleration_m = Util.inches_to_meters(mSetpoint.acceleration());
       final DifferentialDrive.DriveDynamics dynamics = model.solveInverseDynamics(
-          new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m),
-          new DifferentialDrive.ChassisState(
+          new DifferentialDrive.ChassisState(velocity_m, velocity_m * curvature_m), new DifferentialDrive.ChassisState(
               acceleration_m, acceleration_m * curvature_m + velocity_m * velocity_m * dcurvature_ds_m));
       error = current_state.inverse().transformBy(mSetpoint.state().getPose());
 
       // if (mFollowerType == FollowerType.FEEDFORWARD_ONLY) {
-        output = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
-            dynamics.wheel_acceleration.left, dynamics.wheel_acceleration.right, dynamics.voltage.left,
-            dynamics.voltage.right);
+      output = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right, dynamics.wheel_acceleration.left,
+          dynamics.wheel_acceleration.right, dynamics.voltage.left, dynamics.voltage.right);
       // } else if (mFollowerType == FollowerType.PURE_PURSUIT) {
-      //   mOutput = updatePurePursuit(dynamics, current_state);
+      // mOutput = updatePurePursuit(dynamics, current_state);
       // } else if (mFollowerType == FollowerType.PID) {
-      //   mOutput = updatePID(dynamics, current_state);
+      // mOutput = updatePID(dynamics, current_state);
       // } else if (mFollowerType == FollowerType.NONLINEAR_FEEDBACK) {
-      //   mOutput = updateNonlinearFeedback(dynamics, current_state);
+      // mOutput = updateNonlinearFeedback(dynamics, current_state);
       // }
 
-      output = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right,
-            dynamics.wheel_acceleration.left, dynamics.wheel_acceleration.right, dynamics.voltage.left,
-            dynamics.voltage.right);
+      output = new Output(dynamics.wheel_velocity.left, dynamics.wheel_velocity.right, dynamics.wheel_acceleration.left,
+          dynamics.wheel_acceleration.right, dynamics.voltage.left, dynamics.voltage.right);
     } else {
       // TODO Possibly switch to a pose stabilizing controller?
       output = new Output();
