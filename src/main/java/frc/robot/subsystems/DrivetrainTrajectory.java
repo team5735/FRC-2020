@@ -10,12 +10,12 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -53,11 +53,8 @@ public class DrivetrainTrajectory extends Drivetrain {
   private Rotation gyroOffset;
 
   public TimedState<PoseWithCurvature> path_setpoint;
-  private CANSparkMax leftMaster, rightMaster, normalMaster, leftFollower, rightFollower;
-  private CANPIDController leftPIDController, rightPIDController, normalPIDController;
-  private CANEncoder leftEncoder, rightEncoder, normalEncoder;
-  // private TalonSRX leftMaster, rightMaster, normalMaster, leftFollower,
-  // rightFollower;
+  private TalonFX leftMaster, rightMaster, normalMaster, leftFollower, rightFollower;
+  private TalonSRX gyroHost;
 
   private static final double kMaxDx = 0.25;
   private static final double kMaxDy = 0.25;
@@ -93,103 +90,38 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   public DrivetrainTrajectory() {
 
-    /**
-     *
-     * 
-     * private TalonSRX leftMaster, rightMaster, leftFollower, rightFollower;
-     * 
-     * private TalonSRX leftMaster, rightMaster, rightFollower; private VictorSPX
-     * leftFollower;
-     * 
-     */
-    // leftMaster = new TalonSRX(RobotConstants.LEFT_MASTER_ID);
-    // leftMaster.configFactoryDefault();
-    // leftMaster.setSensorPhase(true);
-    // leftMaster.selectProfileSlot(0, 0);
-    // leftMaster.config_kP(0, RobotConstants.LEFT_kP);
-    // leftMaster.config_kI(0, RobotConstants.LEFT_kI);
-    // leftMaster.config_kD(0, RobotConstants.LEFT_kD);
-    // leftMaster.config_kF(0, RobotConstants.LEFT_kF);
-    // leftMaster.configNeutralDeadband(0.04, 0);
-    // // leftFollower = new TalonSRX(Constants.DRIVETRAIN_LEFT_FOLLOWER_MOTOR_ID);
-    // // leftFollower.setInverted(false);
-    // // leftFollower.configFactoryDefault();
-    // // leftFollower.follow(leftMaster);
-    // // leftFollower.configNeutralDeadband(0.04, 0);
+    leftMaster = new TalonFX(RobotConstants.LEFT_MASTER_ID);
+    leftMaster.configFactoryDefault();
+    leftMaster.setInverted(true);
+    leftMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
 
-    // rightMaster = new TalonSRX(RobotConstants.RIGHT_MASTER_ID);
-    // rightMaster.configFactoryDefault();
-    // rightMaster.setInverted(true);
-    // rightMaster.setSensorPhase(true);
-    // rightMaster.selectProfileSlot(0, 0);
-    // rightMaster.config_kP(0, RobotConstants.RIGHT_kP);
-    // rightMaster.config_kI(0, RobotConstants.RIGHT_kI);
-    // rightMaster.config_kD(0, RobotConstants.RIGHT_kD);
-    // rightMaster.config_kF(0, RobotConstants.RIGHT_kF);
-    // rightMaster.configNeutralDeadband(0.04, 0);
-    // // rightFollower = new
-    // TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
-    // // rightFollower.configFactoryDefault();
-    // // rightFollower.setInverted(true);
-    // // rightFollower.follow(rightMaster);
-    // // rightFollower.configNeutralDeadband(0.04, 0);
-
-    // normalMaster = new TalonSRX(RobotConstants.RIGHT_MASTER_ID);
-    // normalMaster.configFactoryDefault();
-    // normalMaster.setInverted(true);
-    // normalMaster.setSensorPhase(true);
-    // normalMaster.selectProfileSlot(0, 0);
-    // normalMaster.config_kP(0, RobotConstants.NORMAL_kP);
-    // normalMaster.config_kI(0, RobotConstants.NORMAL_kI);
-    // normalMaster.config_kD(0, RobotConstants.NORMAL_kD);
-    // normalMaster.config_kF(0, RobotConstants.NORMAL_kF);
-    // normalMaster.configNeutralDeadband(0.04, 0);
-    // // normalFollower = new
-    // TalonSRX(Constants.DRIVETRAIN_RIGHT_FOLLOWER_MOTOR_ID);
-    // // normalFollower.configFactoryDefault();
-    // // normalFollower.setInverted(true);
-    // // normalFollower.follow(rightMaster);
-    // // normalFollower.configNeutralDeadband(0.04, 0);
-
-    leftMaster = new CANSparkMax(4, MotorType.kBrushless);
-    leftMaster.setInverted(false);
-
-    leftPIDController = leftMaster.getPIDController();
-    leftPIDController.setP(0.02);
-    leftPIDController.setI(0);
-    leftPIDController.setD(0);
-    leftPIDController.setFF(0);
-    leftEncoder = leftMaster.getEncoder();
-
-    leftFollower = new CANSparkMax(5, MotorType.kBrushless);
-    leftFollower.follow(leftMaster);
+    leftFollower = new TalonFX(RobotConstants.LEFT_SLAVE_ID);
+    leftFollower.configFactoryDefault();
     leftFollower.setInverted(true);
+    leftFollower.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
+    leftFollower.follow(leftMaster);
 
-    rightMaster = new CANSparkMax(1, MotorType.kBrushless);
-    rightMaster.setInverted(true);
+    rightMaster = new TalonFX(RobotConstants.RIGHT_MASTER_ID);
+    rightMaster.configFactoryDefault();
+    rightMaster.setInverted(false);
+    rightMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
 
-    rightPIDController = rightMaster.getPIDController();
-    rightPIDController.setP(0.02);
-    rightPIDController.setI(0);
-    rightPIDController.setD(0);
-    rightPIDController.setFF(0);
-    rightEncoder = rightMaster.getEncoder();
-
-    rightFollower = new CANSparkMax(3, MotorType.kBrushless);
+    rightFollower = new TalonFX(RobotConstants.RIGHT_SLAVE_ID);
+    rightFollower.configFactoryDefault();
+    rightFollower.setInverted(false);
+    rightFollower.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
     rightFollower.follow(rightMaster);
-    rightFollower.setInverted(true);
 
-    normalMaster = new CANSparkMax(2, MotorType.kBrushless);
+    normalMaster = new TalonFX(RobotConstants.NORMAL_ID);
     normalMaster.setInverted(false);
+    normalMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
 
-    normalPIDController = normalMaster.getPIDController();
-    normalPIDController.setP(0.02);
-    normalPIDController.setI(0);
-    normalPIDController.setD(0);
-    normalPIDController.setFF(0);
-    normalEncoder = normalMaster.getEncoder();
+    gyroHost = new TalonSRX(RobotConstants.GYRO_TALON_HOST_ID);
+    gyroHost.configFactoryDefault();
+    gyroHost.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, 10, 10);
 
-    // pigeon = new PigeonIMU(normalMaster); // TODO TALON HOST
+    pigeon = new PigeonIMU(gyroHost); // TODO TALON HOST
+    
 
     final DCMotorTransmission transmission = new DCMotorTransmission(1.0 / RobotConstants.DriveKv,
         Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches)
@@ -201,8 +133,7 @@ public class DrivetrainTrajectory extends Drivetrain {
         RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelDiameterInches / 2.0),
         Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor),
         transmission, transmission);
-    // leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer,
-    // 10, 10);
+    
 
     error = Pose.Identity;
     gyro_heading = Rotation.Identity;
@@ -225,14 +156,10 @@ public class DrivetrainTrajectory extends Drivetrain {
   }
 
   public void drive(DriveSignal driveSignal, ControlType controlType) {
-    driveSignal.scale(10);
-    leftPIDController.setReference(driveSignal.getLeft(), controlType);
-    rightPIDController.setReference(driveSignal.getRight(), controlType);
-    normalPIDController.setReference(driveSignal.getNormal(), controlType);
     System.out.println(driveSignal);
-    // leftMaster.set(ControlMode.Velocity, DriveSignal.getLeft());
-    // rightMaster.set(ControlMode.Velocity, DriveSignal.getRight());
-    // normalMaster.set(ControlMode.Velocity, DriveSignal.getNormal());
+    leftMaster.set(ControlMode.Velocity, driveSignal.getLeft());
+    rightMaster.set(ControlMode.Velocity, driveSignal.getRight());
+    normalMaster.set(ControlMode.Velocity, driveSignal.getNormal());
   }
 
   public void followPath() {
@@ -258,12 +185,9 @@ public class DrivetrainTrajectory extends Drivetrain {
   }
 
   public synchronized void resetEncoders() {
-    // leftMaster.setSelectedSensorPosition(0);
-    // rightMaster.setSelectedSensorPosition(0);
-    // normalMaster.setSelectedSensorPosition(0);
-    leftMaster.getEncoder().setPosition(0);
-    rightMaster.getEncoder().setPosition(0);
-    normalMaster.getEncoder().setPosition(0);
+    leftMaster.setSelectedSensorPosition(0);
+    rightMaster.setSelectedSensorPosition(0);
+    normalMaster.setSelectedSensorPosition(0);
   }
 
   public void reset() {

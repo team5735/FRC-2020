@@ -7,6 +7,8 @@
 
 package frc.robot.constants;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+
 /**
  * Add your docs here.
  */
@@ -20,10 +22,14 @@ public class RobotConstants {
 
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
-    public static final int LEFT_MASTER_ID = 0;
-    public static final int RIGHT_MASTER_ID = 1;
-    public static final int NORMAL_MASTER_ID = 2;
+    public static final int LEFT_MASTER_ID = 57;
+    public static final int LEFT_SLAVE_ID = 56;
 
+    public static final int RIGHT_MASTER_ID = 58;
+    public static final int RIGHT_SLAVE_ID = 59;
+
+    public static final int NORMAL_ID = 55;
+    
     public static final int GYRO_TALON_HOST_ID = 4; //TODO tune
 
     // PID
@@ -41,6 +47,8 @@ public class RobotConstants {
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 0.0;
+
+    public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
 
     // Wheel stuff for pose
     public static final double DriveWheelTrackWidthInches = 6;
