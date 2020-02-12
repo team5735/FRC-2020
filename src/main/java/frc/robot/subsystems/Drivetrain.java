@@ -32,27 +32,31 @@ public abstract class Drivetrain extends SubsystemBase {
 
   public abstract void zeroSensors();
 
-  protected static double rotationsToInches(double rotations) {
+  public static double rotationsToInches(double rotations) {
     return rotations * (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
-  protected static double rpmToInchesPerSecond(double rpm) {
-    return rotationsToInches(rpm) / 60;
-  }
-
-  protected static double radiansPerSecondToTickesPer100ms(double radians) {
-    return radians / (Math.PI * 2.0) * 4096.0 / 10.0;
-  }
-
-  protected static double inchesToRotations(double inches) {
+  public static double inchesToRotations(double inches) {
     return inches / (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
 
-  protected static double inchesPerSecondToRpm(double inches_per_second) {
-    return inchesToRotations(inches_per_second) * 60;
+  public static double rpmToInchesPerSecond(double rpm) {
+    return rotationsToInches(rpm) / 60.0;
+  }
+
+  public static double radiansPerSecondToTicksPer100ms(double radians) {
+    return radians / (Math.PI * 2.0) * RobotConstants.EncoderTicksPerRotation / 10.0;
+  }
+
+  public static double rpmToTicksPer100ms(double rpm) {
+    return rpm * RobotConstants.EncoderTicksPerRotation / 60.0 / 10.0;
+  }
+
+  public static double inchesPerSecondToRpm(double inches_per_second) {
+    return inchesToRotations(inches_per_second) * 60.0;
   }
   
-  protected static double radiansPerSecondToRPM(double radians) {
+  public static double radiansPerSecondToRPM(double radians) {
     return radians / (Math.PI * 2.0) * 60.0;
   }
 }

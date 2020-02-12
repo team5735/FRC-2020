@@ -11,11 +11,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.geometry.Twist;
 import frc.lib.util.Util;
 import frc.robot.RobotContainer;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriveJoystick extends CommandBase {
 
   private Drivetrain drivetrain;
+
+  private double maxVelocityInTicksper100ms = Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(Util.meters_to_inches(RobotConstants.MaxVelocity)));
+  private double TURN_CONSTANT = Util.degrees_to_radians(3); // maps [-1, 1] input to [-3deg, 3deg]/100ms
 
   /**
    * Creates a new DriveJoystick.
@@ -35,12 +39,12 @@ public class DriveJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(new Twist(0.3 * Util.deadband(RobotContainer.subsystemController.leftStick.getX(), 0.2),
-     0.3 * Util.deadband(RobotContainer.subsystemController.leftStick.getY(), 0.2), 
-     Util.deadband(RobotContainer.subsystemController.rightStick.getX(), 0.1)));
+    drivetrain.drive(new Twist(maxVelocityInTicksper100ms * Util.deadband(RobotContainer.subsystemController.leftStick.getX(), 0.1),
+    maxVelocityInTicksper100ms * Util.deadband(RobotContainer.subsystemController.leftStick.getY(), 0.1), 
+     TURN_CONSTANT * Util.deadband(RobotContainer.subsystemController.rightStick.getX(), 0.1)));
 
 
-    // System.out.println);
+    // System.out.println(unitgay);
     // drivetrain.drive(new DriveSignal(RobotContainer.subsystemController.getY(Hand.kLeft), 0.0, 0.0));
   }
 

@@ -10,7 +10,9 @@ package frc.robot.helper;
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Translation;
 import frc.lib.util.DriveSignal;
+import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Add your docs here.
@@ -25,9 +27,11 @@ public class HDriveHelper {
         return hDrive(translation, Rotation.Identity);
     }
 
+    // ticksper100ms
     public static DriveSignal hDrive(Translation translation, Rotation rotation) {
-        double left = translation.y()  - rotation.radians() * RobotConstants.DriveWheelRadiusInches;
-        double right = translation.y() + rotation.radians() * RobotConstants.DriveWheelRadiusInches;
+        double arcLength = rotation.radians() * RobotConstants.DriveWheelTrackWidthInches / 2.0; // in inches/100ms
+        double left = translation.y()  + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
+        double right = translation.y() - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
         double normal = translation.x();
 
         // System.out.println("[D] Forward Percentage: " + leftPercentage);

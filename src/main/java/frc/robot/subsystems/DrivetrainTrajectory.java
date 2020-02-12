@@ -94,6 +94,10 @@ public class DrivetrainTrajectory extends Drivetrain {
     leftMaster.configFactoryDefault();
     leftMaster.setInverted(true);
     leftMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
+    leftMaster.config_kP(0, RobotConstants.LEFT_kP);
+    leftMaster.config_kI(0, RobotConstants.LEFT_kI);
+    leftMaster.config_kD(0, RobotConstants.LEFT_kD);
+    leftMaster.config_kF(0, RobotConstants.LEFT_kF);
 
     leftFollower = new TalonFX(RobotConstants.LEFT_SLAVE_ID);
     leftFollower.configFactoryDefault();
@@ -105,6 +109,11 @@ public class DrivetrainTrajectory extends Drivetrain {
     rightMaster.configFactoryDefault();
     rightMaster.setInverted(false);
     rightMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
+    rightMaster.config_kP(0, RobotConstants.RIGHT_kP);
+    rightMaster.config_kI(0, RobotConstants.RIGHT_kI);
+    rightMaster.config_kD(0, RobotConstants.RIGHT_kD);
+    rightMaster.config_kF(0, RobotConstants.RIGHT_kF);
+
 
     rightFollower = new TalonFX(RobotConstants.RIGHT_SLAVE_ID);
     rightFollower.configFactoryDefault();
@@ -115,6 +124,11 @@ public class DrivetrainTrajectory extends Drivetrain {
     normalMaster = new TalonFX(RobotConstants.NORMAL_ID);
     normalMaster.setInverted(false);
     normalMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
+    normalMaster.config_kP(0, RobotConstants.NORMAL_kP);
+    normalMaster.config_kI(0, RobotConstants.NORMAL_kI);
+    normalMaster.config_kD(0, RobotConstants.NORMAL_kD);
+    normalMaster.config_kF(0, RobotConstants.NORMAL_kF);
+
 
     gyroHost = new TalonSRX(RobotConstants.GYRO_TALON_HOST_ID);
     gyroHost.configFactoryDefault();
@@ -152,10 +166,10 @@ public class DrivetrainTrajectory extends Drivetrain {
   }
 
   public void drive(DriveSignal driveSignal) {
-    drive(driveSignal, ControlType.kVelocity);
+    drive(driveSignal, ControlMode.Velocity);
   }
 
-  public void drive(DriveSignal driveSignal, ControlType controlType) {
+  public void drive(DriveSignal driveSignal, ControlMode controlMode) {
     System.out.println(driveSignal);
     leftMaster.set(ControlMode.Velocity, driveSignal.getLeft());
     rightMaster.set(ControlMode.Velocity, driveSignal.getRight());

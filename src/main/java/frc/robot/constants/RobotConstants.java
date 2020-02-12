@@ -20,6 +20,10 @@ public class RobotConstants {
     *
     **/
 
+    // Robot Constants
+    public static final double EncoderTicksPerRotation = 2048.0;
+    public static final double MaxVelocity = 5.0; // m/s
+
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
     public static final int LEFT_MASTER_ID = 57;
@@ -36,24 +40,25 @@ public class RobotConstants {
     public static final double LEFT_kP = 0.0;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 0.0;
+    public static final double LEFT_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
 
     public static final double RIGHT_kP = 0.0;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 0.0;
+    public static final double RIGHT_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
 
     public static final double NORMAL_kP = 0.0;
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
-    public static final double NORMAL_kF = 0.0;
+    public static final double NORMAL_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
 
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
 
+
     // Wheel stuff for pose
-    public static final double DriveWheelTrackWidthInches = 6;
-    public static final double DriveWheelDiameterInches = 0.8; // TODO TUNE
-    public static final double DriveWheelRadiusInches =DriveWheelDiameterInches / 2.0;
+    public static final double DriveWheelTrackWidthInches = 23;
+    public static final double DriveWheelDiameterInches = 6; // TODO TUNE
+    public static final double DriveWheelRadiusInches = DriveWheelDiameterInches / 2.0;
     public static final double TrackScrubFactor = 1.0;
 
      // Tuned dynamics
