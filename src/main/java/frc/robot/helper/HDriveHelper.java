@@ -30,8 +30,8 @@ public class HDriveHelper {
     // ticksper100ms
     public static DriveSignal hDrive(Translation translation, Rotation rotation) {
         double arcLength = rotation.radians() * RobotConstants.DriveWheelTrackWidthInches / 2.0; // in inches/100ms
-        double left = translation.y()  + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
-        double right = translation.y() - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
+        double left = translation.y()  - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
+        double right = translation.y() + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
         double normal = translation.x();
 
         // System.out.println("[D] Forward Percentage: " + leftPercentage);

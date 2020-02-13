@@ -22,7 +22,7 @@ public class RobotConstants {
 
     // Robot Constants
     public static final double EncoderTicksPerRotation = 2048.0;
-    public static final double MaxVelocity = 5.0; // m/s
+    public static final double MaxVelocity = 1.0; // m/s
 
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
@@ -56,8 +56,8 @@ public class RobotConstants {
 
 
     // Wheel stuff for pose
-    public static final double DriveWheelTrackWidthInches = 23;
-    public static final double DriveWheelDiameterInches = 6; // TODO TUNE
+    public static final double DriveWheelTrackWidthInches = 23.0;
+    public static final double DriveWheelDiameterInches = 6.0; // TODO TUNE
     public static final double DriveWheelRadiusInches = DriveWheelDiameterInches / 2.0;
     public static final double TrackScrubFactor = 1.0;
 

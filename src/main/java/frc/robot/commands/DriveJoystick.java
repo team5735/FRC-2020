@@ -39,9 +39,9 @@ public class DriveJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(new Twist(maxVelocityInTicksper100ms * Util.deadband(RobotContainer.subsystemController.leftStick.getX(), 0.1),
-    maxVelocityInTicksper100ms * Util.deadband(RobotContainer.subsystemController.leftStick.getY(), 0.1), 
-     TURN_CONSTANT * Util.deadband(RobotContainer.subsystemController.rightStick.getX(), 0.1)));
+    drivetrain.drive(new Twist(maxVelocityInTicksper100ms * RobotContainer.subsystemController.leftStick.getXCubedWithDeadband(0.07),
+    maxVelocityInTicksper100ms * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07), 
+     TURN_CONSTANT * RobotContainer.subsystemController.rightStick.getXCubedWithDeadband(0.07)));
 
 
     // System.out.println(unitgay);

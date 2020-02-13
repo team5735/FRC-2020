@@ -20,19 +20,19 @@ import frc.robot.subsystems.DrivetrainTrajectory;
 public class DriveFollowTrajectory extends CommandBase {
 	private final DrivetrainTrajectory drivetrain;
 	private final TrajectoryIterator<TimedState<PoseWithCurvature>> trajectory;
-	
+
 	/**
-	* Creates a new DriveFollowTrajectory.
-	*/
+	 * Creates a new DriveFollowTrajectory.
+	 */
 	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory,
-	    DrivetrainTrajectory drivetrain) {
+			DrivetrainTrajectory drivetrain) {
 		this.drivetrain = drivetrain;
 		this.trajectory = new TrajectoryIterator<>(new TimedView<>(trajectory));
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(drivetrain);
 	}
-	
+
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
@@ -40,23 +40,28 @@ public class DriveFollowTrajectory extends CommandBase {
 		Robot.robotState.reset(Timer.getFPGATimestamp(), trajectory.getState().state().getPose());
 		drivetrain.setTrajectory(trajectory);
 	}
-	
+
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
 		System.out.println("following");
 		drivetrain.followPath();
+		// System.out.println(Robot.robotState.getFieldToVehicle(Timer.getFPGATimestamp()));
+		System.out.println(trajectory.getState().toString());
 	}
-	
+
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		System.out.println("done");
 		System.out.println(trajectory);
 	}
-	
+
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return drivetrain.isDoneWithTrajectory();
+		boolean finished = drivetrain.isDoneWithTrajectory();
+		if (finished) {System.out.println("done");}
+		return finished;
 	}
 }

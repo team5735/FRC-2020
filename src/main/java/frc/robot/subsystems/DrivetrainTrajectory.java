@@ -92,7 +92,7 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     leftMaster = new TalonFX(RobotConstants.LEFT_MASTER_ID);
     leftMaster.configFactoryDefault();
-    leftMaster.setInverted(true);
+    leftMaster.setInverted(false);
     leftMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
     leftMaster.config_kP(0, RobotConstants.LEFT_kP);
     leftMaster.config_kI(0, RobotConstants.LEFT_kI);
@@ -101,13 +101,13 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     leftFollower = new TalonFX(RobotConstants.LEFT_SLAVE_ID);
     leftFollower.configFactoryDefault();
-    leftFollower.setInverted(true);
+    leftFollower.setInverted(false);
     leftFollower.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
     leftFollower.follow(leftMaster);
 
     rightMaster = new TalonFX(RobotConstants.RIGHT_MASTER_ID);
     rightMaster.configFactoryDefault();
-    rightMaster.setInverted(false);
+    rightMaster.setInverted(true);
     rightMaster.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
     rightMaster.config_kP(0, RobotConstants.RIGHT_kP);
     rightMaster.config_kI(0, RobotConstants.RIGHT_kI);
@@ -117,7 +117,7 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     rightFollower = new TalonFX(RobotConstants.RIGHT_SLAVE_ID);
     rightFollower.configFactoryDefault();
-    rightFollower.setInverted(false);
+    rightFollower.setInverted(true);
     rightFollower.configStatorCurrentLimit(RobotConstants.TALON_CURRENT_LIMIT);
     rightFollower.follow(rightMaster);
 
@@ -144,7 +144,7 @@ public class DrivetrainTrajectory extends Drivetrain {
         RobotConstants.DriveVIntercept);
 
     model = new DifferentialDrive(RobotConstants.RobotLinearInertia, RobotConstants.RobotAngularInertia,
-        RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelDiameterInches / 2.0),
+        RobotConstants.RobotAngularDrag, Util.inches_to_meters(RobotConstants.DriveWheelRadiusInches),
         Util.inches_to_meters(RobotConstants.DriveWheelTrackWidthInches / 2.0 * RobotConstants.TrackScrubFactor),
         transmission, transmission);
     
