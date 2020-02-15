@@ -38,6 +38,9 @@ public class DriveFollowTrajectory extends CommandBase {
 	@Override
 	public void initialize() {
 		// TrajectorySet trajectorySet = generator.getTrajectorySet();
+		drivetrain.reset();
+		// drivetrain.zeroSensors();
+		// drivetrain.error();
 		Robot.robotState.reset(Timer.getFPGATimestamp(), new Pose());
 		drivetrain.setTrajectory(trajectory);
 	}
@@ -45,17 +48,16 @@ public class DriveFollowTrajectory extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		System.out.println("following");
 		drivetrain.followPath();
 		// System.out.println(Robot.robotState.getFieldToVehicle(Timer.getFPGATimestamp()));
-		System.out.println(trajectory.getState().toString());
+		// System.out.println(trajectory.getState().toString());
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("done");
-		System.out.println(trajectory);
+		// System.out.println(trajectory);
 	}
 
 	// Returns true when the command should end.

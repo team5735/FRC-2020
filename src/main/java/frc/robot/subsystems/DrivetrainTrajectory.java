@@ -172,8 +172,8 @@ public class DrivetrainTrajectory extends Drivetrain {
   }
 
   public void drive(DriveSignal driveSignal, ControlMode controlMode) {
-    System.out.println(driveSignal);
-    System.out.println("L: " + getSensorPositionLeft() + " R: " + getSensorPositionRight());
+    // System.out.println(driveSignal);
+    // System.out.println("L: " + getSensorPositionLeft() + " R: " + getSensorPositionRight());
     leftMaster.set(ControlMode.Velocity, driveSignal.getLeft());
     rightMaster.set(ControlMode.Velocity, driveSignal.getRight());
     normalMaster.set(ControlMode.Velocity, driveSignal.getNormal());
@@ -190,7 +190,7 @@ public class DrivetrainTrajectory extends Drivetrain {
     path_setpoint = setpoint();
 
     if (!overrideTrajectory) {
-      System.out.println("foobar");
+      System.out.println("Following Path!");
       drive(new DriveSignal(0.5 * radiansPerSecondToRPM(output.left_velocity),
           0.5 * radiansPerSecondToRPM(output.right_velocity), 0));
     } else { // BRAAAAAKEEE
@@ -226,6 +226,7 @@ public class DrivetrainTrajectory extends Drivetrain {
     error = Pose.Identity;
     output = new Output();
     lastTime = Double.POSITIVE_INFINITY;
+    // zeroSensors();
   }
 
   public void zeroSensors() {
