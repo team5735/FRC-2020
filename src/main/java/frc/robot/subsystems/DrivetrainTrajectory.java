@@ -153,6 +153,8 @@ public class DrivetrainTrajectory extends Drivetrain {
     gyro_heading = Rotation.Identity;
     gyroOffset = Rotation.Identity;
     path_setpoint = new TimedState<PoseWithCurvature>(PoseWithCurvature.identity());
+    resetEncoders();
+    reset();
 
     CommandScheduler.getInstance().setDefaultCommand(this, new DriveJoystick(this));
   }
@@ -171,6 +173,7 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   public void drive(DriveSignal driveSignal, ControlMode controlMode) {
     System.out.println(driveSignal);
+    System.out.println("L: " + getSensorPositionLeft() + " R: " + getSensorPositionRight());
     leftMaster.set(ControlMode.Velocity, driveSignal.getLeft());
     rightMaster.set(ControlMode.Velocity, driveSignal.getRight());
     normalMaster.set(ControlMode.Velocity, driveSignal.getNormal());
@@ -202,6 +205,21 @@ public class DrivetrainTrajectory extends Drivetrain {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
     normalMaster.setSelectedSensorPosition(0);
+  }
+
+  @Override
+  public int getSensorPositionLeft() {
+    return leftMaster.getSelectedSensorPosition();
+  }
+
+  @Override
+  public int getSensorPositionRight() {
+    return rightMaster.getSelectedSensorPosition();
+  }
+
+  @Override
+  public int getSensorPositionNormal() {
+    return normalMaster.getSelectedSensorPosition();
   }
 
   public void reset() {

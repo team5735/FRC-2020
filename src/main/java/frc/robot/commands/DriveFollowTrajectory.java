@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.geometry.Pose;
 import frc.lib.geometry.PoseWithCurvature;
 import frc.lib.trajectory.TimedView;
 import frc.lib.trajectory.Trajectory;
@@ -37,7 +38,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	@Override
 	public void initialize() {
 		// TrajectorySet trajectorySet = generator.getTrajectorySet();
-		Robot.robotState.reset(Timer.getFPGATimestamp(), trajectory.getState().state().getPose());
+		Robot.robotState.reset(Timer.getFPGATimestamp(), new Pose());
 		drivetrain.setTrajectory(trajectory);
 	}
 
@@ -60,8 +61,6 @@ public class DriveFollowTrajectory extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		boolean finished = drivetrain.isDoneWithTrajectory();
-		if (finished) {System.out.println("done");}
-		return finished;
+		return drivetrain.isDone();
 	}
 }

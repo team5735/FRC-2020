@@ -32,6 +32,13 @@ public abstract class Drivetrain extends SubsystemBase {
 
   public abstract void zeroSensors();
 
+  public abstract int getSensorPositionLeft();
+
+  public abstract int getSensorPositionRight();
+
+  public abstract int getSensorPositionNormal();
+
+
   public static double rotationsToInches(double rotations) {
     return rotations * (RobotConstants.DriveWheelDiameterInches * Math.PI);
   }
