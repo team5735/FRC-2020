@@ -28,6 +28,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory,
 			DrivetrainTrajectory drivetrain) {
 		this.drivetrain = drivetrain;
+		System.out.println(trajectory);
 		this.trajectory = new TrajectoryIterator<>(new TimedView<>(trajectory));
 
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -37,10 +38,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		// TrajectorySet trajectorySet = generator.getTrajectorySet();
 		drivetrain.reset();
-		// drivetrain.zeroSensors();
-		// drivetrain.error();
 		Robot.robotState.reset(Timer.getFPGATimestamp(), new Pose());
 		drivetrain.setTrajectory(trajectory);
 	}
@@ -49,15 +47,15 @@ public class DriveFollowTrajectory extends CommandBase {
 	@Override
 	public void execute() {
 		drivetrain.followPath();
-		// System.out.println(Robot.robotState.getFieldToVehicle(Timer.getFPGATimestamp()));
-		// System.out.println(trajectory.getState().toString());
+		System.out.println("Destination: " + drivetrain.rotationstoTicks((drivetrain.inchesToRotations(10))));
+		System.out.println(Robot.robotState.getFieldToVehicle(Timer.getFPGATimestamp()));
+		System.out.println(trajectory.getState().toString());
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("done");
-		// System.out.println(trajectory);
 	}
 
 	// Returns true when the command should end.

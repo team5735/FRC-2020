@@ -102,6 +102,7 @@ public class TrajectoryGenerator extends SubsystemBase {
             List<Pose> waypoints = new ArrayList<>();
             waypoints.add(new Pose(0.0, 0.0, Rotation.fromDegrees(180.0)));
             waypoints.add(new Pose(10.0, 0.0, Rotation.fromDegrees(180.0)));
+            // waypoints.add(new Pose(20.0, 0.0, Rotation.fromDegrees(180.0)));
             // waypoints.add(new Pose(0.0, 0.0, Rotation.fromDegrees(180.0)));
             // waypoints.add(kSideStartPose.transformBy(Pose.fromTranslation(new
             // Translation(-120.0, 0.0))));

@@ -59,6 +59,10 @@ public abstract class Drivetrain extends SubsystemBase {
     return rpm * RobotConstants.EncoderTicksPerRotation / 60.0 / 10.0;
   }
 
+  public static double rotationstoTicks(double rotations) {
+    return rotations * RobotConstants.EncoderTicksPerRotation;
+  }
+
   public static double inchesPerSecondToRpm(double inches_per_second) {
     return inchesToRotations(inches_per_second) * 60.0;
   }

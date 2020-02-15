@@ -173,7 +173,7 @@ public class DrivetrainTrajectory extends Drivetrain {
 
   public void drive(DriveSignal driveSignal, ControlMode controlMode) {
     // System.out.println(driveSignal);
-    // System.out.println("L: " + getSensorPositionLeft() + " R: " + getSensorPositionRight());
+    System.out.println("L: " + getSensorPositionLeft() + " R: " + getSensorPositionRight());
     leftMaster.set(ControlMode.Velocity, driveSignal.getLeft());
     rightMaster.set(ControlMode.Velocity, driveSignal.getRight());
     normalMaster.set(ControlMode.Velocity, driveSignal.getNormal());
@@ -191,8 +191,8 @@ public class DrivetrainTrajectory extends Drivetrain {
 
     if (!overrideTrajectory) {
       System.out.println("Following Path!");
-      drive(new DriveSignal(0.5 * radiansPerSecondToRPM(output.left_velocity),
-          0.5 * radiansPerSecondToRPM(output.right_velocity), 0));
+      drive(new DriveSignal(radiansPerSecondToTicksPer100ms(output.left_velocity),
+          radiansPerSecondToTicksPer100ms(output.right_velocity), 0));
     } else { // BRAAAAAKEEE
       drive(DriveSignal.NEUTRAL);
     }

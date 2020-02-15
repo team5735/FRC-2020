@@ -21,8 +21,9 @@ public class RobotConstants {
     **/
 
     // Robot Constants
-    public static final double EncoderTicksPerRotation = 2048.0;
     public static final double MaxVelocity = 1.0; // m/s
+    public static final double GearRatio = 12.0 / 64.0 * 24.0 / 28.0;
+    public static final double EncoderTicksPerRotation = 2048.0;
 
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
