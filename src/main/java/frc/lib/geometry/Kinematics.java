@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib.geometry;
 
 import frc.lib.geometry.Pose;
 import frc.lib.geometry.Rotation;
