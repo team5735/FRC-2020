@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 import frc.lib.util.Util;
 
-public class Rotation implements IRotation2d<Rotation>{
+public class Rotation{
 
     public static final Rotation Identity = new Rotation();
 
@@ -95,7 +95,7 @@ public class Rotation implements IRotation2d<Rotation>{
         return this;
     }
 
-    @Override
+    
     public Rotation interpolate(final Rotation other, double x) {
         if (x <= 0) {
             return new Rotation(this);
@@ -106,18 +106,18 @@ public class Rotation implements IRotation2d<Rotation>{
         return this.rotateBy(Rotation.fromRadians(angle_diff * x));
     }
 
-    @Override
+    
     public String toCSV() {
         final DecimalFormat fmt = new DecimalFormat("#0.000");
         return fmt.format(degrees());
     }
 
-    @Override
+    
     public double distance(final Rotation other) {
         return inverse().rotateBy(other).radians();
     }
 
-    @Override
+    
     public boolean equals(final Object other) {
         if (other == null || !(other instanceof Rotation)) return false;
         return distance((Rotation) other) < Util.Epsilon;

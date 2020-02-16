@@ -12,7 +12,7 @@ import frc.lib.util.Util;
 /**
  * Add your docs here.
  */
-public class Pose implements IPose2d<Pose>{
+public class Pose{
 
     public static final Pose Identity = new Pose();
 
@@ -104,7 +104,7 @@ public class Pose implements IPose2d<Pose>{
         return new Twist(translation_part.x(), translation_part.y(), dtheta);
     }
 
-    @Override
+    
     public Pose interpolate(final Pose other, double x) {
         if (x <= 0) {
             return new Pose(this);
@@ -143,32 +143,32 @@ public class Pose implements IPose2d<Pose>{
         return a_t.translateBy(a_r.toTranslation().scale(t));
     }
 
-    @Override
+    
     public Translation getTranslation() {
         return translation;
     }
 
-    @Override
+    
     public Rotation getRotation() {
         return rotation;
     }
 
-    @Override
+    
     public double distance(final Pose other) {
         return Pose.log(inverse().transformBy(other)).norm();
     }
 
-    @Override
+    
     public String toCSV() {
         return translation.toCSV() + "," + rotation.toCSV();
     }
 
-    @Override
+    
     public Pose mirror() {
         return new Pose(new Translation(getTranslation().x(), -getTranslation().y()), getRotation().inverse());
     }
 
-    @Override
+    
     public String toString() {
         return "x: " + translation.x + " y: " + translation.y + " r: " + rotation.degrees();
     }

@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.geometry.Twist;
+import frc.lib.util.Units;
 import frc.lib.util.Util;
 import frc.robot.RobotContainer;
 import frc.robot.constants.RobotConstants;
@@ -18,8 +19,8 @@ public class DriveJoystick extends CommandBase {
 
   private Drivetrain drivetrain;
 
-  private double maxVelocityInTicksper100ms = Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(Util.meters_to_inches(RobotConstants.MaxVelocity)));
-  private double TURN_CONSTANT = Util.degrees_to_radians(3); // maps [-1, 1] input to [-3deg, 3deg]/100ms
+  private double maxVelocityInTicksper100ms = Units.rpmToTicks(Units.metersPerSecondToRpm(RobotConstants.MAX_VELOCITY));
+  private double TURN_CONSTANT = Units.degreesToRadians(3); // maps [-1, 1] input to [-3deg, 3deg]/100ms
 
   /**
    * Creates a new DriveJoystick.

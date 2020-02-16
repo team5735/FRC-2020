@@ -14,7 +14,7 @@ import frc.lib.util.Util;
 /**
  * Add your docs here.
  */
-public class Translation implements ITranslation2d<Translation> {
+public class Translation {
 
     protected static final Translation Identity = new Translation();
 
@@ -96,7 +96,7 @@ public class Translation implements ITranslation2d<Translation> {
         return Rotation.fromRadians(Math.acos(Math.min(1.0, Math.max(cos_angle, -1.0))));
     }
 
-    @Override
+    
     public Translation interpolate(final Translation other, double x) {
         if (x <= 0) {
             return new Translation(this);
@@ -110,29 +110,29 @@ public class Translation implements ITranslation2d<Translation> {
         return new Translation(x * (other.x - x) + x, x * (other.y - y) + y);
     }
 
-    @Override
+    
     public Translation getTranslation() {
         return this;
     }
 
-    @Override
+    
     public String toCSV() {
         final DecimalFormat fmt = new DecimalFormat("#0.000");
         return fmt.format(x) + "," + fmt.format(y);
     }
 
-    @Override
+    
     public double distance(final Translation other) {
         return inverse().translateBy(other).norm();
     }
 
-    @Override
+    
     public boolean equals(final Object other) {
         if (other == null || !(other instanceof Translation)) return false;
         return distance((Translation) other) < Util.Epsilon;
     }
 
-    // @Override
+    // 
     // public State getIdentity() {
     //     return Identity;
     // }
