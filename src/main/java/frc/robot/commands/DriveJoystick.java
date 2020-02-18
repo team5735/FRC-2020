@@ -19,7 +19,7 @@ public class DriveJoystick extends CommandBase {
 
   private Drivetrain drivetrain;
 
-  private double maxVelocityInTicksper100ms = Units.rpmToTicks(Units.metersPerSecondToRpm(RobotConstants.MAX_VELOCITY));
+  private double maxVelocityInTicksper100ms = 0.01 * Units.rpmToTicks(Units.metersPerSecondToRpm(RobotConstants.MAX_VELOCITY));
   private double TURN_CONSTANT = Units.degreesToRadians(3); // maps [-1, 1] input to [-3deg, 3deg]/100ms
 
   /**

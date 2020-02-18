@@ -65,16 +65,16 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 12.0 / MAX_VELOCITY_RPM * ENCODER_TICKS_PER_REV;
 
-    public static final double AUTO_LEFT_kP = 0.007;
+    public static final double AUTO_LEFT_kP = 1;
     public static final double AUTO_LEFT_kI = 0.0;
     public static final double AUTO_LEFT_kD = 0.0;
-    public static final double AUTO_LEFT_kV = 0.0; // V per rad/s
-    public static final double AUTO_LEFT_kA = 0.0; // V per rad/s^2
-    public static final double AUTO_RIGHT_kP = 0.009;
+    // public static final double AUTO_LEFT_kV = 0.0; // V per rad/s
+    // public static final double AUTO_LEFT_kA = 0.0; // V per rad/s^2
+    public static final double AUTO_RIGHT_kP = 1;
     public static final double AUTO_RIGHT_kI = 0.0;
     public static final double AUTO_RIGHT_kD = 0.0;
-    public static final double AUTO_RIGHT_kV = 0.0; // V per rad/s
-    public static final double AUTO_RIGHT_kA = 0.0; // V per rad/s^2
+    // public static final double AUTO_RIGHT_kV = 0.0; // V per rad/s
+    // public static final double AUTO_RIGHT_kA = 0.0; // V per rad/s^2
     
     // Current Limiting
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);

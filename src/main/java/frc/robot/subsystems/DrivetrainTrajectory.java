@@ -12,8 +12,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.geometry.Twist;
 import frc.lib.util.DriveSignal;
+import frc.robot.commands.DriveJoystick;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
 
@@ -68,10 +70,14 @@ public class DrivetrainTrajectory extends Drivetrain {
 		gyroHost = new TalonSRX(6);
 		gyroHost.configFactoryDefault();
 		gyro = new PigeonIMU(gyroHost);
+		
+		CommandScheduler.getInstance().setDefaultCommand(this, new DriveJoystick(this));
 	}
 	
 	@Override
 	public void drive(double leftPercent, double rightPercent, double normalPercent) {
+		// leftMaster.set(ControlMode.PercentOutput, 0.5);
+		// rightMaster.set(ControlMode.PercentOutput, 0.5);
 		leftMaster.set(ControlMode.PercentOutput, leftPercent);
 		rightMaster.set(ControlMode.PercentOutput, rightPercent);
 		normalMaster.set(ControlMode.PercentOutput, normalPercent);
