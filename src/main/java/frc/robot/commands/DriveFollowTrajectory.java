@@ -7,33 +7,35 @@
 
 package frc.robot.commands;
 
+import frc.lib.util.Units;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.DrivetrainTrajectory;
 import frc.robot.subsystems.TrajectoryGenerator;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
 * An example command that uses an example subsystem.
 */
 public class DriveFollowTrajectory extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final DrivetrainTrajectory s_drivetrain;
+	private final Drivetrain s_drivetrain;
 	private EncoderFollower left, right;
+	private boolean isTrajDone = false;
 	
 	/**
 	* Creates a new FollowTrajectory.
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public DriveFollowTrajectory(DrivetrainTrajectory subsystem) {
+	public DriveFollowTrajectory(Drivetrain subsystem) {
 		s_drivetrain = subsystem;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(subsystem);
+		addRequirements((Subsystem) subsystem);
 	}
 	
 	// Called when the command is initially scheduled.
@@ -44,27 +46,28 @@ public class DriveFollowTrajectory extends CommandBase {
 		s_drivetrain.reset();
 		
 		left = new EncoderFollower(TrajectoryGenerator.leftTrajectory);
-		left.configureEncoder(s_drivetrain.getLeftEncoderPosition(), (int) RobotConstants.ENCODER_TICKS_PER_REV, RobotConstants.WHEEL_DIAMETER);
-		left.configurePIDVA(RobotConstants.LEFT_kP, RobotConstants.LEFT_kI, RobotConstants.LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
+		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
+		left.configurePIDVA(RobotConstants.AUTO_LEFT_kP, RobotConstants.AUTO_LEFT_kI, RobotConstants.AUTO_LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
 		
 		right = new EncoderFollower(TrajectoryGenerator.rightTrajectory);
-		right.configureEncoder(s_drivetrain.getRightEncoderPosition(), (int) RobotConstants.ENCODER_TICKS_PER_REV, RobotConstants.WHEEL_DIAMETER);
-		right.configurePIDVA(RobotConstants.RIGHT_kP, RobotConstants.RIGHT_kI, RobotConstants.RIGHT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
+		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
+		right.configurePIDVA(RobotConstants.AUTO_RIGHT_kP, RobotConstants.AUTO_RIGHT_kI, RobotConstants.AUTO_RIGHT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		int leftEncoder = s_drivetrain.getLeftEncoderPosition();
-		int rightEncoder = s_drivetrain.getRightEncoderPosition();
-		System.out.println("Left E: " + leftEncoder + ", Right E: " + rightEncoder);
+		if(isTrajDone) return;
+		int leftPos = s_drivetrain.getLeftSidePosition();
+		int rightPos = s_drivetrain.getRightSidePosition();
+		System.out.println("Left E: " + leftPos + ", Right E: " + rightPos);
 		// RETURNS in PERCENT OUTPUT
-		double l = left.calculate(leftEncoder);
-		double r = right.calculate(rightEncoder);
+		double l = left.calculate(leftPos);
+		double r = right.calculate(rightPos);
 		
 		double gyro_heading = s_drivetrain.getGyroAngle();    // Assuming the gyro is giving a value in degrees
 		double desired_heading = Pathfinder.r2d(left.getHeading());  // Should also be in degrees
-		System.out.println("Heading: " + gyro_heading + " | Wanted: " + desired_heading);
+		// System.out.println("Heading: " + gyro_heading + " | Wanted: " + desired_heading);
 		
 		// This allows the angle difference to respect 'wrapping', where 360 and 0 are the same value
 		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
@@ -85,11 +88,17 @@ public class DriveFollowTrajectory extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		System.out.println("DONE: L current:" + Units.rotationsToMeters(Units.tickstoRotations(s_drivetrain.getLeftSidePosition())) / 6.2222 + ", R current: " + Units.rotationsToMeters(Units.tickstoRotations(s_drivetrain.getRightSidePosition())) / 6.2222);
+		s_drivetrain.drive(0, 0, 0);
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return left.isFinished() && right.isFinished();
+		if(left.isFinished() && right.isFinished()) {
+			isTrajDone = true;
+			return true;
+		}
+		return false;
 	}
 }

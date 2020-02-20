@@ -28,14 +28,17 @@ public class RobotConstants {
      */
 
     // Drivetrain Facts
-    public static final double ENCODER_TICKS_PER_REV = 2048.0;
+    public static final double DRIVETRAIN_GEAR_RATIO = 6.22222222 / 1.0; // for every 6.2 rev of Falcon, wheels turn 1 rev
+    public static final double ENCODER_TICKS_PER_FALCON_REV = 2048.0;
+    public static final double ENCODER_TICKS_PER_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * DRIVETRAIN_GEAR_RATIO;
     public static final double DRIVETRAIN_TRACK_WIDTH = Units.inchesToMeters(23.0); // m
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.0); // m
     
     // Pathfinder Limiting
-    public static final double MAX_VELOCITY = 45.0; // m/s, used in generator
-    public static final double MAX_VELOCITY_RPM = 5742.0; // RPM
-    public static final double kTURN_CORRECTION =  0.0031;
+    public static final double MAX_VELOCITY_TICKS = 10500.0; // ticks / 100ms
+    public static final double MAX_VELOCITY_RPM = 496.156; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
+    public static final double MAX_VELOCITY = 3.896; // MAX_VELOCITY_TICKS * 10 / 2048 / DRIVETRAIN_GEAR_RATIO * (Math.PI * 0.15) // m/s, used in generator
+    public static final double kTURN_CORRECTION = -0.009;
     
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
@@ -53,24 +56,24 @@ public class RobotConstants {
     public static final double LEFT_kP = 0.0;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 12.0 / MAX_VELOCITY_RPM * ENCODER_TICKS_PER_REV;
+    public static final double LEFT_kF = 0.064;
     
     public static final double RIGHT_kP = 0.0;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 12.0 / MAX_VELOCITY_RPM * ENCODER_TICKS_PER_REV;
+    public static final double RIGHT_kF = 0.0723;
     
     public static final double NORMAL_kP = 0.0;
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
-    public static final double NORMAL_kF = 12.0 / MAX_VELOCITY_RPM * ENCODER_TICKS_PER_REV;
+    public static final double NORMAL_kF = ENCODER_TICKS_PER_FALCON_REV / MAX_VELOCITY_TICKS;
 
-    public static final double AUTO_LEFT_kP = 1;
+    public static final double AUTO_LEFT_kP = 0.0;//0.018;
     public static final double AUTO_LEFT_kI = 0.0;
     public static final double AUTO_LEFT_kD = 0.0;
     // public static final double AUTO_LEFT_kV = 0.0; // V per rad/s
     // public static final double AUTO_LEFT_kA = 0.0; // V per rad/s^2
-    public static final double AUTO_RIGHT_kP = 1;
+    public static final double AUTO_RIGHT_kP = 0.0;//0.018;
     public static final double AUTO_RIGHT_kI = 0.0;
     public static final double AUTO_RIGHT_kD = 0.0;
     // public static final double AUTO_RIGHT_kV = 0.0; // V per rad/s

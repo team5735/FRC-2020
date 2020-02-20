@@ -38,8 +38,16 @@ public class Units {
         return inches / (RobotConstants.WHEEL_DIAMETER * Math.PI);
     }
 
+    public static double rotationsToTicks(double rotations) {
+        return rotations * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV;
+    }
+
+    public static double tickstoRotations(double ticks) {
+        return ticks / RobotConstants.ENCODER_TICKS_PER_WHEEL_REV;
+    }
+
     public static double rpmToTicks(double rpm) {
-        return rpm * RobotConstants.ENCODER_TICKS_PER_REV / 60.0 / 10.0;
+        return rpm * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV / 60.0 / 10.0;
     }
 
     public static double metersPerSecondToRpm(double metersPerSec) {
@@ -51,7 +59,7 @@ public class Units {
     }
 
     public static double radiansPerSecondToTicks(double radians) {
-        return radians / (Math.PI * 2.0) * RobotConstants.ENCODER_TICKS_PER_REV / 10.0;
+        return radians / (Math.PI * 2.0) * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV / 10.0;
     }
 
 }

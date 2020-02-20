@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.controllers.BobXboxController;
+import frc.robot.commands.ChangeDriveMode;
 import frc.robot.commands.DriveFollowTrajectory;
+import frc.robot.commands.ResetGyroAngle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.DrivetrainTrajectory;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -33,7 +34,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final ColorMatcher colorMatcher = new ColorMatcher();
   public final ColorSpinner colorSpinner = new ColorSpinner();
-  public final Drivetrain drivetrain = new DrivetrainTrajectory();
+  public final Drivetrain drivetrain = new Drivetrain();
   public final Gyro gyro = new Gyro();
   public final Climber climber = new Climber();
   public final Shooter shooter = new Shooter();
@@ -59,7 +60,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
       // subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
       // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-      // subsystemController.xButton.whenPressed(new DriveFollowTrajectory(
+      subsystemController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
+      subsystemController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
       //   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
     }
     
@@ -69,7 +71,7 @@ public class RobotContainer {
     * @return the command to run in autonomous
     */
     public Command getAutonomousCommand() {
-      return new DriveFollowTrajectory((DrivetrainTrajectory) drivetrain);
+      return new DriveFollowTrajectory(drivetrain);
     }
     
   }
