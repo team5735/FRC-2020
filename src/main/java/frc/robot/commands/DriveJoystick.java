@@ -64,7 +64,7 @@ public class DriveJoystick extends CommandBase {
 		double turn = TURN_CONSTANT * RobotContainer.subsystemController.leftStick.getXCubedWithDeadband(0.07);
 		
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
-			drivetrain.driveFC(forward, normal, turn, Units.degreesToRadians(drivetrain.getGyroAngle()));
+			drivetrain.driveFC(forward, normal, turn, drivetrain.getGyroAngle());
 		} else {
 			drivetrain.drive(forward + turn, forward - turn, normal);
 		}
