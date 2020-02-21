@@ -21,6 +21,7 @@ public class Intake extends SubsystemBase {
 	private final TalonSRX intakeArm;
 	private final VictorSPX intakeRoller;
 	private final TalonSRX conveyorRoller;
+	private final VictorSPX conveyorFeeder;
 	
 	/**
 	* Creates a new Intake.
@@ -37,6 +38,9 @@ public class Intake extends SubsystemBase {
 		intakeArm.overrideLimitSwitchesEnable(true);
 
 		conveyorRoller = Drivetrain.gyroHost; // shared TalonSRX
+
+		conveyorFeeder = new VictorSPX(4);
+		conveyorFeeder.configFactoryDefault();
 	}
 	
 	@Override
@@ -65,5 +69,13 @@ public class Intake extends SubsystemBase {
 
 	public void stopConveyor() {
 		conveyorRoller.set(ControlMode.PercentOutput, 0);
+	}
+
+	public void feedShooter() {
+		conveyorFeeder.set(ControlMode.PercentOutput, 0.05);
+	}
+
+	public void stopFeeder() {
+		conveyorFeeder.set(ControlMode.PercentOutput, 0);
 	}
 }
