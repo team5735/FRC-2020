@@ -12,8 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.AngleIntakeCommand;
-import frc.robot.commands.IntakeBallCommand;
 import frc.robot.constants.RobotConstants;
 
 public class Intake extends SubsystemBase {

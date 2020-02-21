@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
@@ -13,21 +13,17 @@ import frc.robot.subsystems.Intake;
 /**
 * An example command that uses an example subsystem.
 */
-public class IntakeBallCommand extends CommandBase {
+public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
-	private final double speed;
-	private final boolean inverted;
 	
 	/**
 	* Creates a new ExampleCommand.
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public IntakeBallCommand(Intake intake, double speed, boolean inverted) {
+	public FeedShooterCommand(Intake intake) {
 		this.intake = intake;
-		this.speed = speed;
-		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(intake);
 	}
@@ -40,13 +36,13 @@ public class IntakeBallCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intake.intakeBall(speed, inverted);
+		intake.feedShooter(-1);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.intakeBall(0, false);
+		intake.feedShooter(0);
 	}
 	
 	// Returns true when the command should end.

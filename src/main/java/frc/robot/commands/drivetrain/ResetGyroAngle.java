@@ -5,19 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.lib.util.Units;
+import frc.lib.util.Util;
+import frc.robot.RobotContainer;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
-public class ChangeDriveMode extends CommandBase {
+public class ResetGyroAngle extends CommandBase {
 
   private Drivetrain drivetrain;
 
-  public ChangeDriveMode(Drivetrain drivetrain) {
+  public ResetGyroAngle(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
 
@@ -32,13 +37,12 @@ public class ChangeDriveMode extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      drivetrain.setDriveMode((drivetrain.getDriveMode() == DriveMode.STATIC_DRIVE) ? DriveMode.FIELD_CENTRIC : DriveMode.STATIC_DRIVE);
+      drivetrain.resetGyroAngle();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("Drive Mode", drivetrain.getDriveMode().toString());
   }
 
   // Returns true when the command should end.
