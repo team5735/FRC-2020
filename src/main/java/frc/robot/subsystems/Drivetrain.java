@@ -24,6 +24,8 @@ public class Drivetrain extends SubsystemBase{
 	private TalonFX leftMaster, rightMaster, leftFollower, rightFollower, normalMaster;
 	private TalonSRX gyroHost;
 	private PigeonIMU gyro;
+
+	private double TURN_CONSTANT = 0.33;
 	
 	public enum DriveMode {
 		STATIC_DRIVE, FIELD_CENTRIC
@@ -77,26 +79,45 @@ public class Drivetrain extends SubsystemBase{
 		
 		CommandScheduler.getInstance().setDefaultCommand(this, (Command) new DriveJoystick(this));
 	}
+
+	/**
+	 * Drive by supplying a forward, sideways, and turn percentage. Limited by TURN_CONSTANT.
+	 * @param forwardP
+	 * @param normalP
+	 * @param turnP
+	 */
+	public void drive(double forwardP, double normalP, double turnP) {
+		double f = -1 * (1 - TURN_CONSTANT) * forwardP;
+		double n = (1 - TURN_CONSTANT) * normalP;
+		double t = TURN_CONSTANT * turnP;
+
+		leftMaster.set(ControlMode.PercentOutput, f + t);
+		rightMaster.set(ControlMode.PercentOutput, f - t);
+		normalMaster.set(ControlMode.PercentOutput, n);
+	}
 	
-	public void drive(double leftPercent, double rightPercent, double normalPercent) {
-		// leftMaster.set(ControlMode.PercentOutput, 0.5);
-		// rightMaster.set(ControlMode.PercentOutput, 0.5);
+	/**
+	 * Drive by supplying a left, right, and sideways percent. Straight 100% output. 
+	 * @param leftPercent
+	 * @param rightPercent
+	 * @param normalPercent
+	 */
+	public void drivePercentOutput(double leftPercent, double rightPercent, double normalPercent) {
 		leftMaster.set(ControlMode.PercentOutput, leftPercent);
 		rightMaster.set(ControlMode.PercentOutput, rightPercent);
 		normalMaster.set(ControlMode.PercentOutput, normalPercent);
 	}
-	
-	public void driveFC(double forwardVelocity, double sidewaysVelocity, double angularVelocity,
+
+	/**
+	 * Drive field-centric with respect to current gyro angle
+	 * @param currentAngle Angle, in degrees
+	 */
+	public void driveFieldCentric(double forwardVelocity, double sidewaysVelocity, double angularVelocity,
 	double currentAngle) {
-		// System.out.println("inputForward: " + forwardVelocity + ", inputSideways: " +
-		// sidewaysVelocity + ", angularVel: " + angularVelocity + ", angle: " +
-		// currentAngle);
 		double angleRad = Math.toRadians(currentAngle);
 		double modifiedForward = forwardVelocity * Math.cos(angleRad) + sidewaysVelocity * Math.sin(-angleRad);
 		double modifiedSideways = forwardVelocity * Math.sin(angleRad) + sidewaysVelocity * Math.cos(angleRad);
-		// System.out.println("forward: " + modifiedForward + ", sideways: " +
-		// modifiedSideways);
-		drive(modifiedForward + angularVelocity, modifiedForward - angularVelocity, modifiedSideways);
+		drive(modifiedForward, modifiedSideways, angularVelocity);
 	}
 	
 	public void reset() {
