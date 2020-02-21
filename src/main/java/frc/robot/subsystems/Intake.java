@@ -63,19 +63,11 @@ public class Intake extends SubsystemBase {
 		intakeRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
 	}
 
-	public void rollConveyor(boolean inverted) {
-		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * 0.2);
+	public void rollConveyor(double speed, boolean inverted) {
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.2 : speed));
 	}
 
-	public void stopConveyor() {
-		conveyorRoller.set(ControlMode.PercentOutput, 0);
-	}
-
-	public void feedShooter() {
-		conveyorFeeder.set(ControlMode.PercentOutput, 0.05);
-	}
-
-	public void stopFeeder() {
-		conveyorFeeder.set(ControlMode.PercentOutput, 0);
+	public void feedShooter(double speed) {
+		conveyorFeeder.set(ControlMode.PercentOutput, (speed < 0 ? 0.05 : speed));
 	}
 }
