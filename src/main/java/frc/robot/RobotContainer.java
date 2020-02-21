@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.controllers.BobXboxController;
 import frc.robot.commands.ChangeDriveMode;
 import frc.robot.commands.DriveFollowTrajectory;
+import frc.robot.commands.IntakeBallCommand;
 import frc.robot.commands.ResetGyroAngle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
@@ -62,6 +63,8 @@ public class RobotContainer {
       // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
       subsystemController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
       subsystemController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
+
+      subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake));
       //   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
     }
     
