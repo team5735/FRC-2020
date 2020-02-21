@@ -8,26 +8,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.util.Util;
-import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Intake;
 
 /**
 * An example command that uses an example subsystem.
 */
-public class AngleIntakeCommand extends CommandBase {
+public class MoveConveyorCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
-	private final double position;
+	private final boolean inverted;
 	
 	/**
 	* Creates a new ExampleCommand.
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public AngleIntakeCommand(Intake intake, double position) {
+	public MoveConveyorCommand(Intake intake, boolean inverted) {
 		this.intake = intake;
-		this.position = position;
+		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(intake);
 	}
@@ -40,17 +38,18 @@ public class AngleIntakeCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		intake.rollConveyor(inverted);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.moveArm(intake.getPosition()); // stay
+		intake.stopConveyor();
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
+		return false;
 	}
 }

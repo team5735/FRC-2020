@@ -12,16 +12,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.controllers.BobXboxController;
+import frc.robot.commands.AngleIntakeCommand;
 import frc.robot.commands.ChangeDriveMode;
 import frc.robot.commands.DriveFollowTrajectory;
 import frc.robot.commands.IntakeBallCommand;
+import frc.robot.commands.MoveConveyorCommand;
 import frc.robot.commands.ResetGyroAngle;
 import frc.robot.commands.ShootCommand;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
@@ -37,7 +39,6 @@ public class RobotContainer {
   public final ColorMatcher colorMatcher = new ColorMatcher();
   public final ColorSpinner colorSpinner = new ColorSpinner();
   public final Drivetrain drivetrain = new Drivetrain();
-  public final Gyro gyro = new Gyro();
   public final Climber climber = new Climber();
   public final Shooter shooter = new Shooter();
   public final Intake intake = new Intake();
@@ -68,7 +69,14 @@ public class RobotContainer {
       subsystemController.aButton.whenPressed(new ShootCommand(shooter, 4500));
       subsystemController.aButton.whenReleased(new ShootCommand(shooter, 0));
 
-      subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake));
+      subsystemController.rightTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getRight(), false));
+      subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getLeft(), true));
+
+      subsystemController.rightBumper.toggleWhenActive(new MoveConveyorCommand(intake, false));
+      subsystemController.leftBumper.toggleWhenActive(new MoveConveyorCommand(intake, true));
+
+      subsystemController.Dpad.Up.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
+      subsystemController.Dpad.Down.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
       //   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
     }
     

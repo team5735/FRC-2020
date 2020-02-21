@@ -8,46 +8,50 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
 /**
- * An example command that uses an example subsystem.
- */
+* An example command that uses an example subsystem.
+*/
 public class IntakeBallCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Intake intake;
-
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public IntakeBallCommand(Intake intake) {
-    this.intake = intake;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    intake.spinRoller(RobotContainer.subsystemController.triggers.getLeft(), false);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+	private final Intake intake;
+	private final double speed;
+	private final boolean inverted;
+	
+	/**
+	* Creates a new ExampleCommand.
+	*
+	* @param subsystem The subsystem used by this command.
+	*/
+	public IntakeBallCommand(Intake intake, double speed, boolean inverted) {
+		this.intake = intake;
+		this.speed = speed;
+		this.inverted = inverted;
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(intake);
+	}
+	
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+	}
+	
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+		intake.intakeBall(speed, inverted);
+	}
+	
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		intake.intakeBall(0, false);
+	}
+	
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

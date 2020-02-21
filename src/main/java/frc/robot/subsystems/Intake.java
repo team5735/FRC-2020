@@ -14,37 +14,56 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.AngleIntakeCommand;
 import frc.robot.commands.IntakeBallCommand;
+import frc.robot.constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
-  
-  private final TalonSRX intakeArm;
-  private final VictorSPX intakeRoller;
+	
+	private final TalonSRX intakeArm;
+	private final VictorSPX intakeRoller;
+	private final TalonSRX conveyorRoller;
+	
+	/**
+	* Creates a new Intake.
+	*/
+	public Intake() {    
+		intakeArm = new TalonSRX(7);
+		intakeArm.configFactoryDefault();
+		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
+		intakeArm.config_kI(0, RobotConstants.INTAKE_kI);
+		intakeArm.config_kD(0, RobotConstants.INTAKE_kD);
 
-  /**
-   * Creates a new Intake.
-   */
-  public Intake() {    
+		intakeRoller = new VictorSPX(10);
+		intakeRoller.configFactoryDefault();
+		intakeArm.overrideLimitSwitchesEnable(true);
 
-    intakeArm = new TalonSRX(1000);
-    intakeArm.configFactoryDefault();
+		conveyorRoller = Drivetrain.gyroHost; // shared TalonSRX
+	}
+	
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
 
-    intakeRoller = new VictorSPX(1000);
-    intakeRoller.configFactoryDefault();
+	/**
+	 * @return Position, in sensor units
+	 */
+	public double getPosition() {
+		return intakeArm.getSelectedSensorPosition();
+	}
 
-    c_intakeBall = new IntakeBallCommand(this);
-    c_angleIntake = new AngleIntakeCommand(this);
-  }
+	public void moveArm(double position) {
+		intakeArm.set(ControlMode.Position, position);
+	}
+	
+	public void intakeBall(double speed, boolean inverted) {
+		intakeRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
+	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	public void rollConveyor(boolean inverted) {
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * 0.2);
+	}
 
-  public void spinRoller(double speed, boolean inverted) {
-    if (inverted) {
-      intakeRoller.set(ControlMode.PercentOutput, speed);
-    } else {
-      intakeRoller.set(ControlMode.PercentOutput, -speed);
-    }
-  }
+	public void stopConveyor() {
+		conveyorRoller.set(ControlMode.PercentOutput, 0);
+	}
 }

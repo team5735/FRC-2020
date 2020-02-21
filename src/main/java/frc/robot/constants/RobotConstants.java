@@ -50,7 +50,7 @@ public class RobotConstants {
     
     public static final int NORMAL_ID = 55;
 
-    public static final int GYRO_TALON_HOST_ID = 4; //TODO tune
+    public static final int GYRO_TALON_HOST_ID = 6;
     
     // PID
     public static final double LEFT_kP = 0.0;
@@ -84,6 +84,14 @@ public class RobotConstants {
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
     public static final double FLYWHEEL_MIN_SPEED = 3800; // rpm
     public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
+
+    // Intake
+    public static final double INTAKE_kP = 0.000325;
+    public static final double INTAKE_kI = 0.0;
+    public static final double INTAKE_kD = 0.004;
+    public static final double INTAKE_POSITION_DEADBAND = 10; // sensor units
+    public static final double INTAKE_POSITION_RETRACTED = 100;
+    public static final double INTAKE_POSITION_DEPLOYED = 4500;
 
     // Current Limiting
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);

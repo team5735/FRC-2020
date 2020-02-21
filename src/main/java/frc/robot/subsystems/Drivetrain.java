@@ -22,7 +22,7 @@ import frc.robot.constants.RobotConstants;
 public class Drivetrain extends SubsystemBase{
 	
 	private TalonFX leftMaster, rightMaster, leftFollower, rightFollower, normalMaster;
-	private TalonSRX gyroHost;
+	public static TalonSRX gyroHost;
 	private PigeonIMU gyro;
 
 	private double TURN_CONSTANT = 0.33;
@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase{
 		normalMaster.config_kD(0, RobotConstants.NORMAL_kD);
 		normalMaster.config_kF(0, RobotConstants.NORMAL_kF);
 		
-		gyroHost = new TalonSRX(6);
+		gyroHost = new TalonSRX(RobotConstants.GYRO_TALON_HOST_ID);
 		gyroHost.configFactoryDefault();
 		gyro = new PigeonIMU(gyroHost);
 		
