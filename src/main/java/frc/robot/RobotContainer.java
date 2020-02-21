@@ -16,6 +16,7 @@ import frc.robot.commands.ChangeDriveMode;
 import frc.robot.commands.DriveFollowTrajectory;
 import frc.robot.commands.IntakeBallCommand;
 import frc.robot.commands.ResetGyroAngle;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
@@ -63,6 +64,9 @@ public class RobotContainer {
       // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
       subsystemController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
       subsystemController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
+
+      subsystemController.aButton.whenPressed(new ShootCommand(shooter, 4500));
+      subsystemController.aButton.whenReleased(new ShootCommand(shooter, 0));
 
       subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake));
       //   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));

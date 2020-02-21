@@ -71,14 +71,20 @@ public class RobotConstants {
     public static final double AUTO_LEFT_kP = 0.0;//0.018;
     public static final double AUTO_LEFT_kI = 0.0;
     public static final double AUTO_LEFT_kD = 0.0;
-    // public static final double AUTO_LEFT_kV = 0.0; // V per rad/s
-    // public static final double AUTO_LEFT_kA = 0.0; // V per rad/s^2
     public static final double AUTO_RIGHT_kP = 0.0;//0.018;
     public static final double AUTO_RIGHT_kI = 0.0;
     public static final double AUTO_RIGHT_kD = 0.0;
-    // public static final double AUTO_RIGHT_kV = 0.0; // V per rad/s
-    // public static final double AUTO_RIGHT_kA = 0.0; // V per rad/s^2
+
+    public static final double FLYWHEEL_kP = 0.000325;
+    public static final double FLYWHEEL_kI = 0.0;
+    public static final double FLYWHEEL_kD = 0.004;
+    public static final double FLYWHEEL_kF = 0.7 / 4900.0;
     
+    // Flywheel
+    public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
+    public static final double FLYWHEEL_MIN_SPEED = 3800; // rpm
+    public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
+
     // Current Limiting
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
     

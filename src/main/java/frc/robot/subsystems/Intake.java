@@ -16,10 +16,7 @@ import frc.robot.commands.AngleIntakeCommand;
 import frc.robot.commands.IntakeBallCommand;
 
 public class Intake extends SubsystemBase {
-
-  private final IntakeBallCommand c_intakeBall;
-  private final AngleIntakeCommand c_angleIntake;
-
+  
   private final TalonSRX intakeArm;
   private final VictorSPX intakeRoller;
 
