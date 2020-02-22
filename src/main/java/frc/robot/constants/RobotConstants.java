@@ -103,11 +103,14 @@ public class RobotConstants {
     public static final double DRIVE_VINTERCEPT = 1.055; // V
     
     // Vision Constants
-    public static final double CAMERAHEIGHTFROMGROUND = 1;
-    public static final double CAMERAANGLEFROMPARALLEL = 0; // Radians
-    public static final double TARGETHEIGHTFROMGROUND = 8; // 8 feet and 2 1/4 inches
+    public static final double VISION_kSTEER = 0.03;
+    public static final double VISION_TARGET_DEADBAND = 1.0; // degrees
+
+    public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(24); // meters
+    public static final double CAMERA_ANGLEFROMPARALLEL = Units.degreesToRadians(15); // radians
+    public static final double TARGET_HEIGHTFROMGROUND = Units.inchesToMeters(94.75); // meters (7 ft 10.75 in, direct center of trapezoid)
     
-    public static final double CAMERAXOFFSET = 0;
-    public static final double CAMERAYOFFSET = 0;
-    public static final double CAMERAYAWANGLEDEGREES = 0;
+    // public static final double CAMERAXOFFSET = 0;
+    // public static final double CAMERAYOFFSET = 0;
+    // public static final double CAMERAYAWANGLEDEGREES = 0;
 }
