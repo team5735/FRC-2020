@@ -19,7 +19,7 @@ public class TurnToTargetCommand extends CommandBase {
     private final Vision vision;
 	private final Drivetrain drivetrain;
 	
-	private double degreesRotate = -1;
+	private double degreesRotate = 10;
 	private double inDeadbandTime = 0;
 	
 	public TurnToTargetCommand(Vision vision, Drivetrain drivetrain) {
@@ -34,7 +34,9 @@ public class TurnToTargetCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-        vision.enableTracking();
+		vision.enableTracking();
+		degreesRotate = 10;
+		inDeadbandTime = 0;
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.

@@ -31,15 +31,16 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
                 new TurnToTargetCommand(vision, drivetrain),
                 new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
             ),
-            new FeedShooterCommand(intake, false).withTimeout(4)
+            new FeedShooterCommand(intake, false).withTimeout(4),
+            new RampShooterCommand(shooter, 0)
         );
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
-        super.end(interrupted);
-        CommandScheduler.getInstance().schedule(new RampShooterCommand(shooter, 0));
-    }
+    // @Override
+    // public void end(boolean interrupted) {
+    //     // TODO Auto-generated method stub
+    //     super.end(interrupted);
+    //     CommandScheduler.getInstance().schedule(new RampShooterCommand(shooter, 0));
+    // }
     
 }
