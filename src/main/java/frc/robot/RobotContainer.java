@@ -42,7 +42,7 @@ public class RobotContainer {
   public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator((Drivetrain)drivetrain);
   public final TrajectorySet trajectorySet = trajectoryGenerator.getTrajectorySet();
 
-  public static final BobXboxController subsystemController = new BobXboxController(0);
+  public static final BobXboxController drivetrainController = new BobXboxController(0);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -61,7 +61,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
     // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-    subsystemController.xButton.whenPressed(new DriveFollowTrajectory(
+    drivetrainController.xButton.whenPressed(new DriveFollowTrajectory(
       trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, drivetrain, trajectoryGenerator));
   }
 

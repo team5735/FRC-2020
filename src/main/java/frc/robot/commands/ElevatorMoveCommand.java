@@ -37,7 +37,7 @@ public class ElevatorMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveElevator(RobotContainer.subsystemController.rightStick.getY());
+    climber.moveElevator(RobotContainer.drivetrainController.rightStick.getY());
   }
 
   // Called once the command ends or is interrupted.
