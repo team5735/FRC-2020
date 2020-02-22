@@ -15,7 +15,7 @@ import frc.robot.commands.drivetrain.ResetGyroAngle;
 import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.commands.intake.MoveConveyorCommand;
-import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
@@ -59,8 +59,8 @@ public class RobotContainer {
 		subsystemController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		subsystemController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 		
-		subsystemController.aButton.whenPressed(new ShootCommand(shooter, 4500));
-		subsystemController.aButton.whenReleased(new ShootCommand(shooter, 0));
+		subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 4500));
+		subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 		
 		subsystemController.rightTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getRight(), false));
 		subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getLeft(), true));

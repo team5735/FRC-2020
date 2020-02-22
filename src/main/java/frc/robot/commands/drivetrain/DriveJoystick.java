@@ -38,6 +38,7 @@ public class DriveJoystick extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 		double forward = RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07);
 		double normal = RobotContainer.subsystemController.rightStick.getXCubedWithDeadband(0.07);
 		double turn = RobotContainer.subsystemController.leftStick.getXCubedWithDeadband(0.07);

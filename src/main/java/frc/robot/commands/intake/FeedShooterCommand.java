@@ -16,13 +16,14 @@ import frc.robot.subsystems.Intake;
 public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
+	private double seconds;
 	
 	/**
 	* Creates a new ExampleCommand.
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public FeedShooterCommand(Intake intake) {
+	public FeedShooterCommand(Intake intake, double seconds) {
 		this.intake = intake;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(intake);

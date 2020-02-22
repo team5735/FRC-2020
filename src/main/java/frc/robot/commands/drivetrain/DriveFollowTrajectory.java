@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.Units;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.TrajectoryGenerator;
 import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
 
 /**
@@ -22,6 +22,7 @@ import jaci.pathfinder.followers.EncoderFollower;
 public class DriveFollowTrajectory extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Drivetrain s_drivetrain;
+	private Trajectory leftTraj, rightTraj;
 	private EncoderFollower left, right;
 	private boolean isTrajDone = false;
 	
@@ -30,8 +31,10 @@ public class DriveFollowTrajectory extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public DriveFollowTrajectory(Drivetrain subsystem) {
+	public DriveFollowTrajectory(Drivetrain subsystem, Trajectory leftTraj, Trajectory rightTraj) {
 		s_drivetrain = subsystem;
+		this.leftTraj = leftTraj;
+		this.rightTraj = rightTraj;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements((Subsystem) subsystem);
 	}
@@ -43,11 +46,11 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		s_drivetrain.reset();
 		
-		left = new EncoderFollower(TrajectoryGenerator.leftTrajectory);
+		left = new EncoderFollower(leftTraj);
 		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
 		left.configurePIDVA(RobotConstants.AUTO_LEFT_kP, RobotConstants.AUTO_LEFT_kI, RobotConstants.AUTO_LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
 		
-		right = new EncoderFollower(TrajectoryGenerator.rightTrajectory);
+		right = new EncoderFollower(rightTraj);
 		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
 		right.configurePIDVA(RobotConstants.AUTO_RIGHT_kP, RobotConstants.AUTO_RIGHT_kI, RobotConstants.AUTO_RIGHT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
 	}

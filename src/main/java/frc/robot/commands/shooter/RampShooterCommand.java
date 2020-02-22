@@ -10,12 +10,12 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShootCommand extends CommandBase {
+public class RampShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Shooter shooter;
 	private final double rpm;
 	
-	public ShootCommand(Shooter shooter, double rpm) {
+	public RampShooterCommand(Shooter shooter, double rpm) {
 		this.shooter = shooter;
 		this.rpm = rpm;
 		

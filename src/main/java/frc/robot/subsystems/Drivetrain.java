@@ -27,10 +27,10 @@ public class Drivetrain extends SubsystemBase{
 	private double TURN_CONSTANT = 0.33;
 	
 	public enum DriveMode {
-		STATIC_DRIVE, FIELD_CENTRIC
+		STATIC_DRIVE, FIELD_CENTRIC, DISABLED
 	};
 	
-	private DriveMode driveMode = DriveMode.STATIC_DRIVE;
+	private DriveMode driveMode = DriveMode.STATIC_DRIVE; //TODO Change to Field Centric
 	
 	public Drivetrain() {
 		leftMaster = new TalonFX(RobotConstants.LEFT_MASTER_ID);

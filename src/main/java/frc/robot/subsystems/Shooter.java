@@ -54,5 +54,15 @@ public class Shooter extends SubsystemBase {
 		if(rpm < RobotConstants.FLYWHEEL_MIN_SPEED) speed = RobotConstants.FLYWHEEL_MIN_SPEED;
 		flywheelPIDController.setReference(speed, ControlType.kVelocity);
 	}
+
+	/**
+	 * Function to convert a distance into flywheel speed
+	 * @param distance Horizontal distance to target, in meters
+	 * @return Flywheel speed, in RPM
+	 */
+	public double getSpeedFromDistance(double distance) {
+		// TODO
+		return 100;
+	}
 	
 }
