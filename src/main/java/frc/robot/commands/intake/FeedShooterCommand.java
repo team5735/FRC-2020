@@ -16,14 +16,13 @@ import frc.robot.subsystems.Intake;
 public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
-	private double seconds;
 	
 	/**
 	* Creates a new ExampleCommand.
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public FeedShooterCommand(Intake intake, double seconds) {
+	public FeedShooterCommand(Intake intake) {
 		this.intake = intake;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(intake);
@@ -37,12 +36,14 @@ public class FeedShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		intake.rollConveyor(-1, false);
 		intake.feedShooter(-1);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		intake.rollConveyor(0, false);
 		intake.feedShooter(0);
 	}
 	

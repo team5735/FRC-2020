@@ -9,8 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.controllers.BobXboxController;
+import frc.robot.commandgroups.SixBallAutoCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
-import frc.robot.commands.drivetrain.DriveFollowTrajectory;
 import frc.robot.commands.drivetrain.ResetGyroAngle;
 import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
@@ -24,6 +24,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
+import frc.robot.subsystems.Vision;
 
 /**
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,6 +41,7 @@ public class RobotContainer {
 	public final Shooter shooter = new Shooter();
 	public final Intake intake = new Intake();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
+	public final Vision vision = new Vision();
 	
 	public static final BobXboxController driverController = new BobXboxController(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
@@ -79,7 +81,7 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new DriveFollowTrajectory(drivetrain);
+		return new SixBallAutoCommand(vision, drivetrain, intake, shooter);
 	}
 	
 }

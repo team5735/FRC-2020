@@ -20,7 +20,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
         addCommands(
             new TurnToTargetCommand(vision, drivetrain),
             new RampShooterCommand(shooter, shooter.getSpeedFromDistance(vision.getDistanceToTarget())),
-            new FeedShooterCommand(intake)
+            new FeedShooterCommand(intake).withTimeout(4)
         );
     }
     

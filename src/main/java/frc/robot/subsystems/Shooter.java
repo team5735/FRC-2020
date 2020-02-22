@@ -55,6 +55,10 @@ public class Shooter extends SubsystemBase {
 		flywheelPIDController.setReference(speed, ControlType.kVelocity);
 	}
 
+	public double getSpeed() {
+		return neoMaster.getEncoder().getVelocity();
+	}
+
 	/**
 	 * Function to convert a distance into flywheel speed
 	 * @param distance Horizontal distance to target, in meters
