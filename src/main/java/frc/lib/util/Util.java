@@ -20,6 +20,13 @@ public class Util {
         return input;
     }
 
+    public static double round(double num, int round) {
+        double val = num * (10 * round);
+        val = Math.round(val);
+        val = val / (10*round);
+        return val;
+    }
+
     /**
      * Limits the given input to the given magnitude.
      */
@@ -65,29 +72,5 @@ public class Util {
             result &= epsilonEquals(value_in, value, epsilon);
         }
         return result;
-    }
-
-    public static double inches_to_meters(double inches) {
-        return inches * 0.0254;
-    }
-
-    public static double meters_to_inches(double meters) {
-        return meters / 0.0254;
-    }
-
-    public static double feet_to_meters(double feet) {
-        return inches_to_meters(feet * 12.0);
-    }
-
-    public static double meters_to_feet(double meters) {
-        return meters_to_inches(meters) / 12.0;
-    }
-
-    public static double degrees_to_radians(double degrees) {
-        return Math.toRadians(degrees);
-    }
-
-    public static double radians_to_degrees(double radians) {
-        return Math.toDegrees(radians);
     }
 }

@@ -7,35 +7,83 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.AngleIntakeCommand;
-import frc.robot.commands.IntakeBallCommand;
+import frc.robot.constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
+	
+	private final TalonSRX intakeArm;
+	private final VictorSPX intakeRoller;
+	private final TalonSRX conveyorRoller;
+	private final VictorSPX conveyorFeeder;
 
-  private final TalonSRX intakeMaster, intakeAngleMaster;
+	private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
+	
+	/**
+	* Creates a new Intake.
+	*/
+	public Intake() {    
+		intakeArm = new TalonSRX(7);
+		intakeArm.configFactoryDefault();
+		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
+		intakeArm.config_kI(0, RobotConstants.INTAKE_kI);
+		intakeArm.config_kD(0, RobotConstants.INTAKE_kD);
 
-  private final IntakeBallCommand c_intakeBall;
-  private final AngleIntakeCommand c_angleIntake;
+		intakeRoller = new VictorSPX(10);
+		intakeRoller.configFactoryDefault();
+		intakeArm.overrideLimitSwitchesEnable(true);
 
-  /**
-   * Creates a new Climber.
-   */
-  public Intake() {
-    c_intakeBall = new IntakeBallCommand(this);
-    c_angleIntake = new AngleIntakeCommand(this);
+		conveyorRoller = Drivetrain.gyroHost; // shared TalonSRX
 
-    intakeMaster = new TalonSRX(1000);
-    intakeMaster.configFactoryDefault();
+		conveyorFeeder = new VictorSPX(4);
+		conveyorFeeder.configFactoryDefault();
+		
+		retractedLimitSwitch = new DigitalInput(0);
+		deployedLimitSwitch = new DigitalInput(1);
+	}
+	
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
 
-    intakeAngleMaster = new TalonSRX(1000);
-    intakeAngleMaster.configFactoryDefault();
-  }
+	/**
+	 * @return Position, in sensor units
+	 */
+	public double getPosition() {
+		return intakeArm.getSelectedSensorPosition();
+	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	public void resetPosition() {
+		intakeArm.setSelectedSensorPosition(0);
+	}
+
+	public void moveArm(ControlMode mode, double value) {
+		intakeArm.set(mode, value);
+	}
+	
+	public void intakeBall(double speed, boolean inverted) {
+		intakeRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
+	}
+
+	public void rollConveyor(double speed, boolean inverted) {
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.2 : speed));
+	}
+
+	public void feedShooter(double speed) {
+		conveyorFeeder.set(ControlMode.PercentOutput, (speed < 0 ? 0.05 : speed));
+	}
+
+	public boolean isRetractedLimitHit() {
+		return retractedLimitSwitch.get();
+	}
+
+	public boolean isDeployedLimitHit() {
+		return deployedLimitSwitch.get();	
+	}
 }
