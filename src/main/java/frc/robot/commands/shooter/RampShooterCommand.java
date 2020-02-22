@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 public class RampShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -28,14 +29,19 @@ public class RampShooterCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		shooter.setSpeed(rpm); // only need to call once?
+		if(rpm == 0) {
+			shooter.slowDown();
+		} else {
+			shooter.setSpeed(rpm); // only need to call once?
+		}
+		
 		// TODO: Adjust banana as necessary
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
+		SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 	}
 	
 	// Called once the command ends or is interrupted.
@@ -46,6 +52,6 @@ public class RampShooterCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(shooter.getSpeed() - rpm, 10) == 0;
+		return Util.deadband(shooter.getSpeed() - rpm, 100) == 0;
 	}
 }

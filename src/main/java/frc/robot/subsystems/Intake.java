@@ -12,15 +12,18 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
 	
 	private final TalonSRX intakeArm;
 	private final VictorSPX intakeRoller;
-	private final TalonSRX conveyorRoller;
-	private final VictorSPX conveyorFeeder;
+	private final VictorSPX conveyorRoller;
+	private final TalonSRX conveyorFeeder;
 
 	private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
 	
@@ -36,20 +39,25 @@ public class Intake extends SubsystemBase {
 
 		intakeRoller = new VictorSPX(10);
 		intakeRoller.configFactoryDefault();
+		intakeRoller.setInverted(true);
 		intakeArm.overrideLimitSwitchesEnable(true);
 
-		conveyorRoller = Drivetrain.gyroHost; // shared TalonSRX
+		conveyorFeeder = Drivetrain.gyroHost; // shared TalonSRX
 
-		conveyorFeeder = new VictorSPX(4);
-		conveyorFeeder.configFactoryDefault();
+		conveyorRoller = new VictorSPX(9);
+		conveyorRoller.configFactoryDefault();
+		conveyorRoller.setInverted(true);
 		
 		retractedLimitSwitch = new DigitalInput(0);
 		deployedLimitSwitch = new DigitalInput(1);
+
+		// CommandScheduler.getInstance().setDefaultCommand(this, new IntakeBallCommand(this));
 	}
 	
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		SmartDashboard.putNumber("Intake Angle Sensor Value", getPosition());
 	}
 
 	/**
@@ -72,11 +80,11 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void rollConveyor(double speed, boolean inverted) {
-		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.2 : speed));
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.5 : speed));
 	}
 
-	public void feedShooter(double speed) {
-		conveyorFeeder.set(ControlMode.PercentOutput, (speed < 0 ? 0.05 : speed));
+	public void feedShooter(double speed, boolean inverted) {
+		conveyorFeeder.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.3 : speed));
 	}
 
 	public boolean isRetractedLimitHit() {

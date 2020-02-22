@@ -16,7 +16,8 @@ import frc.robot.subsystems.Vision;
 public class TurnToTargetCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Vision vision;
-    private final Drivetrain drivetrain;
+	private final Drivetrain drivetrain;
+	private double steer_cmd = 100;
 	
 	public TurnToTargetCommand(Vision vision, Drivetrain drivetrain) {
         this.vision = vision;
@@ -37,7 +38,7 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public void execute() {
 		if(vision.hasValidTarget()) {
-            double steer_cmd = RobotConstants.VISION_kSTEER * vision.getLimelight().getdegRotationToTarget();
+            steer_cmd = RobotConstants.VISION_kSTEER * vision.getLimelight().getdegRotationToTarget();
             drivetrain.drive(0, 0, steer_cmd);
         }
 	}
@@ -51,6 +52,8 @@ public class TurnToTargetCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(vision.getLimelight().getdegRotationToTarget(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
+		return false;
+		// System.out.println(steer_cmd / RobotConstants.VISION_kSTEER);
+		// return Util.deadband(steer_cmd / RobotConstants.VISION_kSTEER, RobotConstants.VISION_TARGET_DEADBAND) == 0;
 	}
 }

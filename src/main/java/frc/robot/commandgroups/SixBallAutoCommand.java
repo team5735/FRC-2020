@@ -25,18 +25,18 @@ public class SixBallAutoCommand extends SequentialCommandGroup {
      */
     public SixBallAutoCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter) {
         addCommands(
-            new ParallelCommandGroup(
-                new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, shooter.getSpeedFromDistance(vision.getDistanceToTarget()))
-            ),
-            new FeedShooterCommand(intake).withTimeout(3),
-            new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
+            // new ParallelCommandGroup(
+            //     new TurnToTargetCommand(vision, drivetrain),
+            //     new RampShooterCommand(shooter, shooter.getSpeedFromDistance(vision.getDistanceToTarget()))
+            // ),
+            // new FeedShooterCommand(intake, false).withTimeout(3),
+            // new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
             new ParallelDeadlineGroup(
-                new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory),
-                new RampShooterCommand(shooter, 0), // call one time
-                new IntakeBallCommand(intake, 0.25, false) // never ends
-            ),
-            new TurnAndShootCommand(vision, drivetrain, intake, shooter)
+                new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory)//,
+                // new RampShooterCommand(shooter, 0), // call one time
+                // new IntakeBallCommand(intake, 0.25, false) // never ends
+            )//,
+            // new TurnAndShootCommand(vision, drivetrain, intake, shooter)
         );
     }
 

@@ -8,6 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -24,6 +25,14 @@ public class IntakeBallCommand extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
+
+	public IntakeBallCommand(Intake intake) {
+		this.intake = intake;
+		this.speed = -1;
+		this.inverted = false;
+		addRequirements(intake);
+	}
+
 	public IntakeBallCommand(Intake intake, double speed, boolean inverted) {
 		this.intake = intake;
 		this.speed = speed;
@@ -35,12 +44,24 @@ public class IntakeBallCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		// System.out.println("INTAKING BALL");
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intake.intakeBall(speed, inverted);
+		if(speed < 0) {
+			// take controller input
+			double rightTrigger = 0.5 * RobotContainer.driverController.triggers.getRight();
+			double leftTrigger = 0.5 * RobotContainer.driverController.triggers.getLeft();
+			if(rightTrigger > 0) {
+				intake.intakeBall(rightTrigger, false);
+			} else if (leftTrigger > 0) {
+				intake.intakeBall(leftTrigger, true);
+			}
+		} else {
+			intake.intakeBall(speed, inverted);
+		}
 	}
 	
 	// Called once the command ends or is interrupted.

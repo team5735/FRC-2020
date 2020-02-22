@@ -86,7 +86,7 @@ public class Drivetrain extends SubsystemBase{
 	 * @param turnP
 	 */
 	public void drive(double forwardP, double normalP, double turnP) {
-		double f = -1 * (1 - TURN_CONSTANT) * forwardP;
+		double f = (1 - TURN_CONSTANT) * forwardP;
 		double n = (1 - TURN_CONSTANT) * normalP;
 		double t = TURN_CONSTANT * turnP;
 

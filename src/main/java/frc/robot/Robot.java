@@ -97,6 +97,9 @@ public class Robot extends TimedRobot {
 	*/
 	@Override
 	public void teleopPeriodic() {
+		if(RobotContainer.subsystemController.xButton.get()) {
+			CommandScheduler.getInstance().cancelAll();
+		}
 	}
 	
 	@Override

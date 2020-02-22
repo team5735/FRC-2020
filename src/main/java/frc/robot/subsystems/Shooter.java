@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants;
 
@@ -57,6 +58,10 @@ public class Shooter extends SubsystemBase {
 
 	public double getSpeed() {
 		return neoMaster.getEncoder().getVelocity();
+	}
+
+	public void slowDown() {
+		neoMaster.set(0);
 	}
 
 	/**
