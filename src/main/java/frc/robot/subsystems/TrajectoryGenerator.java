@@ -22,7 +22,7 @@ import frc.lib.trajectory.timing.TimingConstraint;
 
 public class TrajectoryGenerator extends SubsystemBase {
     
-    private final DrivetrainTrajectory drivetrain;
+    private final Drivetrain drivetrain;
 
     private static final double kMaxVelocity = 130.0;
     private static final double kMaxAccel = 130.0;
@@ -32,7 +32,7 @@ public class TrajectoryGenerator extends SubsystemBase {
 
     private TrajectorySet mTrajectorySet = null;
 
-    public TrajectoryGenerator(DrivetrainTrajectory drivetrain) {
+    public TrajectoryGenerator(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
         // mMotionPlanner = new DriveMotionPlanner();
         generateTrajectories();

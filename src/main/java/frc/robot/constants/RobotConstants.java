@@ -21,7 +21,8 @@ public class RobotConstants {
     **/
 
     // Robot Constants
-    public static final double EncoderTicksPerRotation = 2048.0;
+    public static final double GearRatio = 12.0 / 64.0 * 24.0 / 28.0;
+    public static final double EncoderTicksPerRotation = 2048.0 / GearRatio;
     public static final double MaxVelocity = 1.0; // m/s
 
     // Motor Identification
@@ -40,17 +41,17 @@ public class RobotConstants {
     public static final double LEFT_kP = 0.0;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
+    public static final double LEFT_kF = 12.0 / 5742.0 * 2048.0;
 
     public static final double RIGHT_kP = 0.0;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
+    public static final double RIGHT_kF = 12.0 / 5742.0 * 2048.0;
 
     public static final double NORMAL_kP = 0.0;
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
-    public static final double NORMAL_kF = 12.0 / 5742.0 * EncoderTicksPerRotation;
+    public static final double NORMAL_kF = 12.0 / 5742.0 * 2048.0;
 
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
 

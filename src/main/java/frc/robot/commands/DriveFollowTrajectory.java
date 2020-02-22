@@ -16,11 +16,11 @@ import frc.lib.trajectory.Trajectory;
 import frc.lib.trajectory.TrajectoryIterator;
 import frc.lib.trajectory.timing.TimedState;
 import frc.robot.Robot;
-import frc.robot.subsystems.DrivetrainTrajectory;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.TrajectoryGenerator;
 
 public class DriveFollowTrajectory extends CommandBase {
-	private final DrivetrainTrajectory drivetrain;
+	private final Drivetrain drivetrain;
 	private final TrajectoryGenerator trajectoryGenerator;
 	private final Trajectory<TimedState<PoseWithCurvature>> trajectory;
 	private TrajectoryIterator<TimedState<PoseWithCurvature>> path;
@@ -29,7 +29,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	 * Creates a new DriveFollowTrajectory.
 	 */
 	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory,
-			DrivetrainTrajectory drivetrain, TrajectoryGenerator trajectoryGenerator) {
+			Drivetrain drivetrain, TrajectoryGenerator trajectoryGenerator) {
 		this.drivetrain = drivetrain;
 		this.trajectory = trajectory;
 		this.trajectoryGenerator = trajectoryGenerator;
@@ -42,7 +42,7 @@ public class DriveFollowTrajectory extends CommandBase {
 	@Override
 	public void initialize() {
 		// TrajectorySet trajectorySet = generator.getTrajectorySet();
-		System.out.println("BRUH");
+		// System.out.println("BRUH");
 		Robot.robotState.reset(Timer.getFPGATimestamp(), new Pose());
 		path = null;
 		drivetrain.resetCurrentTrajectory();
