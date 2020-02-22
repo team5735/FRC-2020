@@ -82,8 +82,11 @@ public class RobotConstants {
     
     // Flywheel
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
-    public static final double FLYWHEEL_MIN_SPEED = 3800; // rpm
+    public static final double FLYWHEEL_MIN_SPEED = 3500; // rpm
     public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
+    public static final double FLYWHEEL_PRESET_LINE = 3750; // rpm
+    public static final double FLYWHEEL_PRESET_TRENCH = 4000; // rpm
+    public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
 
     // Intake
     public static final double INTAKE_kP = 0.000325;

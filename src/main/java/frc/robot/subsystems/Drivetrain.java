@@ -76,7 +76,7 @@ public class Drivetrain extends SubsystemBase{
 		gyroHost.configFactoryDefault();
 		gyro = new PigeonIMU(gyroHost);
 		
-		CommandScheduler.getInstance().setDefaultCommand(this, (Command) new DriveJoystick(this));
+		CommandScheduler.getInstance().setDefaultCommand(this, new DriveJoystick(this));
 	}
 
 	/**

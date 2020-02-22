@@ -7,6 +7,7 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.subsystems.Shooter;
@@ -28,12 +29,13 @@ public class RampShooterCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		shooter.setSpeed(rpm); // only need to call once?
+		// TODO: Adjust banana as necessary
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		
+		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 	}
 	
 	// Called once the command ends or is interrupted.

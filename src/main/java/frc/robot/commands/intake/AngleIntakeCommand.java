@@ -7,6 +7,8 @@
 
 package frc.robot.commands.intake;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
@@ -35,18 +37,18 @@ public class AngleIntakeCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		intake.moveArm(ControlMode.Position, position);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intake.moveArm(position);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.moveArm(intake.getPosition()); // stay
+		intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
 	}
 	
 	// Returns true when the command should end.

@@ -8,13 +8,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.controllers.BobXboxController;
 import frc.robot.commandgroups.SixBallAutoCommand;
+import frc.robot.commandgroups.TurnAndShootCommand;
+import frc.robot.commands.CancelAllCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
 import frc.robot.commands.drivetrain.ResetGyroAngle;
 import frc.robot.commands.intake.AngleIntakeCommand;
+import frc.robot.commands.intake.FeedShooterCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.commands.intake.MoveConveyorCommand;
+import frc.robot.commands.intake.ZeroIntakeCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Climber;
@@ -52,27 +57,42 @@ public class RobotContainer {
 	public RobotContainer() {
 		// Configure the button bindings
 		configureDriverBindings();
-		// configureSubsystemBindings();
+		configureSubsystemBindings();
 	}
 	
 	private void configureDriverBindings() {
 		// subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-		subsystemController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
-		subsystemController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
+		driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
+		driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
+		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
+		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 		
-		subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 4500));
-		subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
-		
-		subsystemController.rightTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getRight(), false));
-		subsystemController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getLeft(), true));
+		driverController.rightTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getRight(), false));
+		driverController.leftTriggerButton.toggleWhenActive(new IntakeBallCommand(intake, subsystemController.triggers.getLeft(), true));
+
+		driverController.startButton.whenPressed(new ZeroIntakeCommand(intake));
+		//   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
+	}
+
+	private void configureSubsystemBindings() {
+		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 4500));
+		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
+
+		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter));
+		// subsystemController.bButton.whenPressed();
+		// subsystemController.yButton.whenPressed();
+		subsystemController.xButton.whenPressed(new CancelAllCommand());
+
+		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE));
+		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, 0));
 		
 		subsystemController.rightBumper.toggleWhenActive(new MoveConveyorCommand(intake, false));
 		subsystemController.leftBumper.toggleWhenActive(new MoveConveyorCommand(intake, true));
-		
-		subsystemController.Dpad.Up.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
-		subsystemController.Dpad.Down.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
-		//   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
+
+		subsystemController.rightTriggerButton.toggleWhenActive(new FeedShooterCommand(intake));
 	}
 	
 	/**

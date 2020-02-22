@@ -39,9 +39,9 @@ public class DriveJoystick extends CommandBase {
 	@Override
 	public void execute() {
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
-		double forward = RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07);
-		double normal = RobotContainer.subsystemController.rightStick.getXCubedWithDeadband(0.07);
-		double turn = RobotContainer.subsystemController.leftStick.getXCubedWithDeadband(0.07);
+		double forward = RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
+		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.07);
+		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
 		
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 			drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());

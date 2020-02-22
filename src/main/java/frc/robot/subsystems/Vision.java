@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,9 +53,24 @@ public class Vision extends SubsystemBase {
 	 * @return Horizontal distance to target, in meters
 	 */
 	public double getDistanceToTarget() {
+		if(!trackingMode) enableTracking();
+		boolean gotDistance = false;
+		
 		double heightDiff = RobotConstants.TARGET_HEIGHTFROMGROUND - RobotConstants.CAMERA_HEIGHTFROMGROUND;
-		double yAngleToTarget = Units.degreesToRadians(limelight.getdegVerticalToTarget()); // radians
-		double distance = heightDiff / Math.tan(RobotConstants.CAMERA_ANGLEFROMPARALLEL + yAngleToTarget); // meters
+		double distance = 0;
+
+		while(!gotDistance) {
+			double yAngleToTarget = Units.degreesToRadians(limelight.getdegVerticalToTarget()); // radians
+			distance = heightDiff / Math.tan(RobotConstants.CAMERA_ANGLEFROMPARALLEL + yAngleToTarget); // meters
+			if(distance > 1) {
+				gotDistance = true;
+			}
+		}
+
+		disableTracking();
+
+		// SmartDashboard.putNumber("Distance to Target (m)", distance);
+
 		return distance;
 	}
 
