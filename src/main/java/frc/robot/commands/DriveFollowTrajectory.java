@@ -17,18 +17,22 @@ import frc.lib.trajectory.TrajectoryIterator;
 import frc.lib.trajectory.timing.TimedState;
 import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainTrajectory;
+import frc.robot.subsystems.TrajectoryGenerator;
 
 public class DriveFollowTrajectory extends CommandBase {
 	private final DrivetrainTrajectory drivetrain;
-	private final TrajectoryIterator<TimedState<PoseWithCurvature>> trajectory;
+	private final TrajectoryGenerator trajectoryGenerator;
+	private final Trajectory<TimedState<PoseWithCurvature>> trajectory;
+	private TrajectoryIterator<TimedState<PoseWithCurvature>> path;
 
 	/**
 	 * Creates a new DriveFollowTrajectory.
 	 */
 	public DriveFollowTrajectory(Trajectory<TimedState<PoseWithCurvature>> trajectory,
-			DrivetrainTrajectory drivetrain) {
+			DrivetrainTrajectory drivetrain, TrajectoryGenerator trajectoryGenerator) {
 		this.drivetrain = drivetrain;
-		this.trajectory = new TrajectoryIterator<>(new TimedView<>(trajectory));
+		this.trajectory = trajectory;
+		this.trajectoryGenerator = trajectoryGenerator;
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(drivetrain);
@@ -38,17 +42,21 @@ public class DriveFollowTrajectory extends CommandBase {
 	@Override
 	public void initialize() {
 		// TrajectorySet trajectorySet = generator.getTrajectorySet();
+		System.out.println("BRUH");
 		Robot.robotState.reset(Timer.getFPGATimestamp(), new Pose());
-		drivetrain.setTrajectory(trajectory);
+		path = null;
+		drivetrain.resetCurrentTrajectory();
+		trajectoryGenerator.generateTrajectories();
+		path = new TrajectoryIterator<>(new TimedView<>(trajectory));
+		drivetrain.setTrajectory(path);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		System.out.println("following");
 		drivetrain.followPath();
 		// System.out.println(Robot.robotState.getFieldToVehicle(Timer.getFPGATimestamp()));
-		System.out.println(trajectory.getState().toString());
+		System.out.println(path.getState().toString());
 	}
 
 	// Called once the command ends or is interrupted.

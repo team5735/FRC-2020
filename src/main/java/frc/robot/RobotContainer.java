@@ -62,7 +62,7 @@ public class RobotContainer {
     // subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
     // subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
     subsystemController.xButton.whenPressed(new DriveFollowTrajectory(
-      trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
+      trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain, trajectoryGenerator));
   }
 
   /**

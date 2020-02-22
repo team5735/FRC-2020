@@ -52,7 +52,6 @@ public class DrivetrainTrajectory extends Drivetrain {
   public Rotation gyro_heading;
   private Rotation gyroOffset;
 
-  public TimedState<PoseWithCurvature> path_setpoint;
   private TalonFX leftMaster, rightMaster, normalMaster, leftFollower, rightFollower;
   private TalonSRX gyroHost;
 
@@ -60,7 +59,8 @@ public class DrivetrainTrajectory extends Drivetrain {
   private static final double kMaxDy = 0.25;
   private static final double kMaxDTheta = Math.toRadians(5.0);
   private Pose error = Pose.Identity;
-
+  
+  public TimedState<PoseWithCurvature> path_setpoint;
   private TrajectoryIterator<TimedState<PoseWithCurvature>> currentTrajectory;
   private boolean isReversed = false;
   private double lastTime = Double.POSITIVE_INFINITY;
@@ -232,6 +232,12 @@ public class DrivetrainTrajectory extends Drivetrain {
     setHeading(Rotation.Identity);
     resetEncoders();
     // mAutoShift = true;
+  }
+
+  public void resetCurrentTrajectory() {
+    currentTrajectory = null;
+    path_setpoint = new TimedState<PoseWithCurvature>(PoseWithCurvature.identity());
+    mSetpoint = new TimedState<>(PoseWithCurvature.identity());
   }
 
   public synchronized Rotation getHeading() {
