@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.controllers.BobXboxController;
@@ -53,7 +54,7 @@ public class RobotContainer {
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
 	public final Vision vision = new Vision();
 	
-	public static final BobXboxController driverController = new BobXboxController(0);
+	public static final Joystick driverController = new Joystick(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
 	
 	/**
@@ -78,18 +79,18 @@ public class RobotContainer {
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
 		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
 		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
-		driverController.aButton.whileHeld(new WinchMoveCommand(climber));
-		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
-		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
+		// driverController.aButton.whileHeld(new WinchMoveCommand(climber));
+		// driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
+		// driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 
-		driverController.rightBumper.whileActiveContinuous(new AngleIntakeCommand(intake, false));
-		driverController.leftBumper.whileActiveContinuous(new AngleIntakeCommand(intake, true));
+		// driverController.rightBumper.whileActiveContinuous(new AngleIntakeCommand(intake, false));
+		// driverController.leftBumper.whileActiveContinuous(new AngleIntakeCommand(intake, true));
 		
-		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
-		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
+		// driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
+		// driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 
-		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
-		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
+		// driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
+		// driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
 		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// driverController.Dpad.Right.whileHeld();
 		
