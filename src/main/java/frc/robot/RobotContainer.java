@@ -59,6 +59,13 @@ public class RobotContainer {
 		configureDriverBindings();
 		configureSubsystemBindings();
 	}
+
+	public void stopAll() {
+		CommandScheduler.getInstance().cancelAll();
+		shooter.slowDown();
+		intake.intakeBall(0, false);
+		drivetrain.drivePercentOutput(0, 0, 0);
+	}
 	
 	private void configureDriverBindings() {
 		// subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));

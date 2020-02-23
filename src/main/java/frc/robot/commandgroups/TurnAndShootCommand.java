@@ -32,7 +32,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
                 new TurnToTargetCommand(vision, drivetrain),
                 new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
             ),
-            new FeedShooterCommand(intake, false).withTimeout(1),
+            new FeedShooterCommand(intake, false).withTimeout(3),
             new StopFlywheel(shooter)
         );
     }

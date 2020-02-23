@@ -33,11 +33,13 @@ public class FeedShooterCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		System.out.println("FEED SHOOTER COMMAND | START");
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		intake.intakeBall(0.5, inverted);
 		intake.rollConveyor(-1, inverted);
 		intake.feedShooter(-1, inverted);
 	}
@@ -45,8 +47,10 @@ public class FeedShooterCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		intake.intakeBall(0, false);
 		intake.rollConveyor(0, false);
 		intake.feedShooter(0, false);
+		System.out.println("FEED SHOOTER COMMAND | END");
 	}
 	
 	// Returns true when the command should end.

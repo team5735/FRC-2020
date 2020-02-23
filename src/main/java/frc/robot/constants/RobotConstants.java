@@ -108,8 +108,10 @@ public class RobotConstants {
     public static final double DRIVE_VINTERCEPT = 1.055; // V
     
     // Vision Constants
-    public static final double VISION_kSTEER = 0.03;
-    public static final double VISION_TARGET_DEADBAND = 0.75; // degrees
+    public static final double VISION_kSTEER_FAR = 0.15; // (0.5-anything)
+    public static final double VISION_kSTEER_MED = 0.2; // (0.15-0.5); at 0.5 deg, 10%
+    public static final double VISION_kSTEER_CLOSE = 0.5; // (0-0.15); at 0.15 deg, 7.5%
+    public static final double VISION_TARGET_DEADBAND = 0.13; // degrees
 
     public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(24); // meters
     public static final double CAMERA_ANGLEFROMPARALLEL = Units.degreesToRadians(15); // radians

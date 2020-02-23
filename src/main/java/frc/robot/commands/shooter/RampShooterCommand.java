@@ -47,6 +47,7 @@ public class RampShooterCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		System.out.println("RAMP SHOOTER COMMAND | END");
 	}
 	
 	// Returns true when the command should end.

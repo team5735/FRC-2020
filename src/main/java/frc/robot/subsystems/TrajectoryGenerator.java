@@ -19,8 +19,8 @@ public class TrajectoryGenerator {
     public static Trajectory rightTrajectory;
 
     private Waypoint[] points = new Waypoint[] {
-        new Waypoint(0,0,0),
-        new Waypoint(1.75, 1, 0) // positive ° = rotate left
+        new Waypoint(0,0,Pathfinder.d2r(15)),    
+        new Waypoint(1.75, 0.2, 0) // positive ° = rotate left
     };
 
     public TrajectoryGenerator() {

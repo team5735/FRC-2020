@@ -42,10 +42,23 @@ public class TurnToTargetCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		if(!vision.isTrackingEnabled()) vision.enableTracking();
 		if(vision.hasValidTarget()) {
 			degreesRotate = vision.getLimelight().getdegRotationToTarget();
-            double steer_cmd = RobotConstants.VISION_kSTEER * degreesRotate;
-			drivetrain.drive(0, 0, steer_cmd);
+			// if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
+			double kSteer;
+			if(degreesRotate >= 0.5) {
+				kSteer = RobotConstants.VISION_kSTEER_FAR;
+			} else if(degreesRotate >= 0.15) {
+				kSteer = RobotConstants.VISION_kSTEER_MED;
+			} else {
+				kSteer = RobotConstants.VISION_kSTEER_CLOSE;
+			}
+			double steer_cmd = kSteer * degreesRotate;
+			 
+			// double steer_cmd = Math.copySign(0.08, degreesRotate);
+			System.out.println("TURN TO TARGET: " + steer_cmd);
+			drivetrain.drivePercentOutput(steer_cmd, -steer_cmd, 0);
 			if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();
 			} else {
@@ -57,7 +70,9 @@ public class TurnToTargetCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		System.out.println("TURN TARGET COMMAND | END");
 		vision.disableTracking();
+		drivetrain.drivePercentOutput(0, 0, 0);
 	}
 	
 	// Returns true when the command should end.

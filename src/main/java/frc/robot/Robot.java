@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -31,6 +33,9 @@ public class Robot extends TimedRobot {
 		// Instantiate our RobotContainer.  This will perform all our button bindings, and put our
 		// autonomous chooser on the dashboard.
 		m_robotContainer = new RobotContainer();
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(0);
+		camera.setFPS(15);
+		camera.setBrightness(90);
 	}
 	
 	/**
@@ -98,7 +103,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		if(RobotContainer.subsystemController.xButton.get()) {
-			CommandScheduler.getInstance().cancelAll();
+			m_robotContainer.stopAll();
 		}
 	}
 	
