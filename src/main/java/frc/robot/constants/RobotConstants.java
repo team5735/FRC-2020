@@ -81,26 +81,26 @@ public class RobotConstants {
     public static final double AUTO_RIGHT_kI = 0.0;
     public static final double AUTO_RIGHT_kD = 0.0;
 
-    public static final double FLYWHEEL_kP = 0.0;//0.000325;
+    public static final double FLYWHEEL_kP = 0.000025;//0.000325;
     public static final double FLYWHEEL_kI = 0.0;
-    public static final double FLYWHEEL_kD = 0.0;//0.004;
-    public static final double FLYWHEEL_kF = 0.7 / 4900.0;
+    public static final double FLYWHEEL_kD = 0.02;//0.004;
+    public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.803;
     
     // Flywheel
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
     public static final double FLYWHEEL_MIN_SPEED = 3500; // rpm
     public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
-    public static final double FLYWHEEL_PRESET_LINE = 3500; // rpm
-    public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm
+    public static final double FLYWHEEL_PRESET_LINE = 3800; // rpm
+    public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm //4400 actual rpm
     public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
 
     // Intake
     public static final double INTAKE_kP = 0.000325;
     public static final double INTAKE_kI = 0.0;
-    public static final double INTAKE_kD = 0.004;
+    public static final double INTAKE_kD = 0.01;
     public static final double INTAKE_POSITION_DEADBAND = 10; // sensor units
-    public static final double INTAKE_POSITION_RETRACTED = 100;
-    public static final double INTAKE_POSITION_DEPLOYED = 4500;
+    public static final double INTAKE_POSITION_RETRACTED = 0; // sensor units
+    public static final double INTAKE_POSITION_DEPLOYED = 710; // sensor units
 
     // Current Limiting
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
@@ -112,9 +112,10 @@ public class RobotConstants {
     public static final double DRIVE_VINTERCEPT = 1.055; // V
     
     // Vision Constants
-    public static final double VISION_STEER_kP = 0;
+    public static final double VISION_STEER_kP = 0.035;
     public static final double VISION_STEER_kI = 0;
-    public static final double VISION_TARGET_DEADBAND = 0.1; // degrees
+    public static final double VISION_TARGET_DEADBAND = 0.6; // degrees
+    public static final double VISION_X_OFFSET = -1.07;
 
     public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(24); // meters
     public static final double CAMERA_ANGLEFROMPARALLEL = Units.degreesToRadians(15); // radians

@@ -30,9 +30,11 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
             new ParallelRaceGroup(
                 new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
+                new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
             ),
-            new FeedShooterCommand(intake, false).withTimeout(3),
+            new ShootBallCommand(intake, false).withTimeout(1.2),
+            new ShootBallCommand(intake, false).withTimeout(1.2),
+            new ShootBallCommand(intake, false).withTimeout(1.2),
             new StopFlywheel(shooter)
         );
     }

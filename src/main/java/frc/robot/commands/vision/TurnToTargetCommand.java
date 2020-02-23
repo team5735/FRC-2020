@@ -49,12 +49,12 @@ public class TurnToTargetCommand extends CommandBase {
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
 		if(vision.hasValidTarget()) {
-			double degreeError = vision.getLimelight().getdegRotationToTarget();
+			double degreeError = vision.getLimelight().getdegRotationToTarget() + RobotConstants.VISION_X_OFFSET;
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
 
 			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
 			
-			// double steer_cmd = RobotConstants.VISION_STEER_kP * degreesRotate;
+			// double steer_cmd = RobotConstants.VISION_STEER_kP * degreeError;
 			 
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
 			System.out.println("TURN TO TARGET: " + steer_cmd);
@@ -81,5 +81,6 @@ public class TurnToTargetCommand extends CommandBase {
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
 		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
 		 turnPID.atSetpoint();
+		// return false;
 	}
 }

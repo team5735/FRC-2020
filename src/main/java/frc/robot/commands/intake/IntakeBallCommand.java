@@ -30,7 +30,7 @@ public class IntakeBallCommand extends CommandBase {
 		this.intake = intake;
 		this.speed = -1;
 		this.inverted = false;
-		addRequirements(intake);
+		// addRequirements(intake);
 	}
 
 	public IntakeBallCommand(Intake intake, double speed, boolean inverted) {
@@ -38,7 +38,7 @@ public class IntakeBallCommand extends CommandBase {
 		this.speed = speed;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(intake);
+		// addRequirements(intake);
 	}
 	
 	// Called when the command is initially scheduled.

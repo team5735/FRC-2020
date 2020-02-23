@@ -37,12 +37,12 @@ public class Intake extends SubsystemBase {
 		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
 		intakeArm.config_kI(0, RobotConstants.INTAKE_kI);
 		intakeArm.config_kD(0, RobotConstants.INTAKE_kD);
+		intakeArm.overrideLimitSwitchesEnable(true);
 		resetPosition();
 
 		intakeRoller = new VictorSPX(10);
 		intakeRoller.configFactoryDefault();
 		intakeRoller.setInverted(true);
-		intakeArm.overrideLimitSwitchesEnable(true);
 
 		conveyorFeeder = Drivetrain.gyroHost; // shared TalonSRX
 
@@ -50,8 +50,8 @@ public class Intake extends SubsystemBase {
 		conveyorRoller.configFactoryDefault();
 		conveyorRoller.setInverted(true);
 		
-		retractedLimitSwitch = new DigitalInput(0);
-		deployedLimitSwitch = new DigitalInput(1);
+		retractedLimitSwitch = new DigitalInput(9);
+		deployedLimitSwitch = new DigitalInput(100);
 
 		// CommandScheduler.getInstance().setDefaultCommand(this, new IntakeBallCommand(this));
 		// CommandScheduler.getInstance().setDefaultCommand(this, new AngleIntakeCommand(this, 0));
@@ -62,7 +62,12 @@ public class Intake extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Intake Angle Sensor Value", getPosition());
-	}
+
+		if(isDeployedLimitHit() || isRetractedLimitHit()) {
+			intakeArm.set(ControlMode.PercentOutput, 0);
+			moveArm(ControlMode.Position, getPosition());
+		}
+ 	}
 
 	/**
 	 * @return Position, in sensor units
@@ -84,7 +89,7 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void rollConveyor(double speed, boolean inverted) {
-		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.5 : speed));
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.4 : speed));
 	}
 
 	public void feedShooter(double speed, boolean inverted) {

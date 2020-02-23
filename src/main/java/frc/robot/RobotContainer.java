@@ -70,8 +70,8 @@ public class RobotContainer {
 	private void configureDriverBindings() {
 		// subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
-		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
+		driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
+		driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 		
@@ -91,7 +91,7 @@ public class RobotContainer {
 		// subsystemController.yButton.whenPressed();
 
 		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE));
-		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		// subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, 0));
 		

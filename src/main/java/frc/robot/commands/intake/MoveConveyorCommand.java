@@ -27,7 +27,7 @@ public class MoveConveyorCommand extends CommandBase {
 		this.intake = intake;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(intake);
+		// addRequirements(intake);
 	}
 	
 	// Called when the command is initially scheduled.

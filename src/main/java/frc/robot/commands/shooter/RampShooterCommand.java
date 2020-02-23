@@ -10,6 +10,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -41,7 +42,10 @@ public class RampShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
+		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
+		double speed = shooter.getSpeed();
+		System.out.println("Shooter Speed (RPM): " + speed);
+		System.out.println("Error: " + (speed - RobotConstants.FLYWHEEL_PRESET_LINE));
 	}
 	
 	// Called once the command ends or is interrupted.
@@ -53,6 +57,7 @@ public class RampShooterCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(shooter.getSpeed() - rpm, 100) == 0;
+		return Util.deadband(shooter.getSpeed() - rpm, 40) == 0;
+		// return false;
 	}
 }

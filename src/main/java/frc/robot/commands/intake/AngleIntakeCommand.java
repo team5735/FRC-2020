@@ -38,26 +38,29 @@ public class AngleIntakeCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		// intake.moveArm(ControlMode.Position, position);
+		intake.moveArm(ControlMode.Position, position);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
 		System.out.println(intake.getPosition());
-		intake.moveArm(ControlMode.PercentOutput, RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
+		double position = intake.getPosition();
+		if(position < RobotConstants.INTAKE_POSITION_RETRACTED ||
+			position > RobotConstants.INTAKE_POSITION_DEPLOYED) end(true);
+		// intake.moveArm(ControlMode.PercentOutput, RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		// intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
+		intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		// return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
-		return false;
+		return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
+		// return false;
 	}
 }
