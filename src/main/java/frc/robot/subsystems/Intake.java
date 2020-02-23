@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.constants.RobotConstants;
 
@@ -36,6 +37,7 @@ public class Intake extends SubsystemBase {
 		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
 		intakeArm.config_kI(0, RobotConstants.INTAKE_kI);
 		intakeArm.config_kD(0, RobotConstants.INTAKE_kD);
+		resetPosition();
 
 		intakeRoller = new VictorSPX(10);
 		intakeRoller.configFactoryDefault();
@@ -52,6 +54,8 @@ public class Intake extends SubsystemBase {
 		deployedLimitSwitch = new DigitalInput(1);
 
 		// CommandScheduler.getInstance().setDefaultCommand(this, new IntakeBallCommand(this));
+		// CommandScheduler.getInstance().setDefaultCommand(this, new AngleIntakeCommand(this, 0));
+
 	}
 	
 	@Override

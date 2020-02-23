@@ -51,6 +51,8 @@ public class RobotConstants {
     public static final int NORMAL_ID = 55;
 
     public static final int GYRO_TALON_HOST_ID = 6;
+
+    public static final int WINCH_ID = 40;
     
     // PID
     public static final double LEFT_kP = 0.0;

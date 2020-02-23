@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
+import frc.robot.RobotContainer;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Intake;
 
@@ -37,23 +38,26 @@ public class AngleIntakeCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		intake.moveArm(ControlMode.Position, position);
+		// intake.moveArm(ControlMode.Position, position);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		System.out.println(intake.getPosition());
+		intake.moveArm(ControlMode.PercentOutput, RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
+		// intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
+		// return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
+		return false;
 	}
 }

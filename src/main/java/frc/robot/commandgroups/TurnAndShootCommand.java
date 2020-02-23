@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.intake.FeedShooterCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
+import frc.robot.commands.shooter.StopFlywheel;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -31,8 +32,8 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
                 new TurnToTargetCommand(vision, drivetrain),
                 new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
             ),
-            new FeedShooterCommand(intake, false).withTimeout(4),
-            new RampShooterCommand(shooter, 0)
+            new FeedShooterCommand(intake, false).withTimeout(1),
+            new StopFlywheel(shooter)
         );
     }
 

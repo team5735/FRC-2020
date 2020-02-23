@@ -5,15 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.winch;
+package frc.robot.commands.climber;
 
-import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Climber;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class WinchSpinCommand extends CommandBase {
+public class WinchMoveCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Climber climber;
 
@@ -22,7 +23,7 @@ public class WinchSpinCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public WinchSpinCommand(Climber climber) {
+  public WinchMoveCommand(Climber climber) {
     this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
@@ -36,7 +37,7 @@ public class WinchSpinCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      climber.spinWinch();
+    climber.moveWinch(RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
   }
 
   // Called once the command ends or is interrupted.

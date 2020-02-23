@@ -20,7 +20,7 @@ public class TurnToTargetCommand extends CommandBase {
 	private final Drivetrain drivetrain;
 	
 	private double degreesRotate = 10;
-	private double inDeadbandTime = 0;
+	private double inDeadbandTime = -1;
 	
 	public TurnToTargetCommand(Vision vision, Drivetrain drivetrain) {
         this.vision = vision;
@@ -36,7 +36,7 @@ public class TurnToTargetCommand extends CommandBase {
 	public void initialize() {
 		vision.enableTracking();
 		degreesRotate = 10;
-		inDeadbandTime = 0;
+		inDeadbandTime = -1;
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
