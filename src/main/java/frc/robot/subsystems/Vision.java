@@ -18,84 +18,91 @@ import frc.lib.limelight.LimelightControlMode.LedMode;
 import frc.robot.constants.RobotConstants;
 
 public class Vision extends SubsystemBase {
-	
+
 	private LimeLight limelight;
 	private boolean trackingMode = false;
 	private boolean hasValidTarget = false;
-	
+
 	public enum LimelightPipeline {
 		TESTING(0), NORTH_SHORE(1), GREATER_BOSTON(2);
-		
+
 		private final int value;
+
 		private LimelightPipeline(int id) {
 			this.value = id;
 		}
-		
+
 		public int getValue() {
 			return value;
 		}
 	};
-	
+
 	public Vision() {
 		limelight = new LimeLight();
-		limelight.setPipeline(0);//LimelightPipeline.TESTING.getValue());
+		limelight.setPipeline(0);// LimelightPipeline.TESTING.getValue());
 		disableTracking();
-		
+
 		CommandScheduler.getInstance().registerSubsystem(this);
 	}
-	
+
 	@Override
 	public void periodic() {
-		if(trackingMode) hasValidTarget = limelight.getIsTargetFound();
+		if (trackingMode)
+			hasValidTarget = limelight.getIsTargetFound();
 	}
-	
+
+	// distanceFromCamera = (RobotConstants.TARGETHEIGHTFROMGROUND -
+	// RobotConstants.CAMERAHEIGHTFROMGROUND)
+	// / Math.tan(Math.toRadians(ty) + RobotConstants.CAMERAANGLEFROMPARALLEL);
+
 	/**
-	* @return Horizontal distance to target, in meters
-	*/
+	 * @return Horizontal distance to target, in meters
+	 */
 	public double getDistanceToTarget() {
-		if(!trackingMode) enableTracking();
+		if (!trackingMode) {
+			enableTracking();
+		}
 		boolean gotDistance = false;
-		
+
 		double heightDiff = RobotConstants.TARGET_HEIGHTFROMGROUND - RobotConstants.CAMERA_HEIGHTFROMGROUND;
 		double distance = 0;
-		
-		while(!gotDistance) {
+
+		while (!gotDistance) {
 			double yAngleToTarget = Units.degreesToRadians(limelight.getdegVerticalToTarget()); // radians
 			distance = heightDiff / Math.tan(RobotConstants.CAMERA_ANGLEFROMPARALLEL + yAngleToTarget); // meters
-			if(distance > 1) {
+			if (distance > 1) {
 				gotDistance = true;
 			}
 		}
-		
+
 		disableTracking();
-		
+
 		// SmartDashboard.putNumber("Distance to Target (m)", distance);
-		
+
 		return distance;
 	}
-	
+
 	public void enableTracking() {
 		System.out.println("ENABLED TRACKING");
 		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 		NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
 		trackingMode = true;
 	}
-	
+
 	public void disableTracking() {
 		System.out.println("DISABLED TRACKING");
 		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
 		NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
 		trackingMode = false;
-	
-	
+
 	public boolean isTrackingEnabled() {
 		return trackingMode;
 	}
-	
+
 	public boolean hasValidTarget() {
 		return hasValidTarget;
 	}
-	
+
 	public LimeLight getLimelight() {
 		return limelight;
 	}

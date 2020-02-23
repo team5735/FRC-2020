@@ -42,6 +42,7 @@ public class RobotConstants {
     
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
+
     public static final int LEFT_MASTER_ID = 57;
     public static final int LEFT_SLAVE_ID = 56;
     
@@ -53,6 +54,9 @@ public class RobotConstants {
     public static final int GYRO_TALON_HOST_ID = 6;
 
     public static final int WINCH_ID = 40;
+    public static final int TELESCOPE_ID = 13;
+
+    public static final int BANANA_ID = 69696969; //TODO tune
     
     // PID
     public static final double LEFT_kP = 0.0;

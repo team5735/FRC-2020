@@ -25,7 +25,7 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
-    elevatorMaster = new TalonSRX(13);
+    elevatorMaster = new TalonSRX(RobotConstants.TELESCOPE_ID);
     elevatorMaster.configFactoryDefault();
 
     winchMaster = new CANSparkMax(RobotConstants.WINCH_ID, MotorType.kBrushless);
