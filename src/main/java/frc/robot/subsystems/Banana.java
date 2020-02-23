@@ -10,42 +10,52 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants;
 
 public class Banana extends SubsystemBase {
-
-  public static final double gearRatio = 669696969;
-
-  private final TalonSRX banana;
-
-  /**
-   * Creates a new Banana.
-   */
-  public Banana() {
-    banana = new TalonSRX(RobotConstants.BANANA_ID);
-    banana.configFactoryDefault();
-    banana.config_kP(0, 0.01);
-    banana.config_kI(0, 0);
-    banana.config_kD(0, 0);
-    banana.config_kF(0, 0);
-  }
-
-  public double getPosition() {
+	
+	public static final double gearRatio = 669696969;
+	
+	private final TalonSRX banana;
+	private final DigitalInput retractedLimitSwitch;
+	
+	/**
+	* Creates a new Banana.
+	*/
+	public Banana() {
+		banana = new TalonSRX(RobotConstants.BANANA_ID);
+		banana.configFactoryDefault();
+		banana.config_kP(0, 1.1435);
+		banana.config_kI(0, 0);
+		banana.config_kD(0, 0);
+		
+		banana.setSelectedSensorPosition(0);
+		
+		retractedLimitSwitch = new DigitalInput(9);
+	}
+	
+	public double getPosition() {
 		return banana.getSelectedSensorPosition();
 	}
-
-	public void resetPosition() {
-		banana.setSelectedSensorPosition(0);
-	}
-
+	
 	public void moveBanana(ControlMode mode, double value) {
-    banana.set(mode, value);
-		System.out.println(banana.getStatorCurrent());
+		if(isRetractedLimitHit()) return;
+		banana.set(mode, value);
 	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	public boolean isRetractedLimitHit() {
+		// return false;
+		return retractedLimitSwitch.get();
+	}
+	
+	public void retract() {
+		// banana.set(ControlMode.Position, RobotConstants.BANANA_POSITION_RETRACTED);
+	}
+	
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
 }

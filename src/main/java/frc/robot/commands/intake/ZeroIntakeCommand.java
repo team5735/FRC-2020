@@ -53,6 +53,7 @@ public class ZeroIntakeCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return intake.isRetractedLimitHit();
+		return true;
+		// return intake.isRetractedLimitHit();
 	}
 }

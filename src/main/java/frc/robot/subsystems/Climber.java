@@ -27,10 +27,11 @@ public class Climber extends SubsystemBase {
   public Climber() {
     elevatorMaster = new TalonSRX(RobotConstants.TELESCOPE_ID);
     elevatorMaster.configFactoryDefault();
+    elevatorMaster.setInverted(true);
 
     winchMaster = new CANSparkMax(RobotConstants.WINCH_ID, MotorType.kBrushless);
     winchMaster.restoreFactoryDefaults();
-		CommandScheduler.getInstance().setDefaultCommand(this, new ElevatorMoveCommand(this));
+    winchMaster.setInverted(false);
   }
 
   @Override

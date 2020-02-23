@@ -12,43 +12,46 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 
 /**
- * An example command that uses an example subsystem.
- */
+* An example command that uses an example subsystem.
+*/
 public class ElevatorMoveCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Climber climber;
-
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public ElevatorMoveCommand(Climber climber) {
-    this.climber = climber;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    // climber.moveElevator(0.2 * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
-    // climber.moveWinch(RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+	private final Climber climber;
+	private final boolean inverted;
+	
+	/**
+	* Creates a new ExampleCommand.
+	*
+	* @param subsystem The subsystem used by this command.
+	*/
+	public ElevatorMoveCommand(Climber climber, boolean inverted) {
+		this.climber = climber;
+		this.inverted = inverted;
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(climber);
+	}
+	
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+	}
+	
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+		climber.moveElevator((inverted ? -1 : 1) * 0.3);
+		climber.moveWinch(0.75);
+	}
+	
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		climber.moveElevator(0);
+	}
+	
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

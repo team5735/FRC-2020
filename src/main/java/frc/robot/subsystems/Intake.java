@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
 	private final VictorSPX conveyorRoller;
 	private final TalonSRX conveyorFeeder;
 
-	private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
+	// private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
 	
 	/**
 	* Creates a new Intake.
@@ -50,8 +50,8 @@ public class Intake extends SubsystemBase {
 		conveyorRoller.configFactoryDefault();
 		conveyorRoller.setInverted(true);
 		
-		retractedLimitSwitch = new DigitalInput(9);
-		deployedLimitSwitch = new DigitalInput(1);
+		// retractedLimitSwitch = new DigitalInput(9);
+		// deployedLimitSwitch = new DigitalInput(1);
 
 		// CommandScheduler.getInstance().setDefaultCommand(this, new IntakeBallCommand(this));
 		// CommandScheduler.getInstance().setDefaultCommand(this, new AngleIntakeCommand(this, 0));
@@ -63,10 +63,10 @@ public class Intake extends SubsystemBase {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Intake Angle Sensor Value", getPosition());
 
-		if(isDeployedLimitHit() || isRetractedLimitHit()) {
+		// if(isDeployedLimitHit() || isRetractedLimitHit()) {
 			intakeArm.set(ControlMode.PercentOutput, 0);
 			moveArm(ControlMode.Position, getPosition());
-		}
+		// }
  	}
 
 	/**
@@ -96,11 +96,11 @@ public class Intake extends SubsystemBase {
 		conveyorFeeder.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.3 : speed));
 	}
 
-	public boolean isRetractedLimitHit() {
-		return retractedLimitSwitch.get();
-	}
+	// public boolean isRetractedLimitHit() {
+	// 	return retractedLimitSwitch.get();
+	// }
 
-	public boolean isDeployedLimitHit() {
-		return deployedLimitSwitch.get();	
-	}
+	// public boolean isDeployedLimitHit() {
+	// 	return deployedLimitSwitch.get();	
+	// }
 }

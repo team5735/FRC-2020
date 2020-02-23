@@ -35,7 +35,11 @@ public class MoveBananaCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		banana.moveBanana(ControlMode.PercentOutput, -0.3*RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
+		banana.moveBanana(ControlMode.PercentOutput, -0.3 * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
+
+		//TODO Convert angle to position (lookup?)
+		// banana.moveBanana(ControlMode.Position, angle);
+		// System.out.println(banana.getPosition());
 		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 	}
 	

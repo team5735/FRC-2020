@@ -37,13 +37,14 @@ public class RampShooterCommand extends CommandBase {
 	public void initialize() {
 		if(rpm == 0) {
 			shooter.slowDown();
+			banana.retract();
 		} else {
 			shooter.setSpeed(rpm); // only need to call once?
 		}
 
 		// TODO: Adjust banana as necessary, LOOKUP BANANA POS WITH RPM
 		double bananaPos = 10;
-		banana.moveBanana(ControlMode.Position, bananaPos);
+		// banana.moveBanana(ControlMode.Position, bananaPos);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.

@@ -104,6 +104,10 @@ public class RobotConstants {
     public static final double INTAKE_POSITION_RETRACTED = 0; // sensor units
     public static final double INTAKE_POSITION_DEPLOYED = 710; // sensor units
 
+    // Banana
+    public static final double BANANA_POSITION_RETRACTED = 0; // sensor units
+    public static final double BANANA_POSITION_DEPLOYED = 2900; // sensor units
+
     // Current Limiting
     public static StatorCurrentLimitConfiguration TALON_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 38.5, 38.5, 0.25);
     

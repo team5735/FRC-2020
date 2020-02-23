@@ -13,6 +13,8 @@ import frc.lib.controllers.BobXboxController;
 import frc.robot.commandgroups.SixBallAutoCommand;
 import frc.robot.commandgroups.TurnAndShootCommand;
 import frc.robot.commands.CancelAllCommand;
+import frc.robot.commands.climber.ElevatorMoveCommand;
+import frc.robot.commands.climber.WinchMoveCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
 import frc.robot.commands.drivetrain.ResetGyroAngle;
 import frc.robot.commands.intake.AngleIntakeCommand;
@@ -67,6 +69,7 @@ public class RobotContainer {
 		CommandScheduler.getInstance().cancelAll();
 		shooter.slowDown();
 		intake.intakeBall(0, false);
+		vision.disableTracking();
 		drivetrain.drivePercentOutput(0, 0, 0);
 	}
 	
@@ -75,6 +78,7 @@ public class RobotContainer {
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
 		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
 		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
+		driverController.aButton.whileHeld(new WinchMoveCommand(climber));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 
@@ -84,6 +88,12 @@ public class RobotContainer {
 		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 
+		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
+		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
+		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		// driverController.Dpad.Right.whileHeld();
+		
+
 		// driverController.startButton.whenPressed(new ZeroIntakeCommand(intake));
 		//   trajectoryGenerator.getTrajectorySet().sideStartToNearScale.left, (DrivetrainTrajectory)drivetrain));
 	}
@@ -92,14 +102,16 @@ public class RobotContainer {
 		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 3750));
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
-		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter));
-		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 0));
+		// subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
+		subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
+		subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 696));
 		// subsystemController.yButton.whenPressed();
 
-		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE));
+		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_LINE));
 		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
-		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		// subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, 0));
+		subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, banana, 0));
 		
 		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, false));
 		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, true));
@@ -115,7 +127,7 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new SixBallAutoCommand(vision, drivetrain, intake, shooter);
+		return new SixBallAutoCommand(vision, drivetrain, intake, shooter, banana);
 	}
 	
 }
