@@ -51,7 +51,7 @@ public class Intake extends SubsystemBase {
 		conveyorRoller.setInverted(true);
 		
 		retractedLimitSwitch = new DigitalInput(9);
-		deployedLimitSwitch = new DigitalInput(100);
+		deployedLimitSwitch = new DigitalInput(1);
 
 		// CommandScheduler.getInstance().setDefaultCommand(this, new IntakeBallCommand(this));
 		// CommandScheduler.getInstance().setDefaultCommand(this, new AngleIntakeCommand(this, 0));

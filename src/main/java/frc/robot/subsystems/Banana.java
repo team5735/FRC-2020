@@ -40,7 +40,8 @@ public class Banana extends SubsystemBase {
 	}
 
 	public void moveBanana(ControlMode mode, double value) {
-		banana.set(mode, value);
+    banana.set(mode, value);
+		System.out.println(banana.getStatorCurrent());
 	}
 
   @Override

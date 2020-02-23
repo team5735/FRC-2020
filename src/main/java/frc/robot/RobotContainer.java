@@ -20,8 +20,10 @@ import frc.robot.commands.intake.FeedShooterCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.commands.intake.MoveConveyorCommand;
 import frc.robot.commands.intake.ZeroIntakeCommand;
+import frc.robot.commands.shooter.MoveBananaCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.constants.RobotConstants;
+import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
@@ -44,6 +46,7 @@ public class RobotContainer {
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Climber climber = new Climber();
 	public final Shooter shooter = new Shooter();
+	public final Banana banana = new Banana();
 	public final Intake intake = new Intake();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
 	public final Vision vision = new Vision();
@@ -70,10 +73,13 @@ public class RobotContainer {
 	private void configureDriverBindings() {
 		// subsystemController.xButton.whenPressed(new ColorSpinCommand(colorSpinner, 4));
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
-		driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
-		driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
+		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
+		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
+
+		driverController.rightBumper.whileActiveContinuous(new AngleIntakeCommand(intake, false));
+		driverController.leftBumper.whileActiveContinuous(new AngleIntakeCommand(intake, true));
 		
 		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
@@ -87,11 +93,11 @@ public class RobotContainer {
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
 		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter));
-		// subsystemController.bButton.whenPressed();
+		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
 
 		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE));
-		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		// subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, 0));
 		

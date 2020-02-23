@@ -18,12 +18,13 @@ public class RobotConstants {
     public static double JOYSTICK_DEADBAND = 0.1;
     
     /**
+     *       INTAKE
      * [––––––FRONT–––––]
-     * |                |
-     * |                |
-     * |                |
-     * |                |
-     * |                |
+     * |    CONVEYOR    |
+     * |        |       |
+     * |        |       |
+     * |     FEEDER     |
+     * |     SHOOTER    |
      * [______BACK______]
      */
 
@@ -56,7 +57,7 @@ public class RobotConstants {
     public static final int WINCH_ID = 40;
     public static final int TELESCOPE_ID = 13;
 
-    public static final int BANANA_ID = 69696969; //TODO tune
+    public static final int BANANA_ID = 3; //TODO tune
     
     // PID
     public static final double LEFT_kP = 0.0;
@@ -93,6 +94,7 @@ public class RobotConstants {
     public static final double FLYWHEEL_PRESET_LINE = 3800; // rpm
     public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm //4400 actual rpm
     public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
+    public static final double FLYWHEEL_RPM_DEADBAND = 40; // rpm
 
     // Intake
     public static final double INTAKE_kP = 0.000325;

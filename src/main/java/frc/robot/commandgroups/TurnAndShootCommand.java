@@ -9,6 +9,7 @@ import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
+import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -24,17 +25,17 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter) {
+    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
         this.shooter = shooter;
         addCommands(
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
             new ParallelRaceGroup(
                 new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, RobotConstants.FLYWHEEL_PRESET_LINE)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
+                new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_LINE)//shooter.getSpeedFromDistance(vision.getDistanceToTarget())),    
             ),
-            new ShootBallCommand(intake, false).withTimeout(1.2),
-            new ShootBallCommand(intake, false).withTimeout(1.2),
-            new ShootBallCommand(intake, false).withTimeout(1.2),
+            new ShootBallCommand(intake, shooter, false),
+            new ShootBallCommand(intake, shooter, false),
+            new ShootBallCommand(intake, shooter, false),
             new StopFlywheel(shooter)
         );
     }

@@ -14,12 +14,15 @@ import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
 
 public class Shooter extends SubsystemBase {
 	
 	private CANSparkMax neoMaster, neoSlave;
 	private CANPIDController flywheelPIDController;
+
+	private double speedSetpoint;
 	
 	/**
 	* Creates a new Shooter.
@@ -53,6 +56,7 @@ public class Shooter extends SubsystemBase {
 		double speed = rpm;
 		if(rpm > RobotConstants.FLYWHEEL_MAX_SPEED) speed = RobotConstants.FLYWHEEL_MAX_SPEED;
 		if(rpm < RobotConstants.FLYWHEEL_MIN_SPEED) speed = RobotConstants.FLYWHEEL_MIN_SPEED;
+		speedSetpoint = speed;
 		flywheelPIDController.setReference(speed, ControlType.kVelocity);
 	}
 
@@ -60,8 +64,13 @@ public class Shooter extends SubsystemBase {
 		return neoMaster.getEncoder().getVelocity();
 	}
 
+	public boolean atSpeed(double threshold) {
+		return Util.deadband(speedSetpoint - getSpeed(), threshold) == 0;
+	}
+
 	public void slowDown() {
 		neoMaster.set(0);
+		speedSetpoint = 0;
 	}
 
 	/**

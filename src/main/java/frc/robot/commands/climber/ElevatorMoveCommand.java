@@ -37,8 +37,8 @@ public class ElevatorMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveElevator(0.2 * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
-    climber.moveWinch(RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
+    // climber.moveElevator(0.2 * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
+    // climber.moveWinch(RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
   }
 
   // Called once the command ends or is interrupted.

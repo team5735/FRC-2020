@@ -22,6 +22,7 @@ public class AngleIntakeCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
 	private final double position;
+	private final boolean inverted;
 	
 	/**
 	* Creates a new ExampleCommand.
@@ -31,36 +32,43 @@ public class AngleIntakeCommand extends CommandBase {
 	public AngleIntakeCommand(Intake intake, double position) {
 		this.intake = intake;
 		this.position = position;
+		this.inverted = false;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(intake);
+	}
+
+	public AngleIntakeCommand(Intake intake, boolean inverted) {
+		this.intake = intake;
+		this.position = -1;
+		this.inverted = inverted;
 	}
 	
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		intake.moveArm(ControlMode.Position, position);
+		// intake.moveArm(ControlMode.Position, position);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		System.out.println(intake.getPosition());
-		double position = intake.getPosition();
-		if(position < RobotConstants.INTAKE_POSITION_RETRACTED ||
-			position > RobotConstants.INTAKE_POSITION_DEPLOYED) end(true);
-		// intake.moveArm(ControlMode.PercentOutput, RobotContainer.subsystemController.rightStick.getYCubedWithDeadband(0.07));
+		// System.out.println(intake.getPosition());
+		// double position = intake.getPosition();
+		// if(position < RobotConstants.INTAKE_POSITION_RETRACTED ||
+		// 	position > RobotConstants.INTAKE_POSITION_DEPLOYED) end(true);
+		intake.moveArm(ControlMode.PercentOutput, (inverted ? -1 : 1) * 0.2);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
+		// intake.moveArm(ControlMode.Position, intake.getPosition()); // stay
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
-		// return false;
+		// return Util.deadband(intake.getPosition(), RobotConstants.INTAKE_POSITION_DEADBAND) == 0;
+		return false;
 	}
 }
