@@ -8,6 +8,7 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
@@ -18,13 +19,18 @@ public class TurnToTargetCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Vision vision;
 	private final Drivetrain drivetrain;
+
+	private final PIDController turnPID;
 	
-	private double degreesRotate = 10;
 	private double inDeadbandTime = -1;
 	
 	public TurnToTargetCommand(Vision vision, Drivetrain drivetrain) {
         this.vision = vision;
 		this.drivetrain = drivetrain;
+
+		this.turnPID = new PIDController(RobotConstants.VISION_STEER_kP, RobotConstants.VISION_STEER_kI, 0);
+		turnPID.setTolerance(RobotConstants.VISION_TARGET_DEADBAND);
+		//pid.setIntegratorRange(-0.5, 0.5); use this if it "winds up" and overshoots
 		
 		// Use addRequirements() here to declare subsystem dependencies.
         addRequirements(vision);
@@ -35,7 +41,6 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		vision.enableTracking();
-		degreesRotate = 10;
 		inDeadbandTime = -1;
 	}
 	
@@ -44,22 +49,17 @@ public class TurnToTargetCommand extends CommandBase {
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
 		if(vision.hasValidTarget()) {
-			degreesRotate = vision.getLimelight().getdegRotationToTarget();
-			// if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
-			double kSteer;
-			if(degreesRotate >= 0.5) {
-				kSteer = RobotConstants.VISION_kSTEER_FAR;
-			} else if(degreesRotate >= 0.15) {
-				kSteer = RobotConstants.VISION_kSTEER_MED;
-			} else {
-				kSteer = RobotConstants.VISION_kSTEER_CLOSE;
-			}
-			double steer_cmd = kSteer * degreesRotate;
+			double degreeError = vision.getLimelight().getdegRotationToTarget();
+			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
+
+			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
+			
+			// double steer_cmd = RobotConstants.VISION_STEER_kP * degreesRotate;
 			 
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
 			System.out.println("TURN TO TARGET: " + steer_cmd);
 			drivetrain.drivePercentOutput(steer_cmd, -steer_cmd, 0);
-			if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
+			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();
 			} else {
 				inDeadbandTime = -1;
@@ -78,8 +78,8 @@ public class TurnToTargetCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		//		if greater than 0 and	80 milliseconds have passed		and		we are still within deadband
+		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
 		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
-		 Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0;
+		 turnPID.atSetpoint();
 	}
 }
