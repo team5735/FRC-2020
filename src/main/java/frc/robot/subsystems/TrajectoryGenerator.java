@@ -27,7 +27,7 @@ public class TrajectoryGenerator {
         System.out.println("@@@@@@ GENERATING TRAJECTORIES @@@@@@");
         //                                                                                                               Time step, Max velocity,         max accel, max jerk
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 
-                                                    0.02, RobotConstants.MAX_VELOCITY, 0.8, 8);
+                                                    0.02, RobotConstants.MAX_VELOCITY_DT, 0.8, 8);
         Trajectory trajectory = Pathfinder.generate(points, config);
         TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.DRIVETRAIN_TRACK_WIDTH);
         leftTrajectory = modifier.getLeftTrajectory();

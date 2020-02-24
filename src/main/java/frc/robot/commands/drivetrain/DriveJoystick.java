@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
@@ -46,7 +47,7 @@ public class DriveJoystick extends CommandBase {
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 			drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
 		} else {
-			drivetrain.drive(forward, normal, turn);
+			drivetrain.drivePercent(forward, normal, turn, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
 		}
 		
 		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());

@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.lib.util.DriveSignal;
 import frc.lib.util.Units;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -49,12 +50,12 @@ public class DriveFollowTrajectory extends CommandBase {
 		s_drivetrain.reset();
 		
 		left = new EncoderFollower(leftTraj);
-		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
-		left.configurePIDVA(RobotConstants.AUTO_LEFT_kP, RobotConstants.AUTO_LEFT_kI, RobotConstants.AUTO_LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0); // kV should be 1
+		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
+		left.configurePIDVA(0, 0, 0, 1, 0);
 		
 		right = new EncoderFollower(rightTraj);
-		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
-		right.configurePIDVA(RobotConstants.AUTO_RIGHT_kP, RobotConstants.AUTO_RIGHT_kI, RobotConstants.AUTO_RIGHT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
+		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
+		right.configurePIDVA(0, 0, 0, 1, 0);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
@@ -80,19 +81,19 @@ public class DriveFollowTrajectory extends CommandBase {
 		} 
 		// if(angleDifference > 185) angleDifference = 0;
 		
-		double turn = RobotConstants.kTURN_CORRECTION * angleDifference;
+		double turn = RobotConstants.kTURN_CORRECTION * angleDifference * RobotConstants.MAX_VELOCITY_DT_TICKS;
 		// double turn = 0;
 		
 		System.out.println("@@@@@@@@@@@@@@@ Left: " + (l + turn) + ", Right: " + (r - turn) + ", Angle Diff: " + angleDifference + ", Turn: " + turn);
 		
-		s_drivetrain.drive(ControlMode.PercentOutput, l + turn, r - turn, 0);
+		s_drivetrain.driveExplicit(ControlMode.Velocity, l + turn, r - turn, 0);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		System.out.println("DONE: L current:" + Units.rotationsToMeters(Units.tickstoRotations(s_drivetrain.getLeftSidePosition())) / 6.2222 + ", R current: " + Units.rotationsToMeters(Units.tickstoRotations(s_drivetrain.getRightSidePosition())) / 6.2222);
-		s_drivetrain.drive(0, 0, 0);
+		System.out.println("DONE: L current:" + Units.dtRotationsToMeters(Units.dtTickstoRotations(s_drivetrain.getLeftSidePosition())) / 6.2222 + ", R current: " + Units.dtRotationsToMeters(Units.dtTickstoRotations(s_drivetrain.getRightSidePosition())) / 6.2222);
+		s_drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
 	}
 	
 	// Returns true when the command should end.

@@ -30,36 +30,48 @@ public class Units {
     }
 
     /* Sensor Conversion */
-    public static double rotationsToMeters(double rotations) {
-        return rotations * (RobotConstants.WHEEL_DIAMETER * Math.PI);
+    public static double dtRotationsToMeters(double rotations) {
+        return rotations * (RobotConstants.DT_WHEEL_DIAMETER * Math.PI);
     }
 
-    public static double metersToRotations(double inches) {
-        return inches / (RobotConstants.WHEEL_DIAMETER * Math.PI);
+    public static double dtMetersToRotations(double meters) {
+        return meters / (RobotConstants.DT_WHEEL_DIAMETER * Math.PI);
     }
 
-    public static double rotationsToTicks(double rotations) {
-        return rotations * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV;
+    public static double normalMetersToRotations(double meters) {
+        return meters / (RobotConstants.DT_WHEEL_DIAMETER * Math.PI);
     }
 
-    public static double tickstoRotations(double ticks) {
-        return ticks / RobotConstants.ENCODER_TICKS_PER_WHEEL_REV;
+    public static double dtRotationsToTicks(double rotations) {
+        return rotations * RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV;
     }
 
-    public static double rpmToTicks(double rpm) {
-        return rpm * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV / 60.0 / 10.0;
+    public static double dtTickstoRotations(double ticks) {
+        return ticks / RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV;
     }
 
-    public static double metersPerSecondToRpm(double metersPerSec) {
-        return metersToRotations(metersPerSec) * 60.0;
+    public static double dtRpmToTicks(double rpm) {
+        return rpm * RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV / 60.0 / 10.0;
+    }
+
+    public static double normalRpmToTicks(double rpm) {
+        return rpm * RobotConstants.ENCODER_TICKS_PER_NORMAL_WHEEL_REV / 60.0 / 10.0;
+    }
+
+    public static double dtMetersPerSecondToRpm(double metersPerSec) {
+        return dtMetersToRotations(metersPerSec) * 60.0;
+    }
+    
+    public static double normalMetersPerSecondToRpm(double metersPerSec) {
+        return normalMetersToRotations(metersPerSec) * 60.0;
     }
     
     public static double radiansPerSecondToRPM(double radians) {
         return radians / (Math.PI * 2.0) * 60.0;
     }
 
-    public static double radiansPerSecondToTicks(double radians) {
-        return radians / (Math.PI * 2.0) * RobotConstants.ENCODER_TICKS_PER_WHEEL_REV / 10.0;
+    public static double dtRadiansPerSecondToTicks(double radians) {
+        return radians / (Math.PI * 2.0) * RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV / 10.0;
     }
 
 }

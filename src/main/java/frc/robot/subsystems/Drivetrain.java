@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
+import frc.lib.util.Units;
 import frc.robot.commands.drivetrain.DriveJoystick;
 import frc.robot.constants.RobotConstants;
 
@@ -24,8 +25,8 @@ public class Drivetrain extends SubsystemBase{
 	private TalonFX leftMaster, rightMaster, leftFollower, rightFollower, normalMaster;
 	public static TalonSRX gyroHost;
 	private PigeonIMU gyro;
-
-	private double TURN_CONSTANT = 0.33;
+	
+	private double ANGULAR_PERCENTAGE = 0.33;
 	
 	public enum DriveMode {
 		STATIC_DRIVE, FIELD_CENTRIC, DISABLED
@@ -79,49 +80,81 @@ public class Drivetrain extends SubsystemBase{
 		
 		CommandScheduler.getInstance().setDefaultCommand(this, new DriveJoystick(this));
 	}
-
+	
 	/**
-	 * Drive by supplying a forward, sideways, and turn percentage. Limited by TURN_CONSTANT.
-	 * @param forwardP
-	 * @param normalP
-	 * @param turnP
+	* Drive by supplying a forward, sideways, and turn percentage. Limited by TURN_CONSTANT.
+	* @param forwardP
+	* @param normalP
+	* @param turnP
+	*/
+	// public void drive(double forwardP, double normalP, double turnP) {
+	// 	double f = (1 - TURN_CONSTANT) * forwardP;
+	// 	double n = (1 - TURN_CONSTANT) * normalP;
+	// 	double t = TURN_CONSTANT * turnP;
+		
+	// 	leftMaster.set(ControlMode.PercentOutput, f + t);
+	// 	rightMaster.set(ControlMode.PercentOutput, f - t);
+	// 	normalMaster.set(ControlMode.PercentOutput, n);
+	// }
+	
+	/**
+	 * Drive by providing velocities in sensor ticks / 100 ms
+	 * @param controlMode
+	 * @param forwardVelocity
+	 * @param sidewaysVelocity
+	 * @param angularVelocity
 	 */
-	public void drive(double forwardP, double normalP, double turnP) {
-		double f = (1 - TURN_CONSTANT) * forwardP;
-		double n = (1 - TURN_CONSTANT) * normalP;
-		double t = TURN_CONSTANT * turnP;
-
-		leftMaster.set(ControlMode.PercentOutput, f + t);
-		rightMaster.set(ControlMode.PercentOutput, f - t);
-		normalMaster.set(ControlMode.PercentOutput, n);
+	public void drive(ControlMode controlMode, double forwardVelocity, double sidewaysVelocity, double angularVelocity) {
+		double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
+		double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
+		double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
+		
+		leftMaster.set(controlMode, leftPercentage);
+		rightMaster.set(controlMode, rightPercentage);
+		normalMaster.set(controlMode, sidewaysPercentage);
 	}
 	
 	/**
-	 * Drive by supplying a left, right, and sideways percent. Straight 100% output. 
-	 * @param left
-	 * @param right
-	 * @param normal
+	 * Drive with drive signal, providing velocities
+	 * @param controlMode
+	 * @param driveSignal
 	 */
-  public void drive(ControlMode controlMode, double left, double right, double normal) {
-    leftMaster.set(controlMode, left);
-		rightMaster.set(controlMode, right);
-		normalMaster.set(controlMode, normal);
-  }
-
-  public void drive(ControlMode controlMode, DriveSignal driveSignal) {
-    drive(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
-  }
+	public void drive(ControlMode controlMode, DriveSignal driveSignal) {
+		drive(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
+	}
 
 	/**
-	 * Drive field-centric with respect to current gyro angle
-	 * @param currentAngle Angle, in degrees
-	 */
-	public void driveFieldCentric(double forwardVelocity, double sidewaysVelocity, double angularVelocity,
+	* Drive by supplying a left, right, and sideways value
+	* @param left
+	* @param right
+	* @param normal
+	*/
+	public void driveExplicit(ControlMode controlMode, double left, double right, double normal) {
+		leftMaster.set(controlMode, left);
+		rightMaster.set(controlMode, right);
+		normalMaster.set(controlMode, normal);
+	}
+
+	/**
+	* Drive by supplying a forward, sideways, and turning percentage, which are converted into velocities
+	*/
+	public void drivePercent(double forwardPercent, double normalPercent, double turnPercent, double limiting) {
+		drive(ControlMode.Velocity, 
+			forwardPercent * limiting,
+			normalPercent * limiting,
+			turnPercent * limiting);
+	}
+	
+	/**
+	* Drive field-centric with respect to current gyro angle
+	* @param currentAngle Angle, in degrees
+	*/
+	public void driveFieldCentric(double forwardPercent, double sidewaysPercent, double angularPercent,
 	double currentAngle) {
 		double angleRad = Math.toRadians(currentAngle);
-		double modifiedForward = forwardVelocity * Math.cos(angleRad) + sidewaysVelocity * Math.sin(-angleRad);
-		double modifiedSideways = forwardVelocity * Math.sin(angleRad) + sidewaysVelocity * Math.cos(angleRad);
-		drive(modifiedForward, modifiedSideways, angularVelocity);
+		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
+		double modifiedSideways = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
+		drivePercent(modifiedForward, modifiedSideways, angularPercent, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
 	}
 	
 	public void reset() {
