@@ -10,6 +10,7 @@ package frc.robot.commands.shooter;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.util.Util;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Banana;
 
@@ -35,24 +36,26 @@ public class MoveBananaCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		banana.moveBanana(ControlMode.PercentOutput, -0.3 * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
-
+		// banana.moveBanana(ControlMode.PercentOutput, -0. * RobotContainer.subsystemController.leftStick.getYCubedWithDeadband(0.07));
+		// System.out.println( banana.isRetractedLimitHit());
 		//TODO Convert angle to position (lookup?)
-		// banana.moveBanana(ControlMode.Position, angle);
-		// System.out.println(banana.getPosition());
+		banana.moveBanana(ControlMode.Position, angle);
+		System.out.println(banana.getPosition());
 		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		// System.out.println("RAMP SHOOTER COMMAND | END");
+		System.out.println("MOVE BANANA | END");
+		banana.moveBanana(ControlMode.Position, banana.getPosition());
+
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		// return Util.deadband(shooter.getSpeed() - rpm, 40) == 0;
-		return false;
+		return Util.deadband(banana.getPosition() - angle, 10) == 0;
+		// return false;
 	}
 }

@@ -53,7 +53,7 @@ public class RampShooterCommand extends CommandBase {
 		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 		double speed = shooter.getSpeed();
 		System.out.println("Shooter Speed (RPM): " + speed);
-		System.out.println("Error: " + (speed - RobotConstants.FLYWHEEL_PRESET_LINE));
+		System.out.println("Error: " + (speed - RobotConstants.FLYWHEEL_PRESET_TRENCH));
 	}
 	
 	// Called once the command ends or is interrupted.

@@ -102,10 +102,10 @@ public class RobotContainer {
 		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 3750));
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
-		// subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
-		subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
-		subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
-		subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 696));
+		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
+		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
+		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 696));
 		// subsystemController.yButton.whenPressed();
 
 		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_LINE));

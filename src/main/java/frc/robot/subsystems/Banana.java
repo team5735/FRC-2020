@@ -28,7 +28,7 @@ public class Banana extends SubsystemBase {
 		banana = new TalonSRX(RobotConstants.BANANA_ID);
 		banana.configFactoryDefault();
 		banana.config_kP(0, 1.1435);
-		banana.config_kI(0, 0);
+		banana.config_kI(0, 0.0009);
 		banana.config_kD(0, 0);
 		
 		banana.setSelectedSensorPosition(0);
@@ -41,13 +41,14 @@ public class Banana extends SubsystemBase {
 	}
 	
 	public void moveBanana(ControlMode mode, double value) {
-		if(isRetractedLimitHit()) return;
+		if(isRetractedLimitHit() && value < 0) return;
+		// if(getPosition() + value > RobotConstants.BANANA_POSITION_DEPLOYED) return;
 		banana.set(mode, value);
 	}
 
 	public boolean isRetractedLimitHit() {
 		// return false;
-		return retractedLimitSwitch.get();
+		return !retractedLimitSwitch.get();
 	}
 	
 	public void retract() {

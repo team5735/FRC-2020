@@ -48,7 +48,8 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
-		if(vision.hasValidTarget()) {
+		System.out.println(vision.getDistanceToTarget());
+		if(vision.hasValidTarget() && false) {
 			double degreeError = vision.getLimelight().getdegRotationToTarget() + RobotConstants.VISION_X_OFFSET;
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
 
@@ -79,8 +80,8 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
-		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
-		 turnPID.atSetpoint();
-		// return false;
+		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
+		//  turnPID.atSetpoint();
+		return false;
 	}
 }
