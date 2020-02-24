@@ -7,9 +7,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.controllers.BobXboxController;
+import frc.lib.util.DriveSignal;
 import frc.robot.commandgroups.SixBallAutoCommand;
 import frc.robot.commandgroups.TurnAndShootCommand;
 import frc.robot.commands.CancelAllCommand;
@@ -70,7 +73,7 @@ public class RobotContainer {
 		shooter.slowDown();
 		intake.intakeBall(0, false);
 		vision.disableTracking();
-		drivetrain.drivePercentOutput(0, 0, 0);
+		drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
 	}
 	
 	private void configureDriverBindings() {

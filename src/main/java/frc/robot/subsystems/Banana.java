@@ -16,7 +16,9 @@ import frc.robot.constants.RobotConstants;
 
 public class Banana extends SubsystemBase {
 	
-	public static final double gearRatio = 669696969;
+  public static final double gearRatio = 669696969;
+  
+  // private InterpolatingTreeMap<InterpolatingDouble, double> 
 	
 	private final TalonSRX banana;
 	private final DigitalInput retractedLimitSwitch;
