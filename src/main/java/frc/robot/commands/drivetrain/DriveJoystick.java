@@ -10,7 +10,9 @@ package frc.robot.commands.drivetrain;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.lib.util.DriveSignal;
 import frc.robot.RobotContainer;
+import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
@@ -39,15 +41,18 @@ public class DriveJoystick extends CommandBase {
 	@Override
 	public void execute() {
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
+
 		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
 		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.07);
 		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
+
+		DriveSignal controllerInput = new DriveSignal(, )
 		
-		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
-			drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
-		} else {
-			drivetrain.drive(forward, normal, turn);
-		}
+		// if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
+		// 	drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
+		// } else {
+		// 	drivetrain.drive(forward, normal, turn);
+		// }
 		
 		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
 	}

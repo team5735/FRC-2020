@@ -34,9 +34,21 @@ public class DriveSignal {
     }
 
     public void scale(double factor) {
-        left = factor * left;
-        right = factor * right;
-        normal = factor * normal;
+        scaleLeft(factor);
+        scaleRight(factor);
+        scaleNormal(factor);
+    }
+
+    public void scaleLeft(double factor) {
+        left *= factor;
+    }
+
+    public void scaleRight(double factor) {
+        right *= factor;
+    }
+
+    public void scaleNormal(double factor) {
+        normal *= factor;
     }
 
     @Override
