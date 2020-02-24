@@ -91,10 +91,15 @@ public class RobotConstants {
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
     public static final double FLYWHEEL_MIN_SPEED = 3500; // rpm
     public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
+    public static final double FLYWHEEL_RPM_DEADBAND = 40; // rpm
+
     public static final double FLYWHEEL_PRESET_LINE = 3800; // rpm
     public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm //4400 actual rpm
     public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
-    public static final double FLYWHEEL_RPM_DEADBAND = 40; // rpm
+
+    public static final double DISTANCE_TO_TARGET_PRESET_LINE = 3800 * 0.004; // TODO TUNE
+    public static final double DISTANCE_TO_TARGET_PRESET_TRENCH = 3550 * 0.004; // TODO TUNE
+    public static final double DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL = 4500 * 0.004; // TODO TUNE
 
     // Intake
     public static final double INTAKE_kP = 0.000325;
