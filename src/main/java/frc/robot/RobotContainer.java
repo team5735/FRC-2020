@@ -15,7 +15,6 @@ import frc.lib.controllers.BobXboxController;
 import frc.lib.util.DriveSignal;
 import frc.robot.commandgroups.SixBallAutoCommand;
 import frc.robot.commandgroups.TurnAndShootCommand;
-import frc.robot.commands.CancelAllCommand;
 import frc.robot.commands.climber.ElevatorMoveCommand;
 import frc.robot.commands.climber.WinchMoveCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
@@ -37,6 +36,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -74,6 +74,7 @@ public class RobotContainer {
 		intake.intakeBall(0, false);
 		vision.disableTracking();
 		drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
+		drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
 	}
 	
 	private void configureDriverBindings() {

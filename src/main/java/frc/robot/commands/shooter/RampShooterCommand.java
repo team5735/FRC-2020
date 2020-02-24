@@ -43,7 +43,7 @@ public class RampShooterCommand extends CommandBase {
 		}
 
 		// TODO: Adjust banana as necessary, LOOKUP BANANA POS WITH RPM
-		double bananaPos = 10;
+		// double bananaPos = //shooter.getSpeedFromDistance(distance);
 		// banana.moveBanana(ControlMode.Position, bananaPos);
 	}
 	
