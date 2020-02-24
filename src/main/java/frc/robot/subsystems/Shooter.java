@@ -66,10 +66,6 @@ public class Shooter extends SubsystemBase {
 		// This method will be called once per scheduler run
 	}
 
-	public double getInterpolatedRPM(double distance) {
-        return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
-    }
-
 	public void setSpeed(double rpm) {
 		double speed = rpm;
 		if (rpm > RobotConstants.FLYWHEEL_MAX_SPEED)
@@ -100,8 +96,7 @@ public class Shooter extends SubsystemBase {
 	 * @return Flywheel speed, in RPM
 	 */
 	public double getSpeedFromDistance(double distance) {
-		// TODO
-		return 100;
+		return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
 	}
 
 }

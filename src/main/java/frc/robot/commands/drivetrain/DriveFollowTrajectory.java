@@ -50,7 +50,7 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		left = new EncoderFollower(leftTraj);
 		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
-		left.configurePIDVA(RobotConstants.AUTO_LEFT_kP, RobotConstants.AUTO_LEFT_kI, RobotConstants.AUTO_LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0);
+		left.configurePIDVA(RobotConstants.AUTO_LEFT_kP, RobotConstants.AUTO_LEFT_kI, RobotConstants.AUTO_LEFT_kD, 1 / RobotConstants.MAX_VELOCITY, 0); // kV should be 1
 		
 		right = new EncoderFollower(rightTraj);
 		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_WHEEL_REV, RobotConstants.WHEEL_DIAMETER);
