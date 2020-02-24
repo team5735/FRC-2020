@@ -14,32 +14,31 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants;
 
+
 public class Banana extends SubsystemBase {
-	
-	public static final double gearRatio = 669696969;
-	
+
 	private final TalonSRX banana;
 	private final DigitalInput retractedLimitSwitch;
-	
+
 	/**
-	* Creates a new Banana.
-	*/
+	 * Creates a new Banana.
+	 */
 	public Banana() {
 		banana = new TalonSRX(RobotConstants.BANANA_ID);
 		banana.configFactoryDefault();
 		banana.config_kP(0, 1.1435);
 		banana.config_kI(0, 0.0009);
 		banana.config_kD(0, 0);
-		
+
 		banana.setSelectedSensorPosition(0);
-		
+
 		retractedLimitSwitch = new DigitalInput(9);
 	}
-	
+
 	public double getPosition() {
 		return banana.getSelectedSensorPosition();
 	}
-	
+
 	public void moveBanana(ControlMode mode, double value) {
 		if(isRetractedLimitHit() && value < 0) return;
 		// if(getPosition() + value > RobotConstants.BANANA_POSITION_DEPLOYED) return;
@@ -50,11 +49,11 @@ public class Banana extends SubsystemBase {
 		// return false;
 		return !retractedLimitSwitch.get();
 	}
-	
+
 	public void retract() {
 		// banana.set(ControlMode.Position, RobotConstants.BANANA_POSITION_RETRACTED);
 	}
-	
+
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run

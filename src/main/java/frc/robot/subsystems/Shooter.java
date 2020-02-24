@@ -16,46 +16,66 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
+import frc.lib.util.InterpolatingTreeMap;
+import frc.lib.util.InterpolatingDouble;
+
+import java.util.Map;
 
 public class Shooter extends SubsystemBase {
-	
+
+	private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> DistanceToRPM;
+
 	private CANSparkMax neoMaster, neoSlave;
 	private CANPIDController flywheelPIDController;
 
 	private double speedSetpoint;
-	
+
 	/**
-	* Creates a new Shooter.
-	*/
+	 * Creates a new Shooter.
+	 */
 	public Shooter() {
-		
+
 		neoMaster = new CANSparkMax(33, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
 		neoMaster.setInverted(false);
-		
+
 		neoSlave = new CANSparkMax(52, MotorType.kBrushless);
 		neoSlave.restoreFactoryDefaults();
 		neoSlave.follow(neoMaster, true);
-		
+
 		neoMaster.getEncoder().setVelocityConversionFactor(RobotConstants.FLYWHEEL_PULLEY_RATIO);
-		
+
 		flywheelPIDController = neoMaster.getPIDController();
-		
+
 		flywheelPIDController.setP(RobotConstants.FLYWHEEL_kP, 0);
 		flywheelPIDController.setI(RobotConstants.FLYWHEEL_kI, 0);
 		flywheelPIDController.setD(RobotConstants.FLYWHEEL_kD, 0);
 		flywheelPIDController.setFF(RobotConstants.FLYWHEEL_kF, 0);
+
+		DistanceToRPM = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>(1000);
+		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
+				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
+		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
+				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
+				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 	}
-	
+
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
 	}
-	
+
+	public double getInterpolatedRPM(double distance) {
+        return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
+    }
+
 	public void setSpeed(double rpm) {
 		double speed = rpm;
-		if(rpm > RobotConstants.FLYWHEEL_MAX_SPEED) speed = RobotConstants.FLYWHEEL_MAX_SPEED;
-		if(rpm < RobotConstants.FLYWHEEL_MIN_SPEED) speed = RobotConstants.FLYWHEEL_MIN_SPEED;
+		if (rpm > RobotConstants.FLYWHEEL_MAX_SPEED)
+			speed = RobotConstants.FLYWHEEL_MAX_SPEED;
+		if (rpm < RobotConstants.FLYWHEEL_MIN_SPEED)
+			speed = RobotConstants.FLYWHEEL_MIN_SPEED;
 		speedSetpoint = speed;
 		flywheelPIDController.setReference(speed, ControlType.kVelocity);
 	}
@@ -75,6 +95,7 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Function to convert a distance into flywheel speed
+	 * 
 	 * @param distance Horizontal distance to target, in meters
 	 * @return Flywheel speed, in RPM
 	 */
@@ -82,5 +103,5 @@ public class Shooter extends SubsystemBase {
 		// TODO
 		return 100;
 	}
-	
+
 }

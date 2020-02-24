@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.DriveSignal;
 import frc.robot.commands.drivetrain.DriveJoystick;
 import frc.robot.constants.RobotConstants;
 
@@ -97,15 +98,19 @@ public class Drivetrain extends SubsystemBase{
 	
 	/**
 	 * Drive by supplying a left, right, and sideways percent. Straight 100% output. 
-	 * @param leftPercent
-	 * @param rightPercent
-	 * @param normalPercent
+	 * @param left
+	 * @param right
+	 * @param normal
 	 */
-	public void drivePercentOutput(double leftPercent, double rightPercent, double normalPercent) {
-		leftMaster.set(ControlMode.PercentOutput, leftPercent);
-		rightMaster.set(ControlMode.PercentOutput, rightPercent);
-		normalMaster.set(ControlMode.PercentOutput, normalPercent);
-	}
+  public void drive(ControlMode controlMode, double left, double right, double normal) {
+    leftMaster.set(controlMode, left);
+		rightMaster.set(controlMode, right);
+		normalMaster.set(controlMode, normal);
+  }
+
+  public void drive(ControlMode controlMode, DriveSignal driveSignal) {
+    drive(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
+  }
 
 	/**
 	 * Drive field-centric with respect to current gyro angle

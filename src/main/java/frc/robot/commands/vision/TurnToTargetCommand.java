@@ -7,9 +7,12 @@
 
 package frc.robot.commands.vision;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -56,10 +59,9 @@ public class TurnToTargetCommand extends CommandBase {
 			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
 			
 			// double steer_cmd = RobotConstants.VISION_STEER_kP * degreeError;
-			 
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
 			System.out.println("TURN TO TARGET: " + steer_cmd);
-			drivetrain.drivePercentOutput(steer_cmd, -steer_cmd, 0);
+			drivetrain.drive(ControlMode.PercentOutput, new DriveSignal(steer_cmd, -steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();
 			} else {
@@ -73,7 +75,7 @@ public class TurnToTargetCommand extends CommandBase {
 	public void end(boolean interrupted) {
 		System.out.println("TURN TARGET COMMAND | END");
 		vision.disableTracking();
-		drivetrain.drivePercentOutput(0, 0, 0);
+		drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
 	}
 	
 	// Returns true when the command should end.

@@ -7,6 +7,8 @@
 
 package frc.robot.commands.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.Units;
@@ -83,7 +85,7 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		System.out.println("@@@@@@@@@@@@@@@ Left: " + (l + turn) + ", Right: " + (r - turn) + ", Angle Diff: " + angleDifference + ", Turn: " + turn);
 		
-		s_drivetrain.drivePercentOutput(l + turn, r - turn, 0);
+		s_drivetrain.drive(ControlMode.PercentOutput, l + turn, r - turn, 0);
 	}
 	
 	// Called once the command ends or is interrupted.
