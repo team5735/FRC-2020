@@ -30,15 +30,21 @@ public class RobotConstants {
 
     // Drivetrain Facts
     public static final double DRIVETRAIN_GEAR_RATIO = 6.22222222 / 1.0; // for every 6.2 rev of Falcon, wheels turn 1 rev
+    public static final double NORMAL_GEAR_RATIO = 1.0 / 1.0;
     public static final double ENCODER_TICKS_PER_FALCON_REV = 2048.0;
-    public static final double ENCODER_TICKS_PER_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * DRIVETRAIN_GEAR_RATIO;
+    public static final double ENCODER_TICKS_PER_DT_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * DRIVETRAIN_GEAR_RATIO;
+    public static final double ENCODER_TICKS_PER_NORMAL_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * NORMAL_GEAR_RATIO;
     public static final double DRIVETRAIN_TRACK_WIDTH = Units.inchesToMeters(23.0); // m
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.0); // m
+    public static final double DT_WHEEL_DIAMETER = Units.inchesToMeters(6.0); // m
+    public static final double NORMAL_WHEEL_DIAMETER = Units.inchesToMeters(3.25); // m
     
     // Pathfinder Limiting
-    public static final double MAX_VELOCITY_TICKS = 10500.0; // ticks / 100ms
-    public static final double MAX_VELOCITY_RPM = 496.156; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
-    public static final double MAX_VELOCITY = 3.896; // MAX_VELOCITY_TICKS * 10 / 2048 / DRIVETRAIN_GEAR_RATIO * (Math.PI * 0.15) // m/s, used in generator
+    public static final double MAX_VELOCITY_DT_TICKS = 10500.0; // ticks / 100ms
+    public static final double MAX_VELOCITY_DT_RPM = MAX_VELOCITY_DT_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO; //496.156; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
+    public static final double MAX_VELOCITY_DT = MAX_VELOCITY_DT_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO * (Math.PI * DT_WHEEL_DIAMETER); //3.896; // MAX_VELOCITY_TICKS * 10 / 2048 / DRIVETRAIN_GEAR_RATIO * (Math.PI * 0.15) // m/s, used in generator
+    public static final double MAX_VELOCITY_NORMAL_TICKS = 10500.0; // ticks / 100ms
+    public static final double MAX_VELOCITY_NORMAL_RPM = MAX_VELOCITY_NORMAL_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
+    public static final double MAX_VELOCITY_NORMAL = MAX_VELOCITY_NORMAL_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO * (Math.PI * NORMAL_WHEEL_DIAMETER); // m/s
     public static final double kTURN_CORRECTION = -0.009;
     
     // Motor Identification
@@ -73,14 +79,7 @@ public class RobotConstants {
     public static final double NORMAL_kP = 0.0;
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
-    public static final double NORMAL_kF = ENCODER_TICKS_PER_FALCON_REV / MAX_VELOCITY_TICKS;
-
-    public static final double AUTO_LEFT_kP = 0.0;//0.018;
-    public static final double AUTO_LEFT_kI = 0.0;
-    public static final double AUTO_LEFT_kD = 0.0;
-    public static final double AUTO_RIGHT_kP = 0.0;//0.018;
-    public static final double AUTO_RIGHT_kI = 0.0;
-    public static final double AUTO_RIGHT_kD = 0.0;
+    public static final double NORMAL_kF = ENCODER_TICKS_PER_FALCON_REV / MAX_VELOCITY_NORMAL_TICKS;
 
     public static final double FLYWHEEL_kP = 0.000025;//0.000325;
     public static final double FLYWHEEL_kI = 0.0;

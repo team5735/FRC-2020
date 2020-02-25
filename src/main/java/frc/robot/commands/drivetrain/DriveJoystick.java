@@ -46,7 +46,7 @@ public class DriveJoystick extends CommandBase {
 		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.07);
 		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
 
-		DriveSignal controllerInput = new DriveSignal(, )
+		DriveSignal controllerInput = new DriveSignal(forward, nor)
 		
 		// if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 		// 	drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
