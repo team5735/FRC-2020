@@ -120,7 +120,7 @@ public class Drivetrain extends SubsystemBase{
 	 * @param driveSignal
 	 */
 	public void drive(ControlMode controlMode, DriveSignal driveSignal) {
-		drive(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
+		driveExplicit(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
 	}
 
 	/**
