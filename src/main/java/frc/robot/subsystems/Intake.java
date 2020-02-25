@@ -32,7 +32,7 @@ public class Intake extends SubsystemBase {
 	* Creates a new Intake.
 	*/
 	public Intake() {    
-		intakeArm = new TalonSRX(7);
+		intakeArm = new TalonSRX(RobotConstants.INTAKE_ARM_ID);
 		intakeArm.configFactoryDefault();
 		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
 		intakeArm.config_kI(0, RobotConstants.INTAKE_kI);
@@ -40,13 +40,13 @@ public class Intake extends SubsystemBase {
 		intakeArm.overrideLimitSwitchesEnable(true);
 		resetPosition();
 
-		intakeRoller = new VictorSPX(10);
+		intakeRoller = new VictorSPX(RobotConstants.INTAKE_ROLLER_ID);
 		intakeRoller.configFactoryDefault();
 		intakeRoller.setInverted(true);
 
 		conveyorFeeder = Drivetrain.gyroHost; // shared TalonSRX
 
-		conveyorRoller = new VictorSPX(9);
+		conveyorRoller = new VictorSPX(RobotConstants.CONVEYOR_ID);
 		conveyorRoller.configFactoryDefault();
 		conveyorRoller.setInverted(true);
 		

@@ -82,7 +82,7 @@ public class RobotContainer {
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
 		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
 		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
-		driverController.aButton.whileHeld(new WinchMoveCommand(climber));
+		driverController.bButton.whileHeld(new WinchMoveCommand(climber));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 
@@ -94,6 +94,8 @@ public class RobotContainer {
 
 		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
 		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
+		driverController.Dpad.Right.whileHeld(new IntakeBallCommand(intake, 0.2, false));
+		driverController.Dpad.Left.whileHeld(new IntakeBallCommand(intake, 0.2, true));
 		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// driverController.Dpad.Right.whileHeld();
 		

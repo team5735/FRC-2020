@@ -35,11 +35,11 @@ public class Shooter extends SubsystemBase {
 	 */
 	public Shooter() {
 
-		neoMaster = new CANSparkMax(33, MotorType.kBrushless);
+		neoMaster = new CANSparkMax(RobotConstants.FLYWHEEL_MASTER_ID, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
 		neoMaster.setInverted(false);
 
-		neoSlave = new CANSparkMax(52, MotorType.kBrushless);
+		neoSlave = new CANSparkMax(RobotConstants.FLYWHEEL_SLAVE_ID, MotorType.kBrushless);
 		neoSlave.restoreFactoryDefaults();
 		neoSlave.follow(neoMaster, true);
 

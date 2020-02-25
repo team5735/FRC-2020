@@ -30,7 +30,7 @@ public class RobotConstants {
 
     // Drivetrain Facts
     public static final double DRIVETRAIN_GEAR_RATIO = 6.22222222 / 1.0; // for every 6.2 rev of Falcon, wheels turn 1 rev
-    public static final double NORMAL_GEAR_RATIO = 1.0 / 1.0;
+    public static final double NORMAL_GEAR_RATIO = (64/12) * (40/30); // 7.1111111;
     public static final double ENCODER_TICKS_PER_FALCON_REV = 2048.0;
     public static final double ENCODER_TICKS_PER_DT_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * DRIVETRAIN_GEAR_RATIO;
     public static final double ENCODER_TICKS_PER_NORMAL_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * NORMAL_GEAR_RATIO;
@@ -60,6 +60,14 @@ public class RobotConstants {
 
     public static final int GYRO_TALON_HOST_ID = 6;
 
+    public static final int FLYWHEEL_MASTER_ID = 33;
+    public static final int FLYWHEEL_SLAVE_ID = 52;
+
+    public static final int INTAKE_ARM_ID = 7;
+    public static final int INTAKE_ROLLER_ID = 10;
+    public static final int CONVEYOR_ID = 9;
+
+
     public static final int WINCH_ID = 40;
     public static final int TELESCOPE_ID = 13;
 
@@ -69,12 +77,12 @@ public class RobotConstants {
     public static final double LEFT_kP = 0.0;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 0.064;
+    public static final double LEFT_kF = 0.09742857143; // (100% * 1023) / 10500
     
     public static final double RIGHT_kP = 0.0;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 0.0723;
+    public static final double RIGHT_kF = 0.09742857143;
     
     public static final double NORMAL_kP = 0.0;
     public static final double NORMAL_kI = 0.0;
