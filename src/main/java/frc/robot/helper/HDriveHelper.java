@@ -19,23 +19,23 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class HDriveHelper {
 
-    public static DriveSignal xyLockedDrive(double x, double y) {
-        return hDrive(x, y, 0);
-    }
+    // public static DriveSignal xyLockedDrive(double x, double y) {
+        // return hDrive(x, y, 0);
+    // }
 
     // ticksper100ms
-    public static DriveSignal hDrive(double x, double y, double radians) {
-        double arcLength = rotation.radians() * RobotConstants.DRIVETRAIN_TRACK_WIDTH / 2.0; // in inches/100ms
-        double left = translation.y()  - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
-        double right = translation.y() + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
-        double normal = translation.x();
+    // public static DriveSignal hDrive(double x, double y, double radians) {
+    //     double arcLength = rotation.radians() * RobotConstants.DRIVETRAIN_TRACK_WIDTH / 2.0; // in inches/100ms
+    //     double left = translation.y()  - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
+    //     double right = translation.y() + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
+    //     double normal = translation.x();
 
-        return new DriveSignal(left, right, normal);
-    }
+    //     return new DriveSignal(left, right, normal);
+    // }
 
-    public static DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
-        return hDrive(translation.rotateBy(Rotation.fromDegrees(fieldAngle)), rotation);
-    }
+    // public static DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
+    //     return hDrive(translation.rotateBy(Rotation.fromDegrees(fieldAngle)), rotation);
+    // }
 
     /* Uses poses
 

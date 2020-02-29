@@ -7,6 +7,8 @@
 
 package frc.robot.commands.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -43,18 +45,25 @@ public class DriveJoystick extends CommandBase {
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
 		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
-		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.07);
+		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
 		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
 
-		DriveSignal controllerInput = new DriveSignal(forward, nor)
+		// double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
+		// double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
+		// double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
 		
-		// if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
-		// 	drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
-		// } else {
-		// 	drivetrain.drive(forward, normal, turn);
-		// }
+		// drive(controlMode, new DriveSignal(leftPercentage, rightPercentage, sidewaysPercentage));
+
+		// DriveSignal controllerInput = new DriveSignal(forward)
 		
-		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
+		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
+			drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
+		} else {
+			drivetrain.drivePercent(ControlMode.Velocity, forward, normal, turn, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
+			// drivetrain.drive(ControlMode.Velocity, new DriveSignal(0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
+		}
+		
+		System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
 	}
 	
 	// Called once the command ends or is interrupted.

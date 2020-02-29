@@ -86,7 +86,7 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		System.out.println("@@@@@@@@@@@@@@@ Left: " + (l + turn) + ", Right: " + (r - turn) + ", Angle Diff: " + angleDifference + ", Turn: " + turn);
 		
-		s_drivetrain.driveExplicit(ControlMode.Velocity, l + turn, r - turn, 0);
+		s_drivetrain.drive(ControlMode.Velocity, new DriveSignal(l + turn, r - turn, 0));
 	}
 	
 	// Called once the command ends or is interrupted.

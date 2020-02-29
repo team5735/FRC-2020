@@ -30,7 +30,7 @@ public class RobotConstants {
 
     // Drivetrain Facts
     public static final double DRIVETRAIN_GEAR_RATIO = 6.22222222 / 1.0; // for every 6.2 rev of Falcon, wheels turn 1 rev
-    public static final double NORMAL_GEAR_RATIO = (64/12) * (40/30); // 7.1111111;
+    public static final double NORMAL_GEAR_RATIO = (64.0/12.0) * (40.0/30.0); // 7.1111111;
     public static final double ENCODER_TICKS_PER_FALCON_REV = 2048.0;
     public static final double ENCODER_TICKS_PER_DT_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * DRIVETRAIN_GEAR_RATIO;
     public static final double ENCODER_TICKS_PER_NORMAL_WHEEL_REV = ENCODER_TICKS_PER_FALCON_REV * NORMAL_GEAR_RATIO;
@@ -42,7 +42,7 @@ public class RobotConstants {
     public static final double MAX_VELOCITY_DT_TICKS = 10500.0; // ticks / 100ms
     public static final double MAX_VELOCITY_DT_RPM = MAX_VELOCITY_DT_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO; //496.156; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
     public static final double MAX_VELOCITY_DT = MAX_VELOCITY_DT_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO * (Math.PI * DT_WHEEL_DIAMETER); //3.896; // MAX_VELOCITY_TICKS * 10 / 2048 / DRIVETRAIN_GEAR_RATIO * (Math.PI * 0.15) // m/s, used in generator
-    public static final double MAX_VELOCITY_NORMAL_TICKS = 10500.0; // ticks / 100ms
+    public static final double MAX_VELOCITY_NORMAL_TICKS = 9000.0; // ticks / 100ms
     public static final double MAX_VELOCITY_NORMAL_RPM = MAX_VELOCITY_NORMAL_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
     public static final double MAX_VELOCITY_NORMAL = MAX_VELOCITY_NORMAL_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO * (Math.PI * NORMAL_WHEEL_DIAMETER); // m/s
     public static final double kTURN_CORRECTION = -0.009;
@@ -58,12 +58,12 @@ public class RobotConstants {
     
     public static final int NORMAL_ID = 55;
 
-    public static final int GYRO_TALON_HOST_ID = 6;
+    public static final int GYRO_TALON_HOST_ID = 7; // also feeder
 
     public static final int FLYWHEEL_MASTER_ID = 33;
     public static final int FLYWHEEL_SLAVE_ID = 52;
 
-    public static final int INTAKE_ARM_ID = 7;
+    public static final int INTAKE_ARM_ID = 6;
     public static final int INTAKE_ROLLER_ID = 10;
     public static final int CONVEYOR_ID = 9;
 
@@ -74,20 +74,20 @@ public class RobotConstants {
     public static final int BANANA_ID = 3; //TODO tune
     
     // PID
-    public static final double LEFT_kP = 0.0;
+    public static final double LEFT_kP = 0.1;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
     public static final double LEFT_kF = 0.09742857143; // (100% * 1023) / 10500
     
-    public static final double RIGHT_kP = 0.0;
+    public static final double RIGHT_kP = 0.1;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
     public static final double RIGHT_kF = 0.09742857143;
     
-    public static final double NORMAL_kP = 0.0;
+    public static final double NORMAL_kP = 0.1;
     public static final double NORMAL_kI = 0.0;
     public static final double NORMAL_kD = 0.0;
-    public static final double NORMAL_kF = ENCODER_TICKS_PER_FALCON_REV / MAX_VELOCITY_NORMAL_TICKS;
+    public static final double NORMAL_kF = 1023.0 / MAX_VELOCITY_NORMAL_TICKS;
 
     public static final double FLYWHEEL_kP = 0.000025;//0.000325;
     public static final double FLYWHEEL_kI = 0.0;

@@ -26,7 +26,7 @@ public class Drivetrain extends SubsystemBase{
 	public static TalonSRX gyroHost;
 	private PigeonIMU gyro;
 	
-	private double ANGULAR_PERCENTAGE = 0.33;
+	public static double ANGULAR_PERCENTAGE = 0.33;
 	
 	public enum DriveMode {
 		STATIC_DRIVE, FIELD_CENTRIC, DISABLED
@@ -104,14 +104,12 @@ public class Drivetrain extends SubsystemBase{
 	 * @param sidewaysVelocity
 	 * @param angularVelocity
 	 */
-	public void drive(ControlMode controlMode, double forwardVelocity, double sidewaysVelocity, double angularVelocity) {
-		double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
-		double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
+	public void driveTurn(ControlMode controlMode, double forwardVelocity, double sidewaysVelocity, double angularVelocity) {
+		double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
+		double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
 		double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
 		
-		leftMaster.set(controlMode, leftPercentage);
-		rightMaster.set(controlMode, rightPercentage);
-		normalMaster.set(controlMode, sidewaysPercentage);
+		drive(controlMode, new DriveSignal(leftPercentage, rightPercentage, sidewaysPercentage));
 	}
 	
 	/**
@@ -120,26 +118,17 @@ public class Drivetrain extends SubsystemBase{
 	 * @param driveSignal
 	 */
 	public void drive(ControlMode controlMode, DriveSignal driveSignal) {
-		driveExplicit(controlMode, driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
-	}
-
-	/**
-	* Drive by supplying a left, right, and sideways value
-	* @param left
-	* @param right
-	* @param normal
-	*/
-	public void driveExplicit(ControlMode controlMode, double left, double right, double normal) {
-		leftMaster.set(controlMode, left);
-		rightMaster.set(controlMode, right);
-		normalMaster.set(controlMode, normal);
+		leftMaster.set(controlMode, driveSignal.getLeft());
+		rightMaster.set(controlMode, driveSignal.getRight());
+		normalMaster.set(controlMode, driveSignal.getNormal());
+		// System.out.println("L: " + leftMaster.getSelectedSensorVelocity() + ", R: " + rightMaster.getSelectedSensorVelocity() + ", N: " + normalMaster.getSelectedSensorVelocity());
 	}
 
 	/**
 	* Drive by supplying a forward, sideways, and turning percentage, which are converted into velocities
 	*/
-	public void drivePercent(double forwardPercent, double normalPercent, double turnPercent, double limiting) {
-		drive(ControlMode.Velocity, 
+	public void drivePercent(ControlMode controlMode, double forwardPercent, double normalPercent, double turnPercent, double limiting) {
+		driveTurn(controlMode, 
 			forwardPercent * limiting,
 			normalPercent * limiting,
 			turnPercent * limiting);
@@ -154,7 +143,7 @@ public class Drivetrain extends SubsystemBase{
 		double angleRad = Math.toRadians(currentAngle);
 		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
 		double modifiedSideways = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
-		drivePercent(modifiedForward, modifiedSideways, angularPercent, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
+		drivePercent(ControlMode.Velocity, modifiedForward, modifiedSideways, angularPercent, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
 	}
 	
 	public void reset() {

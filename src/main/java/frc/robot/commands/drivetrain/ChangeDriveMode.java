@@ -38,6 +38,7 @@ public class ChangeDriveMode extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DRIVE MODE: " + drivetrain.getDriveMode().toString());
     SmartDashboard.putString("Drive Mode", drivetrain.getDriveMode().toString());
   }
 
