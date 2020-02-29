@@ -86,14 +86,14 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		System.out.println("@@@@@@@@@@@@@@@ Left: " + (l + turn) + ", Right: " + (r - turn) + ", Angle Diff: " + angleDifference + ", Turn: " + turn);
 		
-		s_drivetrain.drive(ControlMode.Velocity, new DriveSignal(l + turn, r - turn, 0));
+		s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("DONE: L current:" + Units.dtRotationsToMeters(Units.dtTickstoRotations(s_drivetrain.getLeftSidePosition())) / 6.2222 + ", R current: " + Units.dtRotationsToMeters(Units.dtTickstoRotations(s_drivetrain.getRightSidePosition())) / 6.2222);
-		s_drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
+		s_drivetrain.drive(DriveSignal.NEUTRAL);
 	}
 	
 	// Returns true when the command should end.

@@ -52,7 +52,7 @@ public class TurnToTargetCommand extends CommandBase {
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
 		System.out.println(vision.getDistanceToTarget());
-		if(vision.hasValidTarget() && false) {
+		if(vision.hasValidTarget()) {
 			double degreeError = vision.getLimelight().getdegRotationToTarget() + RobotConstants.VISION_X_OFFSET;
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
 
@@ -61,7 +61,7 @@ public class TurnToTargetCommand extends CommandBase {
 			// double steer_cmd = RobotConstants.VISION_STEER_kP * degreeError;
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
 			System.out.println("TURN TO TARGET: " + steer_cmd);
-			drivetrain.drive(ControlMode.PercentOutput, new DriveSignal(steer_cmd, -steer_cmd, 0));
+			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, steer_cmd, -steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();
 			} else {
@@ -75,7 +75,7 @@ public class TurnToTargetCommand extends CommandBase {
 	public void end(boolean interrupted) {
 		System.out.println("TURN TARGET COMMAND | END");
 		vision.disableTracking();
-		drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
+		drivetrain.drive(DriveSignal.NEUTRAL);
 	}
 	
 	// Returns true when the command should end.

@@ -7,6 +7,8 @@
 
 package frc.robot.helper;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import frc.lib.geometry.Rotation;
 import frc.lib.geometry.Translation;
 import frc.lib.util.DriveSignal;
@@ -19,23 +21,49 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class HDriveHelper {
 
-    // public static DriveSignal xyLockedDrive(double x, double y) {
-        // return hDrive(x, y, 0);
-    // }
+	public static double ANGULAR_PERCENTAGE = 0.33;
 
-    // ticksper100ms
-    // public static DriveSignal hDrive(double x, double y, double radians) {
-    //     double arcLength = rotation.radians() * RobotConstants.DRIVETRAIN_TRACK_WIDTH / 2.0; // in inches/100ms
-    //     double left = translation.y()  - Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
-    //     double right = translation.y() + Drivetrain.rpmToTicksPer100ms(Drivetrain.inchesPerSecondToRpm(arcLength * 10));
-    //     double normal = translation.x();
+    public static DriveSignal xyLockedDrive(double x, double y) {
+        return HDrive(x, y, 0);
+    }
 
-    //     return new DriveSignal(left, right, normal);
-    // }
+    /**
+     * 
+     * @param forward
+     * @param normal
+     * @param angular
+     * @return DriveSignal
+     */
+    public static DriveSignal HDrive(double forward, double normal, double angular) {
+		double leftPercentage = forward * (1 - ANGULAR_PERCENTAGE) + angular * ANGULAR_PERCENTAGE;
+		double rightPercentage = forward * (1 - ANGULAR_PERCENTAGE) - angular * ANGULAR_PERCENTAGE;
+        double normalPercentage = normal * (1 - ANGULAR_PERCENTAGE);
+        
+        leftPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
+        rightPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
+        normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+		
+		return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
+    }
 
-    // public static DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
-    //     return hDrive(translation.rotateBy(Rotation.fromDegrees(fieldAngle)), rotation);
-    // }
+    /**
+     * Drive field-centric with respect to current gyro angle
+     * @param forwardPercent
+     * @param sidewaysPercent
+     * @param angularPercent
+     * @param currentAngle
+     * @return DriveSignal
+     */
+    public static DriveSignal HdriveFieldCentric(double forwardPercent, double sidewaysPercent, double angularPercent, double currentAngle) {
+		double angleRad = Math.toRadians(currentAngle);
+		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
+		double modifiedNormal = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
+        
+        modifiedForward *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        modifiedNormal *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+		
+		return new DriveSignal(ControlMode.Velocity, modifiedForward, modifiedForward, modifiedNormal);
+	}
 
     /* Uses poses
 
@@ -62,5 +90,27 @@ public class HDriveHelper {
     public static DriveSignal correctField(Translation translation, Rotation rotation, double fieldAngle) {
         return hDrive(translation.rotateBy(Rotation.fromDegrees(fieldAngle)), rotation);
     }
+    
+	 * Drive by providing velocities in sensor ticks / 100 ms
+	 * @param controlMode
+	 * @param forwardVelocity
+	 * @param sidewaysVelocity
+	 * @param angularVelocity
+     * 
+	public void driveTurn(ControlMode controlMode, double forwardVelocity, double sidewaysVelocity, double angularVelocity) {
+		double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
+		double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
+		double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
+		
+		drive(controlMode, new DriveSignal(leftPercentage, rightPercentage, sidewaysPercentage));
+    }
+    
+    public void driveFieldCentric(double forwardPercent, double sidewaysPercent, double angularPercent, double currentAngle) {
+		double angleRad = Math.toRadians(currentAngle);
+		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
+		double modifiedSideways = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
+		drivePercent(ControlMode.Velocity, modifiedForward, modifiedSideways, angularPercent, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
+	}
+
     */
 }

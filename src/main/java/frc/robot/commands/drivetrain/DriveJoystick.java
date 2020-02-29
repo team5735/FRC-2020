@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.DriveSignal;
 import frc.robot.RobotContainer;
 import frc.robot.constants.RobotConstants;
+import frc.robot.helper.HDriveHelper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
@@ -47,19 +48,11 @@ public class DriveJoystick extends CommandBase {
 		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
 		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
 		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
-
-		// double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
-		// double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
-		// double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
-		
-		// drive(controlMode, new DriveSignal(leftPercentage, rightPercentage, sidewaysPercentage));
-
-		// DriveSignal controllerInput = new DriveSignal(forward)
 		
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
-			drivetrain.driveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle());
+			drivetrain.drive(HDriveHelper.HdriveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle()));
 		} else {
-			drivetrain.drivePercent(ControlMode.Velocity, forward, normal, turn, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
+			drivetrain.drive(HDriveHelper.HDrive(forward, normal, turn));
 			// drivetrain.drive(ControlMode.Velocity, new DriveSignal(0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
 		}
 		

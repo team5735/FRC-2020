@@ -73,7 +73,7 @@ public class RobotContainer {
 		shooter.slowDown();
 		intake.intakeBall(0, false);
 		vision.disableTracking();
-		drivetrain.drive(ControlMode.PercentOutput, DriveSignal.NEUTRAL);
+		drivetrain.drive(DriveSignal.NEUTRAL);
 		drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
 	}
 	

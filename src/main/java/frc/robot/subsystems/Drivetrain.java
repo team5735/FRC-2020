@@ -25,9 +25,7 @@ public class Drivetrain extends SubsystemBase{
 	private TalonFX leftMaster, rightMaster, leftFollower, rightFollower, normalMaster;
 	public static TalonSRX gyroHost;
 	private PigeonIMU gyro;
-	
-	public static double ANGULAR_PERCENTAGE = 0.33;
-	
+		
 	public enum DriveMode {
 		STATIC_DRIVE, FIELD_CENTRIC, DISABLED
 	};
@@ -82,69 +80,27 @@ public class Drivetrain extends SubsystemBase{
 	}
 	
 	/**
-	* Drive by supplying a forward, sideways, and turn percentage. Limited by TURN_CONSTANT.
-	* @param forwardP
-	* @param normalP
-	* @param turnP
-	*/
-	// public void drive(double forwardP, double normalP, double turnP) {
-	// 	double f = (1 - TURN_CONSTANT) * forwardP;
-	// 	double n = (1 - TURN_CONSTANT) * normalP;
-	// 	double t = TURN_CONSTANT * turnP;
-		
-	// 	leftMaster.set(ControlMode.PercentOutput, f + t);
-	// 	rightMaster.set(ControlMode.PercentOutput, f - t);
-	// 	normalMaster.set(ControlMode.PercentOutput, n);
-	// }
-	
-	/**
-	 * Drive by providing velocities in sensor ticks / 100 ms
-	 * @param controlMode
-	 * @param forwardVelocity
-	 * @param sidewaysVelocity
-	 * @param angularVelocity
-	 */
-	public void driveTurn(ControlMode controlMode, double forwardVelocity, double sidewaysVelocity, double angularVelocity) {
-		double leftPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) + angularVelocity * ANGULAR_PERCENTAGE;
-		double rightPercentage = forwardVelocity * (1 - ANGULAR_PERCENTAGE) - angularVelocity * ANGULAR_PERCENTAGE;
-		double sidewaysPercentage = sidewaysVelocity * (1 - ANGULAR_PERCENTAGE);
-		
-		drive(controlMode, new DriveSignal(leftPercentage, rightPercentage, sidewaysPercentage));
-	}
-	
-	/**
-	 * Drive with drive signal, providing velocities
-	 * @param controlMode
+	 * Drive with drive signal
 	 * @param driveSignal
 	 */
-	public void drive(ControlMode controlMode, DriveSignal driveSignal) {
-		leftMaster.set(controlMode, driveSignal.getLeft());
-		rightMaster.set(controlMode, driveSignal.getRight());
-		normalMaster.set(controlMode, driveSignal.getNormal());
-		// System.out.println("L: " + leftMaster.getSelectedSensorVelocity() + ", R: " + rightMaster.getSelectedSensorVelocity() + ", N: " + normalMaster.getSelectedSensorVelocity());
+	public void drive(DriveSignal driveSignal) {
+		drive(driveSignal.getControlMode(), driveSignal.getLeft(), driveSignal.getRight(), driveSignal.getNormal());
 	}
 
 	/**
-	* Drive by supplying a forward, sideways, and turning percentage, which are converted into velocities
-	*/
-	public void drivePercent(ControlMode controlMode, double forwardPercent, double normalPercent, double turnPercent, double limiting) {
-		driveTurn(controlMode, 
-			forwardPercent * limiting,
-			normalPercent * limiting,
-			turnPercent * limiting);
+	 * Drive Explicitly
+	 * @param controlMode
+	 * @param left
+	 * @param right
+	 * @param normal
+	 */
+	public void drive(ControlMode controlMode, double left, double right, double normal) {
+		leftMaster.set(controlMode, left);
+		rightMaster.set(controlMode, right);
+		normalMaster.set(controlMode, normal);
+		// System.out.println("L: " + leftMaster.getSelectedSensorVelocity() + ", R: " + rightMaster.getSelectedSensorVelocity() + ", N: " + normalMaster.getSelectedSensorVelocity());
 	}
-	
-	/**
-	* Drive field-centric with respect to current gyro angle
-	* @param currentAngle Angle, in degrees
-	*/
-	public void driveFieldCentric(double forwardPercent, double sidewaysPercent, double angularPercent,
-	double currentAngle) {
-		double angleRad = Math.toRadians(currentAngle);
-		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
-		double modifiedSideways = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
-		drivePercent(ControlMode.Velocity, modifiedForward, modifiedSideways, angularPercent, RobotConstants.MAX_VELOCITY_NORMAL_TICKS);
-	}
+
 	
 	public void reset() {
 		zeroSensors();
@@ -157,12 +113,10 @@ public class Drivetrain extends SubsystemBase{
 	}
 	
 	public int getLeftSidePosition() {
-		// return (int) (leftMaster.getSelectedSensorPosition() / RobotConstants.DRIVETRAIN_GEAR_RATIO);
 		return (int) (leftMaster.getSelectedSensorPosition() * RobotConstants.DRIVETRAIN_GEAR_RATIO);
 	}
 	
 	public int getRightSidePosition() {
-		// return (int) (rightMaster.getSelectedSensorPosition() / RobotConstants.DRIVETRAIN_GEAR_RATIO);
 		return (int) (rightMaster.getSelectedSensorPosition() * RobotConstants.DRIVETRAIN_GEAR_RATIO);
 	}
 	
