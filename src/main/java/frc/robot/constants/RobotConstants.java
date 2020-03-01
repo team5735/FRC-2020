@@ -136,9 +136,9 @@ public class RobotConstants {
     public static final double VISION_TARGET_DEADBAND = 0.6; // degrees
     public static final double VISION_X_OFFSET = 0;
 
-    public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(12); // meters
+    public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(11.25); // meters
     public static final double CAMERA_ANGLEFROMPARALLEL = Units.degreesToRadians(19.01); // radians
-    public static final double TARGET_HEIGHTFROMGROUND = Units.inchesToMeters(94.75); // meters (7 ft 10.75 in, direct center of trapezoid)
+    public static final double TARGET_HEIGHTFROMGROUND = Units.inchesToMeters(91.5); // meters (7 ft 10.75 in, direct center of trapezoid)
     
     // public static final double CAMERAXOFFSET = 0;
     // public static final double CAMERAYOFFSET = 0;
