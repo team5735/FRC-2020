@@ -59,7 +59,7 @@ public class Vision extends SubsystemBase {
 	 * @return Horizontal distance to target, in meters
 	 */
 	public double getDistanceToTarget() {
-		if (!trackingMode) {
+		if (!isTrackingEnabled()) {
 			enableTracking();
 		}
 		boolean gotDistance = false;
@@ -75,9 +75,10 @@ public class Vision extends SubsystemBase {
 			}
 		}
 
-		disableTracking();
+		// disableTracking();
 
-		// SmartDashboard.putNumber("Distance to Target (m)", distance);
+		System.out.println("Distance to Target: " + distance);
+		SmartDashboard.putNumber("Distance to Target (m)", distance);
 
 		return distance;
 	}
