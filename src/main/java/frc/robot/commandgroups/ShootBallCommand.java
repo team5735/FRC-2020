@@ -40,8 +40,13 @@ public class ShootBallCommand extends SequentialCommandGroup {
 				new MoveConveyorCommand(intake, inverted),
 				new IntakeBallCommand(intake, 0.5, inverted)
 			),
+			// new ParallelDeadlineGroup(
+			// 	new WaitCommand(conveyerTime), 
+			// 	new MoveConveyorCommand(intake, inverted),
+			// 	new IntakeBallCommand(intake, 0.5, inverted)
+			// ),
 			new ParallelDeadlineGroup(
-				new FeedShooterCommand(intake, inverted).withTimeout(0.4),
+				new FeedShooterCommand(intake, inverted).withTimeout(0.69),
 				new MoveConveyorCommand(intake, inverted),
 				new IntakeBallCommand(intake, 0.5, inverted)
 			)

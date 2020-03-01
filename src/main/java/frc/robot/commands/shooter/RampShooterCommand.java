@@ -21,7 +21,7 @@ public class RampShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Shooter shooter;
 	private final Banana banana;
-	private final double rpm;
+	private double rpm;
 	
 	public RampShooterCommand(Shooter shooter, Banana banana, double rpm) {
 		this.shooter = shooter;
@@ -35,10 +35,13 @@ public class RampShooterCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		rpm = SmartDashboard.getNumber("RPM", 0);
 		if(rpm == 0) {
+			System.out.println("RPM 0");
 			shooter.slowDown();
 			banana.retract();
 		} else {
+			System.out.println("RPM SETPOINT: " + rpm);
 			shooter.setSpeed(rpm); // only need to call once?
 		}
 
@@ -50,8 +53,8 @@ public class RampShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		// SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
-		double speed = shooter.getSpeed();
+		SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
+		// double speed = shooter.getSpeed();
 	}
 	
 	// Called once the command ends or is interrupted.

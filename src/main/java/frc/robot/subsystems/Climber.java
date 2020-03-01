@@ -31,7 +31,7 @@ public class Climber extends SubsystemBase {
 
     winchMaster = new CANSparkMax(RobotConstants.WINCH_ID, MotorType.kBrushless);
     winchMaster.restoreFactoryDefaults();
-    winchMaster.setInverted(false);
+    winchMaster.setInverted(true);
   }
 
   @Override

@@ -9,6 +9,9 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.controllers.BobXboxController;
@@ -66,6 +69,7 @@ public class RobotContainer {
 		// Configure the button bindings
 		configureDriverBindings();
 		configureSubsystemBindings();
+		SmartDashboard.putNumber("RPM", RobotConstants.FLYWHEEL_PRESET_LINE);
 	}
 
 	public void stopAll() {
@@ -110,14 +114,14 @@ public class RobotContainer {
 
 		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
-		subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
-		subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
+		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
 
-		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_LINE));
-		subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
-		subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, banana, 0));
+		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, 1000));
+		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		// subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, banana, 0));
 		
 		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, false));
 		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, true));

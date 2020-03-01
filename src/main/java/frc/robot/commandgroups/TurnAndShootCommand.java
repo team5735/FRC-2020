@@ -1,7 +1,11 @@
 package frc.robot.commandgroups;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
 import frc.robot.commands.vision.TurnToTargetCommand;
@@ -30,14 +34,14 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
         // double distance = vision.getDistanceToTarget();
         addCommands(
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
-            new ParallelRaceGroup( 
-                new TurnToTargetCommand(vision, drivetrain)
-                // new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_LINE)//shooter.getSpeedFromDistance(distance)),    
-            ),
+            new ParallelCommandGroup( 
+                new TurnToTargetCommand(vision, drivetrain),
+                new RampShooterCommand(shooter, banana, 1000)//RobotConstants.FLYWHEEL_PRESET_LINE)//shooter.getSpeedFromDistance(distance)),    
+            )//,
             // new ShootBallCommand(intake, shooter, 0, false),
-            // new ShootBallCommand(intake, shooter, 0.3, false),
+            // new ShootBallCommand(intake, shooter, 0, false),
             // new ShootBallCommand(intake, shooter, 0.6, false),
-            new StopFlywheel(shooter)
+            // new StopFlywheel(shooter)
         );
     }
 

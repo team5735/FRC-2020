@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
@@ -52,14 +53,15 @@ public class TurnToTargetCommand extends CommandBase {
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
 		if(vision.hasValidTarget()) {
-			double degreeError = vision.getLimelight().getdegRotationToTarget() + RobotConstants.VISION_X_OFFSET;
+			double degreeError = vision.getTX() + RobotConstants.VISION_X_OFFSET;
+			SmartDashboard.putNumber("Degree Error", degreeError);
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
 
 			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
 			
 			// double steer_cmd = -RobotConstants.VISION_STEER_kP * degreeError;
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
-			// System.out.println("TURN TO TARGET: " + vision.getLimelight().getdegRotationToTarget() + "  " +steer_cmd);
+			System.out.println("TURN TO TARGET: " + vision.getTX()+ "  " +steer_cmd);
 			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();
@@ -75,14 +77,17 @@ public class TurnToTargetCommand extends CommandBase {
 		System.out.println("TURN TARGET COMMAND | END");
 		// vision.disableTracking();
 		drivetrain.drive(DriveSignal.NEUTRAL);
+		System.out.println("DISTANCE: " + vision.getDistanceToTarget());
+		SmartDashboard.putNumber("DISTANCE", vision.getDistanceToTarget());
 	}
 	
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
+		SmartDashboard.putNumber("InDeadbandTime", inDeadbandTime);
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
-		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getLimelight().getdegRotationToTarget(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
-		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && turnPID.atSetpoint();
+		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getLimelight().getdegRotationToTarget(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
+		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && turnPID.atSetpoint();
 		// return false;
 	}
 }

@@ -86,7 +86,6 @@ public class Shooter extends SubsystemBase {
 
 	public boolean atSpeed(double threshold) {
 		System.out.println("Shooter Speed (RPM): " + getSpeed());
-		System.out.println("Error: " + (getSpeed() - RobotConstants.FLYWHEEL_PRESET_LINE));
 		return Util.deadband(speedSetpoint - getSpeed(), threshold) == 0;
 	}
 

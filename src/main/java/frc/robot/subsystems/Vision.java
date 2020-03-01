@@ -48,7 +48,7 @@ public class Vision extends SubsystemBase {
 	@Override
 	public void periodic() {
 		if (trackingMode)
-			hasValidTarget = limelight.getIsTargetFound();
+			hasValidTarget = isTargetFound();
 	}
 
 	// distanceFromCamera = (RobotConstants.TARGETHEIGHTFROMGROUND -
@@ -101,11 +101,23 @@ public class Vision extends SubsystemBase {
 		return trackingMode;
 	}
 
+	public boolean isTargetFound() {
+		return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) > 0;
+	}
+
 	public boolean hasValidTarget() {
 		return hasValidTarget;
 	}
 
 	public LimeLight getLimelight() {
 		return limelight;
+	}
+
+	public double getTX() {
+		return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
+	}
+
+	public double getTY() {
+		return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
 	}
 }
