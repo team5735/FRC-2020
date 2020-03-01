@@ -31,7 +31,7 @@ public class TurnToTargetCommand extends CommandBase {
         this.vision = vision;
 		this.drivetrain = drivetrain;
 
-		this.turnPID = new PIDController(RobotConstants.VISION_STEER_kP, RobotConstants.VISION_STEER_kI, 0);
+		this.turnPID = new PIDController(RobotConstants.VISION_STEER_kP, RobotConstants.VISION_STEER_kI, RobotConstants.VISION_STEER_kD);
 		turnPID.setTolerance(RobotConstants.VISION_TARGET_DEADBAND);
 		//pid.setIntegratorRange(-0.5, 0.5); use this if it "winds up" and overshoots
 		
@@ -54,11 +54,11 @@ public class TurnToTargetCommand extends CommandBase {
 		// System.out.println(vision.getDistanceToTarget());
 		if(vision.hasValidTarget()) {
 			double degreeError = vision.getLimelight().getdegRotationToTarget() + RobotConstants.VISION_X_OFFSET;
-			// double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
+			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
 
 			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
 			
-			double steer_cmd = -RobotConstants.VISION_STEER_kP * degreeError;
+			// double steer_cmd = -RobotConstants.VISION_STEER_kP * degreeError;
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
 			System.out.println("TURN TO TARGET: " + vision.getLimelight().getdegRotationToTarget() + "  " +steer_cmd);
 			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));

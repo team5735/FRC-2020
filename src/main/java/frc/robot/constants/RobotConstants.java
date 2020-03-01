@@ -129,9 +129,10 @@ public class RobotConstants {
     public static final double ROBOT_ANGULAR_DRAG = 12.0; // N*m / (rad/sec) TODO tune
     public static final double DRIVE_VINTERCEPT = 1.055; // V
     
-    // Vision Constants
-    public static final double VISION_STEER_kP = 0.03;
-    public static final double VISION_STEER_kI = 0;
+    // Vision Constants 
+    public static final double VISION_STEER_kP = 0.018; //0.024; //0.018; //0.02; //kU = 0.04
+    public static final double VISION_STEER_kI = 0.0216;   //0.048; //0.0216;
+    public static final double VISION_STEER_kD = 0.0;   //0.003;
     public static final double VISION_TARGET_DEADBAND = 0.6; // degrees
     public static final double VISION_X_OFFSET = 0;
 
