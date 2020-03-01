@@ -89,18 +89,18 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 1023.0 / MAX_VELOCITY_NORMAL_TICKS;
 
-    public static final double FLYWHEEL_kP = 0.000025;//0.000325;
+    public static final double FLYWHEEL_kP = 0.0009;//0.000325;
     public static final double FLYWHEEL_kI = 0.0;
-    public static final double FLYWHEEL_kD = 0.02;//0.004;
-    public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.803;
+    public static final double FLYWHEEL_kD = 0.15;//0.004;
+    public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.78;
     
     // Flywheel
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;
     public static final double FLYWHEEL_MIN_SPEED = 3500; // rpm
     public static final double FLYWHEEL_MAX_SPEED = 5800; // rpm
-    public static final double FLYWHEEL_RPM_DEADBAND = 40; // rpm
+    public static final double FLYWHEEL_RPM_DEADBAND = 50; // rpm
 
-    public static final double FLYWHEEL_PRESET_LINE = 3800; // rpm
+    public static final double FLYWHEEL_PRESET_LINE = 3780; // rpm
     public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm //4400 actual rpm
     public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
 
@@ -133,7 +133,7 @@ public class RobotConstants {
     public static final double VISION_STEER_kP = 0.035;
     public static final double VISION_STEER_kI = 0;
     public static final double VISION_TARGET_DEADBAND = 0.6; // degrees
-    public static final double VISION_X_OFFSET = -1.07;
+    public static final double VISION_X_OFFSET = 0;
 
     public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(12.5); // meters
     public static final double CAMERA_ANGLEFROMPARALLEL = Units.degreesToRadians(19.01); // radians

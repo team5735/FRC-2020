@@ -11,6 +11,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,10 +39,13 @@ public class Shooter extends SubsystemBase {
 		neoMaster = new CANSparkMax(RobotConstants.FLYWHEEL_MASTER_ID, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
 		neoMaster.setInverted(false);
+		neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
 
 		neoSlave = new CANSparkMax(RobotConstants.FLYWHEEL_SLAVE_ID, MotorType.kBrushless);
 		neoSlave.restoreFactoryDefaults();
 		neoSlave.follow(neoMaster, true);
+		neoSlave.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 		neoMaster.getEncoder().setVelocityConversionFactor(RobotConstants.FLYWHEEL_PULLEY_RATIO);
 
@@ -81,6 +85,8 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public boolean atSpeed(double threshold) {
+		System.out.println("Shooter Speed (RPM): " + getSpeed());
+		System.out.println("Error: " + (getSpeed() - RobotConstants.FLYWHEEL_PRESET_LINE));
 		return Util.deadband(speedSetpoint - getSpeed(), threshold) == 0;
 	}
 

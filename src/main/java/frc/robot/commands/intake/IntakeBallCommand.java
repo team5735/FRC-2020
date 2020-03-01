@@ -44,7 +44,7 @@ public class IntakeBallCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		// System.out.println("INTAKING BALL");
+		System.out.println("INTAKING BALL"); 
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.

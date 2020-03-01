@@ -82,8 +82,8 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
-		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
-		//  turnPID.atSetpoint();
-		return false;
+		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) &&
+		 turnPID.atSetpoint();
+		// return false;
 	}
 }

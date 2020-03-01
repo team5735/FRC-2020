@@ -56,7 +56,7 @@ public class DriveJoystick extends CommandBase {
 			// drivetrain.drive(ControlMode.Velocity, new DriveSignal(0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
 		}
 		
-		System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
+		// System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
 	}
 	
 	// Called once the command ends or is interrupted.
