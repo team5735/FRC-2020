@@ -20,13 +20,15 @@ import frc.robot.subsystems.Vision;
 public class RampShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Shooter shooter;
+	private final Vision vision;
 	private final Banana banana;
 	private double rpm;
 	
-	public RampShooterCommand(Shooter shooter, Banana banana, double rpm) {
+	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana) {
 		this.shooter = shooter;
+		this.vision = vision;
 		this.banana = banana;
-		this.rpm = rpm;
+		// this.rpm = rpm;
 		
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(this.shooter);
@@ -35,15 +37,25 @@ public class RampShooterCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		// TODO Get interpolation working
+		double distance = vision.getDistanceToTarget();
+		double rpm = 0;
+		if(distance < 4.9) {
+			// line, or near line
+			rpm = RobotConstants.FLYWHEEL_PRESET_LINE;
+		} else {
+			rpm = RobotConstants.FLYWHEEL_PRESET_TRENCH;
+		}
+
 		// rpm = SmartDashboard.getNumber("RPM", 0);
 		SmartDashboard.putNumber("RPM Setpoint", rpm);
-		// if(rpm == 0) {
-		// 	System.out.println("RPM 0");
-		// 	shooter.slowDown();
-		// 	banana.retract();
-		// } else {
-		// 	shooter.setSpeed(rpm); // only need to call once?
-		// }
+		if(rpm == 0) {
+			System.out.println("RPM 0");
+			shooter.slowDown();
+			banana.retract();
+		} else {
+			shooter.setSpeed(rpm); // only need to call once?
+		}
 
 		// TODO: Adjust banana as necessary, LOOKUP BANANA POS WITH RPM
 		// double bananaPos = //shooter.getSpeedFromDistance(distance);

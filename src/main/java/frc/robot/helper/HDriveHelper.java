@@ -39,11 +39,11 @@ public class HDriveHelper {
 		double rightPercentage = forward * (1 - ANGULAR_PERCENTAGE) - angular * ANGULAR_PERCENTAGE;
         double normalPercentage = normal * (1 - ANGULAR_PERCENTAGE);
         
-        leftPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
-        rightPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
-        normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        // leftPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
+        // rightPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
+        // normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
 		
-		return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
+		return new DriveSignal(ControlMode.PercentOutput, leftPercentage, rightPercentage, normalPercentage);
     }
 
     /**
@@ -59,10 +59,12 @@ public class HDriveHelper {
 		double modifiedForward = forwardPercent * Math.cos(angleRad) + sidewaysPercent * Math.sin(-angleRad); // %
 		double modifiedNormal = forwardPercent * Math.sin(angleRad) + sidewaysPercent * Math.cos(angleRad); // %
         
-        modifiedForward *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
-        modifiedNormal *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
-		
-		return new DriveSignal(ControlMode.Velocity, modifiedForward, modifiedForward, modifiedNormal);
+        // modifiedForward *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        // modifiedNormal *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        
+        return HDrive(modifiedForward, modifiedNormal, angularPercent);
+        
+		// return new DriveSignal(ControlMode.Velocity, modifiedForward, modifiedForward, modifiedNormal);
 	}
 
     /* Uses poses

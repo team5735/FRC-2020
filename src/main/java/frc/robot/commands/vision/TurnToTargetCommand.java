@@ -68,7 +68,9 @@ public class TurnToTargetCommand extends CommandBase {
 			} else {
 				inDeadbandTime = -1;
 			}
-        }
+		}
+		
+		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
 	}
 	
 	// Called once the command ends or is interrupted.

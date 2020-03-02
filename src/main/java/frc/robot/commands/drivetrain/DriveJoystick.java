@@ -43,7 +43,10 @@ public class DriveJoystick extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
+
+		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
+
+		// if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
 		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
 		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);

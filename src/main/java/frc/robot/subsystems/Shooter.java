@@ -39,13 +39,13 @@ public class Shooter extends SubsystemBase {
 		neoMaster = new CANSparkMax(RobotConstants.FLYWHEEL_MASTER_ID, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
 		neoMaster.setInverted(false);
-		neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
+		// neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
 		neoSlave = new CANSparkMax(RobotConstants.FLYWHEEL_SLAVE_ID, MotorType.kBrushless);
 		neoSlave.restoreFactoryDefaults();
 		neoSlave.follow(neoMaster, true);
-		neoSlave.enableSoftLimit(SoftLimitDirection.kReverse, true);
+		// neoSlave.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 		neoMaster.getEncoder().setVelocityConversionFactor(RobotConstants.FLYWHEEL_PULLEY_RATIO);
 
@@ -63,16 +63,22 @@ public class Shooter extends SubsystemBase {
 		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
 		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		DistanceToRPM.put(new InterpolatingDouble(3.04), new InterpolatingDouble(3450.0));
 		DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 		DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
 		DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
 		DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
+		System.out.println("INTERPOLATED: " + DistanceToRPM.getInterpolated(new InterpolatingDouble(4.50)));
 		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+	}
+
+	public void moveExplicit(double percent) {
+		neoMaster.set(percent);
 	}
 
 	public void setSpeed(double rpm) {

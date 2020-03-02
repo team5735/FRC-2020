@@ -29,6 +29,7 @@ import frc.robot.commands.intake.MoveConveyorCommand;
 import frc.robot.commands.intake.ZeroIntakeCommand;
 import frc.robot.commands.shooter.MoveBananaCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
+import frc.robot.commands.shooter.ReverseShooterCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Climber;
@@ -118,10 +119,10 @@ public class RobotContainer {
 		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
 
-		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, 1000));
+		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, 3650));
 		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		// subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, banana, 0));
+		subsystemController.Dpad.Down.whileActiveContinuous(new ReverseShooterCommand(shooter));
 		
 		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, false));
 		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, true));
