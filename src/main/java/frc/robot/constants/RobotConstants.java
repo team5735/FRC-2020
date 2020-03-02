@@ -101,7 +101,7 @@ public class RobotConstants {
     public static final double FLYWHEEL_RPM_DEADBAND = 50; // rpm
 
     public static final double FLYWHEEL_PRESET_LINE = 3500; // rpm
-    public static final double FLYWHEEL_PRESET_TRENCH = 3550; // rpm //4400 actual rpm
+    public static final double FLYWHEEL_PRESET_TRENCH = 3650; // rpm //4400 actual rpm
     public static final double FLYWHEEL_PRESET_BEHINDCOLORWHEEL = 4500; // rpm
 
     public static final double DISTANCE_TO_TARGET_PRESET_LINE = 3.1735; // Meters

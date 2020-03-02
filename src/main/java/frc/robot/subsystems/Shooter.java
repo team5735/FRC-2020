@@ -57,12 +57,17 @@ public class Shooter extends SubsystemBase {
 		flywheelPIDController.setFF(RobotConstants.FLYWHEEL_kF, 0);
 
 		DistanceToRPM = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>(1000);
-		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
-				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
-		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
-				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
-		DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
-				new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
+		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
+		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
+		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
+		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
+		DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
+		DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
+		DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
+		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 	}
 
 	@Override

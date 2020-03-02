@@ -47,8 +47,7 @@ public class Vision extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		if (trackingMode)
-			hasValidTarget = isTargetFound();
+		hasValidTarget = isTargetFound();
 	}
 
 	// distanceFromCamera = (RobotConstants.TARGETHEIGHTFROMGROUND -
@@ -106,6 +105,7 @@ public class Vision extends SubsystemBase {
 	}
 
 	public boolean hasValidTarget() {
+		SmartDashboard.putBoolean("Has Target", hasValidTarget);
 		return hasValidTarget;
 	}
 

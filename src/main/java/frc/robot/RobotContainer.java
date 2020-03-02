@@ -98,8 +98,8 @@ public class RobotContainer {
 
 		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
 		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
-		driverController.Dpad.Right.whileHeld(new IntakeBallCommand(intake, 0.2, false));
-		driverController.Dpad.Left.whileHeld(new IntakeBallCommand(intake, 0.2, true));
+		// driverController.Dpad.Right.whileHeld(new IntakeBallCommand(intake, 0.2, false));
+		// driverController.Dpad.Left.whileHeld(new IntakeBallCommand(intake, 0.2, true));
 		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// driverController.Dpad.Right.whileHeld();
 		
@@ -114,7 +114,7 @@ public class RobotContainer {
 
 		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
-		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
 		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
 

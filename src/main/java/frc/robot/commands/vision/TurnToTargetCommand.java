@@ -77,7 +77,8 @@ public class TurnToTargetCommand extends CommandBase {
 		System.out.println("TURN TARGET COMMAND | END");
 		// vision.disableTracking();
 		drivetrain.drive(DriveSignal.NEUTRAL);
-		System.out.println("DISTANCE: " + vision.getDistanceToTarget());
+
+		// System.out.println("DISTANCE: " + vision.getDistanceToTarget());
 		SmartDashboard.putNumber("DISTANCE", vision.getDistanceToTarget());
 	}
 	

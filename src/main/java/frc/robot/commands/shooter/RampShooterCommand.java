@@ -35,15 +35,15 @@ public class RampShooterCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		rpm = SmartDashboard.getNumber("RPM", 0);
-		if(rpm == 0) {
-			System.out.println("RPM 0");
-			shooter.slowDown();
-			banana.retract();
-		} else {
-			System.out.println("RPM SETPOINT: " + rpm);
-			shooter.setSpeed(rpm); // only need to call once?
-		}
+		// rpm = SmartDashboard.getNumber("RPM", 0);
+		SmartDashboard.putNumber("RPM Setpoint", rpm);
+		// if(rpm == 0) {
+		// 	System.out.println("RPM 0");
+		// 	shooter.slowDown();
+		// 	banana.retract();
+		// } else {
+		// 	shooter.setSpeed(rpm); // only need to call once?
+		// }
 
 		// TODO: Adjust banana as necessary, LOOKUP BANANA POS WITH RPM
 		// double bananaPos = //shooter.getSpeedFromDistance(distance);
