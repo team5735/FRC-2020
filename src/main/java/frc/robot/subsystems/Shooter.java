@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
 		DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
 		DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
 		DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
-		System.out.println("INTERPOLATED: " + DistanceToRPM.getInterpolated(new InterpolatingDouble(4.50)));
+		// System.out.println("INTERPOLATED: " + DistanceToRPM.getInterpolated(new InterpolatingDouble(4.50)));
 		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 	}
 

@@ -38,14 +38,15 @@ public class RampShooterCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		// TODO Get interpolation working
-		double distance = vision.getDistanceToTarget();
-		double rpm = 0;
-		if(distance < 4.9) {
-			// line, or near line
-			rpm = RobotConstants.FLYWHEEL_PRESET_LINE;
-		} else {
-			rpm = RobotConstants.FLYWHEEL_PRESET_TRENCH;
-		}
+		// double distance = vision.getDistanceToTarget();
+		// double rpm = 0;
+		// if(distance < 4.9) {
+		// 	// line, or near line
+		// 	rpm = RobotConstants.FLYWHEEL_PRESET_LINE;
+		// } else {
+		// 	rpm = RobotConstants.FLYWHEEL_PRESET_TRENCH;
+		// }
+		double rpm = shooter.getSpeedFromDistance(vision.getDistanceToTarget());
 
 		// rpm = SmartDashboard.getNumber("RPM", 0);
 		SmartDashboard.putNumber("RPM Setpoint", rpm);
