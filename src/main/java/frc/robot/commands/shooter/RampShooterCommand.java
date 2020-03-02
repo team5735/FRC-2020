@@ -24,11 +24,11 @@ public class RampShooterCommand extends CommandBase {
 	private final Banana banana;
 	private double rpm;
 	
-	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana) {
+	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, double rpm) {
 		this.shooter = shooter;
 		this.vision = vision;
 		this.banana = banana;
-		// this.rpm = rpm;
+		this.rpm = rpm;
 		
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(this.shooter);
@@ -46,7 +46,6 @@ public class RampShooterCommand extends CommandBase {
 		// } else {
 		// 	rpm = RobotConstants.FLYWHEEL_PRESET_TRENCH;
 		// }
-		double rpm = shooter.getSpeedFromDistance(vision.getDistanceToTarget());
 
 		// rpm = SmartDashboard.getNumber("RPM", 0);
 		SmartDashboard.putNumber("RPM Setpoint", rpm);
