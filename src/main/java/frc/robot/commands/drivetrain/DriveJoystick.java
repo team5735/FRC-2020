@@ -55,7 +55,7 @@ public class DriveJoystick extends CommandBase {
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 			drivetrain.drive(HDriveHelper.HdriveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle()));
 		} else {
-			drivetrain.drive(HDriveHelper.HDrive(forward, normal, turn));
+			drivetrain.drive(HDriveHelper.HDrive(forward, normal, turn, false));
 			// drivetrain.drive(ControlMode.Velocity, new DriveSignal(0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
 		}
 		

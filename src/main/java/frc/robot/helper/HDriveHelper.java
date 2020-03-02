@@ -24,7 +24,7 @@ public class HDriveHelper {
 	public static double ANGULAR_PERCENTAGE = 0.33;
 
     public static DriveSignal xyLockedDrive(double x, double y) {
-        return HDrive(x, y, 0);
+        return HDrive(x, y, 0, false);
     }
 
     /**
@@ -34,16 +34,16 @@ public class HDriveHelper {
      * @param angular
      * @return DriveSignal
      */
-    public static DriveSignal HDrive(double forward, double normal, double angular) {
+    public static DriveSignal HDrive(double forward, double normal, double angular, boolean fc) {
 		double leftPercentage = forward * (1 - ANGULAR_PERCENTAGE) + angular * ANGULAR_PERCENTAGE;
 		double rightPercentage = forward * (1 - ANGULAR_PERCENTAGE) - angular * ANGULAR_PERCENTAGE;
         double normalPercentage = normal * (1 - ANGULAR_PERCENTAGE);
         
-        // leftPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
-        // rightPercentage *= RobotConstants.MAX_VELOCITY_DT_TICKS;
-        // normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        leftPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        rightPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
 		
-		return new DriveSignal(ControlMode.PercentOutput, leftPercentage, rightPercentage, normalPercentage);
+		return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
     }
 
     /**
@@ -62,7 +62,7 @@ public class HDriveHelper {
         // modifiedForward *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
         // modifiedNormal *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
         
-        return HDrive(modifiedForward, modifiedNormal, angularPercent);
+        return HDrive(modifiedForward, modifiedNormal, angularPercent, true);
         
 		// return new DriveSignal(ControlMode.Velocity, modifiedForward, modifiedForward, modifiedNormal);
 	}
