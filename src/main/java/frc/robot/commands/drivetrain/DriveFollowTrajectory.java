@@ -11,13 +11,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.lib.trajectory.EncoderFollower;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Units;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.followers.EncoderFollower;
 
 /**
 * An example command that uses an example subsystem.

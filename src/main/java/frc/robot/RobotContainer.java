@@ -124,8 +124,8 @@ public class RobotContainer {
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		subsystemController.Dpad.Down.whileActiveContinuous(new ReverseShooterCommand(shooter));
 		
-		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, false));
-		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, true));
+		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, 0.420, false));
+		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, 0.420, true));
 
 		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, false));
 		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, true));

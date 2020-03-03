@@ -64,8 +64,8 @@ public class Intake extends SubsystemBase {
 		SmartDashboard.putNumber("Intake Angle Sensor Value", getPosition());
 
 		// if(isDeployedLimitHit() || isRetractedLimitHit()) {
-			intakeArm.set(ControlMode.PercentOutput, 0);
-			moveArm(ControlMode.Position, getPosition());
+			// intakeArm.set(ControlMode.PercentOutput, 0);
+			// moveArm(ControlMode.Position, getPosition());
 		// }
  	}
 
@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void rollConveyor(double speed, boolean inverted) {
-		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * (speed < 0 ? 0.6 : speed));
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
 	}
 
 	public void feedShooter(double speed, boolean inverted) {

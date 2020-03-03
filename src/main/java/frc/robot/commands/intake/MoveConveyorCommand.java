@@ -16,6 +16,7 @@ import frc.robot.subsystems.Intake;
 public class MoveConveyorCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
+	private final double speed;
 	private final boolean inverted;
 	
 	/**
@@ -23,8 +24,9 @@ public class MoveConveyorCommand extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public MoveConveyorCommand(Intake intake, boolean inverted) {
+	public MoveConveyorCommand(Intake intake, double speed, boolean inverted) {
 		this.intake = intake;
+		this.speed = speed;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		// addRequirements(intake);
@@ -39,7 +41,7 @@ public class MoveConveyorCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intake.rollConveyor(-1, inverted);
+		intake.rollConveyor(speed, inverted);
 	}
 	
 	// Called once the command ends or is interrupted.

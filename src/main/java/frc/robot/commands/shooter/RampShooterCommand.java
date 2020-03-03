@@ -23,12 +23,25 @@ public class RampShooterCommand extends CommandBase {
 	private final Vision vision;
 	private final Banana banana;
 	private double rpm;
+	private boolean autoRamp;
 	
 	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, double rpm) {
 		this.shooter = shooter;
 		this.vision = vision;
 		this.banana = banana;
 		this.rpm = rpm;
+		this.autoRamp = false;
+		
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(this.shooter);
+	}
+
+	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, boolean autoRamp) {
+		this.shooter = shooter;
+		this.vision = vision;
+		this.banana = banana;
+		this.rpm = 0;
+		this.autoRamp = autoRamp;
 		
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(this.shooter);
@@ -48,6 +61,11 @@ public class RampShooterCommand extends CommandBase {
 		// }
 
 		// rpm = SmartDashboard.getNumber("RPM", 0);
+		
+		if(autoRamp) {
+			rpm = shooter.getSpeedFromDistance(vision.getDistanceToTarget());
+		}
+
 		SmartDashboard.putNumber("RPM Setpoint", rpm);
 		if(rpm == 0) {
 			System.out.println("RPM 0");
@@ -65,7 +83,6 @@ public class RampShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		SmartDashboard.putNumber("Shooter Speed (RPM)", shooter.getSpeed());
 		// double speed = shooter.getSpeed();
 	}
 	

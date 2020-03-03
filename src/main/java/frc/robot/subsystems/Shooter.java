@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Util;
@@ -56,18 +57,18 @@ public class Shooter extends SubsystemBase {
 		flywheelPIDController.setD(RobotConstants.FLYWHEEL_kD, 0);
 		flywheelPIDController.setFF(RobotConstants.FLYWHEEL_kF, 0);
 
-		DistanceToRPM = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>(1000);
-		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
-		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
-		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
-		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
-		// DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
-		// 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		DistanceToRPM.put(new InterpolatingDouble(3.04), new InterpolatingDouble(3450.0));
-		DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
-		DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
-		DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
-		DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
+		// DistanceToRPM = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>(1000);
+		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
+		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
+		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
+		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
+		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
+		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
+		// DistanceToRPM.put(new InterpolatingDouble(3.04), new InterpolatingDouble(3450.0));
+		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
+		// DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
+		// DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
+		// DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
 		// System.out.println("INTERPOLATED: " + DistanceToRPM.getInterpolated(new InterpolatingDouble(4.50)));
 		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 	}
@@ -75,6 +76,7 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		SmartDashboard.putNumber("Shooter Speed (RPM)", getSpeed());
 	}
 
 	public void moveExplicit(double percent) {
@@ -115,8 +117,12 @@ public class Shooter extends SubsystemBase {
 	 * @param distance Horizontal distance to target, in meters
 	 * @return Flywheel speed, in RPM
 	 */
-	public double getSpeedFromDistance(double distance) {
-		return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
+	public double getSpeedFromDistance(double x) {
+		// return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
+		// return 52.4826534001*(x*x) - 286.6534831746*(x) + 3836.4028991883;
+		return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
+		// return 3850.0;
+		// return 3650.0;
 	}
 
 }

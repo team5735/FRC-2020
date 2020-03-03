@@ -52,8 +52,8 @@ public class IntakeBallCommand extends CommandBase {
 	public void execute() {
 		if(speed < 0) {
 			// take controller input
-			double rightTrigger = 0.5 * RobotContainer.driverController.triggers.getRight();
-			double leftTrigger = 0.5 * RobotContainer.driverController.triggers.getLeft();
+			double rightTrigger = 0.420 * RobotContainer.driverController.triggers.getRight();
+			double leftTrigger = 0.420 * RobotContainer.driverController.triggers.getLeft();
 			if(rightTrigger > 0) {
 				intake.intakeBall(rightTrigger, false);
 			} else if (leftTrigger > 0) {
