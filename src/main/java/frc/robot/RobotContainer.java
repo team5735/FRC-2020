@@ -127,8 +127,8 @@ public class RobotContainer {
 		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, false));
 		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, true));
 
-		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, false));
-		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, true));
+		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, false));
+		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, true));
 		
 	}
 	

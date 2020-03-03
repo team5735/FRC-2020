@@ -9,6 +9,7 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
 * An example command that uses an example subsystem.
@@ -16,10 +17,12 @@ import frc.robot.subsystems.Intake;
 public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
+	private final Shooter shooter;
 	private final boolean inverted;
 
-	public FeedShooterCommand(Intake intake, boolean inverted) {
+	public FeedShooterCommand(Intake intake, Shooter shooter, boolean inverted) {
 		this.intake = intake;
+		this.shooter = shooter;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		// addRequirements(intake);
@@ -33,6 +36,7 @@ public class FeedShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		if(shooter.getSetpoint() == 0 && !inverted) return;
 		intake.feedShooter(1, inverted);
 	}
 	

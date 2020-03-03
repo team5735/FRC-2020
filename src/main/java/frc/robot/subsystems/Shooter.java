@@ -105,6 +105,10 @@ public class Shooter extends SubsystemBase {
 		speedSetpoint = 0;
 	}
 
+	public double getSetpoint() {
+		return speedSetpoint;
+	}
+
 	/**
 	 * Function to convert a distance into flywheel speed
 	 * 
