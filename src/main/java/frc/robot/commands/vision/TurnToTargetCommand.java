@@ -64,7 +64,9 @@ public class TurnToTargetCommand extends CommandBase {
 			System.out.println("TURN TO TARGET: " + vision.getTX()+ "  " +steer_cmd);
 			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
-				inDeadbandTime = Timer.getFPGATimestamp();
+				if(inDeadbandTime < 0) {
+					inDeadbandTime = Timer.getFPGATimestamp();	
+				}
 			} else {
 				inDeadbandTime = -1;
 			}
@@ -90,7 +92,7 @@ public class TurnToTargetCommand extends CommandBase {
 		SmartDashboard.putNumber("InDeadbandTime", inDeadbandTime);
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
 		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getLimelight().getdegRotationToTarget(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
-		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && turnPID.atSetpoint();
+		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getTX(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
 		// return false;
 	}
 }

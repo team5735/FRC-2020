@@ -46,7 +46,7 @@ public class DriveJoystick extends CommandBase {
 
 		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
 
-		// if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
+		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
 		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
 		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
