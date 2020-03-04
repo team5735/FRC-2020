@@ -42,7 +42,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
             new TurnAndPrepareCommand(vision, drivetrain, intake, shooter, banana),
             new ShootBallCommand(intake, shooter, false),
             new ShootBallCommand(intake, shooter, false),
-            new ShootBallCommand(intake, shooter, false),
+            // new ShootBallCommand(intake, shooter, false),
             // new ShootBallCommand(intake, shooter, false),
             new StopFlywheel(shooter)
         );
