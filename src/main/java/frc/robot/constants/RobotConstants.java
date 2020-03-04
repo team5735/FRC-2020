@@ -77,12 +77,12 @@ public class RobotConstants {
     public static final double LEFT_kP = 0.1;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 0.09742857143; // (100% * 1023) / 10500
+    public static final double LEFT_kF = 1023.0 / 10500.0 * 0.969; // (100% * 1023) / 10500
     
     public static final double RIGHT_kP = 0.1;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 0.09742857143;
+    public static final double RIGHT_kF = 1023.0 / 10500.0 * 0.969;
     
     public static final double NORMAL_kP = 0.1;
     public static final double NORMAL_kI = 0.0;

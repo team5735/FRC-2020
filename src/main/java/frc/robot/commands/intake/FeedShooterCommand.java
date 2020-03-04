@@ -25,7 +25,7 @@ public class FeedShooterCommand extends CommandBase {
 		this.shooter = shooter;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		// addRequirements(intake);
+		addRequirements(intake);
 	}
 	
 	// Called when the command is initially scheduled.

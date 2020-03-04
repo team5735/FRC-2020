@@ -9,6 +9,7 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
 * An example command that uses an example subsystem.
@@ -16,6 +17,7 @@ import frc.robot.subsystems.Intake;
 public class MoveConveyorCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Intake intake;
+	private final Shooter shooter;
 	private final double speed;
 	private final boolean inverted;
 	
@@ -24,8 +26,9 @@ public class MoveConveyorCommand extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public MoveConveyorCommand(Intake intake, double speed, boolean inverted) {
+	public MoveConveyorCommand(Intake intake, Shooter shooter, double speed, boolean inverted) {
 		this.intake = intake;
+		this.shooter = shooter;
 		this.speed = speed;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -42,6 +45,9 @@ public class MoveConveyorCommand extends CommandBase {
 	@Override
 	public void execute() {
 		intake.rollConveyor(speed, inverted);
+		if(shooter.getSetpoint() == 0) {
+			intake.feedShooter(0.1, true);
+		}
 	}
 	
 	// Called once the command ends or is interrupted.

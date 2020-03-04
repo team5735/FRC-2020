@@ -21,6 +21,7 @@ import frc.robot.commandgroups.TurnAndShootCommand;
 import frc.robot.commands.climber.ElevatorMoveCommand;
 import frc.robot.commands.climber.WinchMoveCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
+import frc.robot.commands.drivetrain.DriveFollowTrajectory;
 import frc.robot.commands.drivetrain.ResetGyroAngle;
 import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.FeedShooterCommand;
@@ -124,8 +125,8 @@ public class RobotContainer {
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		subsystemController.Dpad.Down.whileActiveContinuous(new ReverseShooterCommand(shooter));
 		
-		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, 0.420, false));
-		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, 0.420, true));
+		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, shooter, 0.420, false));
+		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, shooter, 0.420, true));
 
 		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, false));
 		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, true));
@@ -138,7 +139,8 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new SixBallAutoCommand(vision, drivetrain, intake, shooter, banana);
+		return new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory);
+		// return new SixBallAutoCommand(vision, drivetrain, intake, shooter, banana);
 	}
 	
 }

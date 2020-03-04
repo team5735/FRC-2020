@@ -51,11 +51,13 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		left = new EncoderFollower(leftTraj);
 		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
-		left.configurePIDVA(0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
+		// left.configurePIDVA(0.0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
+		left.configurePIDVA(0, 0, 0, 1, 0);
 		
 		right = new EncoderFollower(rightTraj);
 		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
-		right.configurePIDVA(0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
+		// right.configurePIDVA(0.0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
+		right.configurePIDVA(0.0, 0, 0, 1, 0);
 	}
 	
 	// Called every time the scheduler runs while the command is scheduled.
@@ -86,8 +88,11 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		System.out.println("@@@@@@@@@@@@@@@ Left: " + (l + turn) + ", Right: " + (r - turn) + ", Angle Diff: " + angleDifference + ", Turn: " + turn);
 		
+		l = Units.dtRpmToTicks(Units.dtMetersPerSecondToRpm(l));
+		r = Units.dtRpmToTicks(Units.dtMetersPerSecondToRpm(r));
+
 		// s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
-		s_drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, l + turn, r - turn, 0));
+		s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
 	}
 	
 	// Called once the command ends or is interrupted.

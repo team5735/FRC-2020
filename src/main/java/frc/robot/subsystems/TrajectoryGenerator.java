@@ -19,9 +19,10 @@ public class TrajectoryGenerator {
     public static Trajectory rightTrajectory;
 
     private Waypoint[] points = new Waypoint[] {
-        new Waypoint(0, 0, 0),    
-        new Waypoint(1.75, 0.2, 0), // positive ° = rotate left
-        new Waypoint(2.5, 0.2, 0),
+        new Waypoint(0, 0, 0),
+        new Waypoint(3, 0, 0)    
+        // new Waypoint(1.75, 0.2, 0), // positive ° = rotate left
+        // new Waypoint(2.5, 0.2, 0),
     };
 
     public TrajectoryGenerator() {

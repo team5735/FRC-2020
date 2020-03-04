@@ -37,7 +37,7 @@ public class ShootBallCommand extends SequentialCommandGroup {
 			// 	new IntakeBallCommand(intake, 0.5, inverted)),
 			new ParallelDeadlineGroup(
 				new WaitUntilCommand(() -> shooter.atSpeed(RobotConstants.FLYWHEEL_RPM_DEADBAND)),
-				new MoveConveyorCommand(intake, 0.6, inverted),
+				new MoveConveyorCommand(intake, shooter, 0.6, inverted),
 				new IntakeBallCommand(intake, 0.5, inverted)
 			),
 			// new ParallelDeadlineGroup(
@@ -47,7 +47,7 @@ public class ShootBallCommand extends SequentialCommandGroup {
 			// ),
 			new ParallelDeadlineGroup(
 				new FeedShooterCommand(intake, shooter, inverted).withTimeout(0.15),
-				new MoveConveyorCommand(intake, 0.6, inverted),
+				new MoveConveyorCommand(intake, shooter, 0.6, inverted),
 				new IntakeBallCommand(intake, 0.5, inverted)
 			)
 		);

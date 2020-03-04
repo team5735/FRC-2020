@@ -29,9 +29,9 @@ public class TurnAndPrepareCommand extends SequentialCommandGroup {
         addCommands(
             new ParallelCommandGroup(
                 new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, vision, banana, 3600)
+                new RampShooterCommand(shooter, vision, banana, intake, 3600)
             ), 
-            new RampShooterCommand(shooter, vision, banana, true)
+            new RampShooterCommand(shooter, vision, banana, intake, true)
         );
     }
 

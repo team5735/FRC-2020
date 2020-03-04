@@ -123,7 +123,7 @@ public class Shooter extends SubsystemBase {
 		System.out.println("X: " + x);
 		SmartDashboard.putNumber("X value given", x);
 		// return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
-		return 30.1178638578*(x*x) - 131.1793268435*(x) + 3611.3959592734;
+		return 16.1564869793*(x*x) - 22.0935926212*(x) + 3365.2543639255;
 		// return 3850.0;
 		// return 3650.0;
 	}

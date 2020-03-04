@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -25,7 +26,7 @@ public class RampShooterCommand extends CommandBase {
 	private double rpm;
 	private boolean autoRamp;
 	
-	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, double rpm) {
+	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, Intake intake, double rpm) {
 		this.shooter = shooter;
 		this.vision = vision;
 		this.banana = banana;
@@ -34,9 +35,10 @@ public class RampShooterCommand extends CommandBase {
 		
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(this.shooter);
+		addRequirements(intake);
 	}
 
-	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, boolean autoRamp) {
+	public RampShooterCommand(Shooter shooter, Vision vision, Banana banana, Intake intake, boolean autoRamp) {
 		this.shooter = shooter;
 		this.vision = vision;
 		this.banana = banana;
@@ -45,6 +47,7 @@ public class RampShooterCommand extends CommandBase {
 		
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(this.shooter);
+		addRequirements(intake);
 	}
 	
 	// Called when the command is initially scheduled.
