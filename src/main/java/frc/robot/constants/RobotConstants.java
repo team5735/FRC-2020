@@ -89,10 +89,10 @@ public class RobotConstants {
     public static final double NORMAL_kD = 0.0;
     public static final double NORMAL_kF = 1023.0 / MAX_VELOCITY_NORMAL_TICKS;
 
-    public static final double FLYWHEEL_kP = 0.0009;//0.000325;
+    public static final double FLYWHEEL_kP = 0.0005;//0.000325;
     public static final double FLYWHEEL_kI = 0.0;
     public static final double FLYWHEEL_kD = 0.2;//0.15;//0.004;
-    public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.76;//0.78;
+    public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.79;//0.78;
     
     // Flywheel
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;

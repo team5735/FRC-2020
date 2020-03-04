@@ -61,7 +61,7 @@ public class TurnToTargetCommand extends CommandBase {
 			
 			// double steer_cmd = -RobotConstants.VISION_STEER_kP * degreeError;
 			// double steer_cmd = Math.copySign(0.08, degreesRotate);
-			System.out.println("TURN TO TARGET: " + vision.getTX()+ "  " +steer_cmd);
+			// System.out.println("vTURN TO TARGET: " + vision.getTX()+ "  " +steer_cmd);
 			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				if(inDeadbandTime < 0) {

@@ -28,7 +28,7 @@ public class ShootBallCommand extends SequentialCommandGroup {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public ShootBallCommand(Intake intake, Shooter shooter, double conveyerTime, boolean inverted) {
+	public ShootBallCommand(Intake intake, Shooter shooter, boolean inverted) {
 		super(
 			new PrintCommand("Shoot Ball"),
 			// new ParallelDeadlineGroup(

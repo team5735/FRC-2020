@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public boolean atSpeed(double threshold) {
-		System.out.println("Shooter Speed (RPM): " + getSpeed());
+		// System.out.println("Shooter Speed (RPM): " + getSpeed());
 		return Util.deadband(speedSetpoint - getSpeed(), threshold) == 0;
 	}
 
@@ -120,7 +120,10 @@ public class Shooter extends SubsystemBase {
 	public double getSpeedFromDistance(double x) {
 		// return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
 		// return 52.4826534001*(x*x) - 286.6534831746*(x) + 3836.4028991883;
-		return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
+		System.out.println("X: " + x);
+		SmartDashboard.putNumber("X value given", x);
+		// return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
+		return 30.1178638578*(x*x) - 131.1793268435*(x) + 3611.3959592734;
 		// return 3850.0;
 		// return 3650.0;
 	}

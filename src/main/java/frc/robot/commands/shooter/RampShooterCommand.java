@@ -63,17 +63,23 @@ public class RampShooterCommand extends CommandBase {
 		// rpm = SmartDashboard.getNumber("RPM", 0);
 		
 		if(autoRamp) {
-			rpm = shooter.getSpeedFromDistance(vision.getDistanceToTarget());
-		}
-
-		SmartDashboard.putNumber("RPM Setpoint", rpm);
-		if(rpm == 0) {
-			System.out.println("RPM 0");
-			shooter.slowDown();
-			banana.retract();
+			double distance = vision.getDistanceToTarget();
+			System.out.println("DISTANCE: " + distance);
+			double autoSpeed = shooter.getSpeedFromDistance(distance);
+			System.out.println("RPM setpoint: " + autoSpeed);
+			SmartDashboard.putNumber("RPM Setpoint", autoSpeed);
+			shooter.setSpeed(autoSpeed);
 		} else {
-			shooter.setSpeed(rpm); // only need to call once?
+			if(rpm == 0) {
+				System.out.println("RPM 0");
+				shooter.slowDown();
+				banana.retract();
+			} else {
+				shooter.setSpeed(rpm); // only need to call once?
+			}
+			SmartDashboard.putNumber("RPM Setpoint", rpm);
 		}
+		
 
 		// TODO: Adjust banana as necessary, LOOKUP BANANA POS WITH RPM
 		// double bananaPos = //shooter.getSpeedFromDistance(distance);

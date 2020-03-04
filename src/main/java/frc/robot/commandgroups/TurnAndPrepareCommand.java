@@ -18,7 +18,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.Vision;
 
-public class TurnAndPrepareCommand extends ParallelCommandGroup {//SequentialCommandGroup {
+public class TurnAndPrepareCommand extends SequentialCommandGroup {
     /**
      * Get balls, shoot, get more balls, shoot!
      * @param vision
@@ -27,11 +27,11 @@ public class TurnAndPrepareCommand extends ParallelCommandGroup {//SequentialCom
      */
     public TurnAndPrepareCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
         addCommands(
-            // new ParallelCommandGroup(
+            new ParallelCommandGroup(
                 new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, vision, banana, true)//3600)
-            // ), 
-            // new RampShooterCommand(shooter, vision, banana, true)
+                new RampShooterCommand(shooter, vision, banana, 3600)
+            ), 
+            new RampShooterCommand(shooter, vision, banana, true)
         );
     }
 

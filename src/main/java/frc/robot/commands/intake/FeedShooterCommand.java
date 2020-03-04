@@ -36,7 +36,7 @@ public class FeedShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if(shooter.getSetpoint() == 0 && !inverted) return;
+		// if(shooter.getSetpoint() == 0 && !inverted) return;
 		intake.feedShooter(1, inverted);
 	}
 	

@@ -39,11 +39,12 @@ public class HDriveHelper {
 		double rightPercentage = forward * (1 - ANGULAR_PERCENTAGE) - angular * ANGULAR_PERCENTAGE;
         double normalPercentage = normal * (1 - ANGULAR_PERCENTAGE);
         
-        leftPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
-        rightPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
-        normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        // leftPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        // rightPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        // normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
 		
-		return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
+        // return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
+        return new DriveSignal(ControlMode.PercentOutput, leftPercentage, rightPercentage, normalPercentage);
     }
 
     /**
