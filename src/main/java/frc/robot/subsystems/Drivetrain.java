@@ -31,6 +31,7 @@ public class Drivetrain extends SubsystemBase{
 	};
 	
 	private DriveMode driveMode = DriveMode.STATIC_DRIVE; //TODO Change to Field Centric
+	private DriveMode prevDriveMode = DriveMode.STATIC_DRIVE;
 	
 	public Drivetrain() {
 		leftMaster = new TalonFX(RobotConstants.LEFT_MASTER_ID);
@@ -137,7 +138,12 @@ public class Drivetrain extends SubsystemBase{
 	}
 	
 	public void setDriveMode(DriveMode driveMode) {
+		this.prevDriveMode = getDriveMode();
 		this.driveMode = driveMode;
+	}
+
+	public void revertDriveMode() {
+		this.driveMode = prevDriveMode;
 	}
 	
 	public DriveMode getDriveMode() {
