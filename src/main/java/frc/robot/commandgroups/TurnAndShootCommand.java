@@ -59,7 +59,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        drivetrain.revertDriveMode();
+        drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
     }
     
 }

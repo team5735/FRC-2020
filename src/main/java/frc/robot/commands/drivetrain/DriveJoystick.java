@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.DriveSignal;
+import frc.lib.util.Util;
 import frc.robot.RobotContainer;
 import frc.robot.constants.RobotConstants;
 import frc.robot.helper.HDriveHelper;
@@ -48,9 +49,27 @@ public class DriveJoystick extends CommandBase {
 
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
-		double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
-		double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
-		double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
+		// double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
+		// double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
+		// double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
+		double forward = -Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.07);
+		double normal = Util.deadband(RobotContainer.driverController.rightStick.getX(), 0.2);
+		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.07);
+
+		/* 0.5x + 0.5x^3
+		forward = (0.5 * forward) + (0.5 * Math.pow(forward, 3));
+		normal = (0.5 * normal) + (0.5 * Math.pow(normal, 3));
+		turn = (0.5 * turn) + (0.5 * Math.pow(turn, 3)); */
+
+		/* Arctan
+		forward = Math.atan((Math.PI / 2) * forward);
+		normal = Math.atan((Math.PI / 2) * normal);
+		turn = Math.atan((Math.PI / 2) * turn); */
+
+		/* x^2
+		forward = Math.copySign(Math.pow(forward, 2), forward);
+		normal = Math.copySign(Math.pow(normal, 2), normal);
+		turn = Math.copySign(Math.pow(turn, 2), turn); */
 		
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 			drivetrain.drive(HDriveHelper.HdriveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle()));
