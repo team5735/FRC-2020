@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
+import frc.robot.commands.vision.TurnOffLimelightCommand;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
@@ -42,9 +43,10 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
             new TurnAndPrepareCommand(vision, drivetrain, intake, shooter, banana),
             new ShootBallCommand(intake, shooter, false),
             new ShootBallCommand(intake, shooter, false),
+            new ShootBallCommand(intake, shooter, false),
             // new ShootBallCommand(intake, shooter, false),
-            // new ShootBallCommand(intake, shooter, false),
-            new StopFlywheel(shooter)
+            new StopFlywheel(shooter),
+            new TurnOffLimelightCommand(vision)
         );
     }
 
