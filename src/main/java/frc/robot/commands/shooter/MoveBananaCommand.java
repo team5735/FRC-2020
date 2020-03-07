@@ -10,7 +10,6 @@ package frc.robot.commands.shooter;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.util.Util;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Banana;
 

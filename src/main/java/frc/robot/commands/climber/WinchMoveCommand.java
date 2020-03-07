@@ -9,7 +9,6 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Winch;
 
 /**
@@ -38,7 +37,7 @@ public class WinchMoveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		winch.moveWinch(0.7);
+		winch.moveWinch(0.8);
 	}
 	
 	// Called once the command ends or is interrupted.

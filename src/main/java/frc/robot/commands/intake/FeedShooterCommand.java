@@ -8,7 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -16,16 +16,16 @@ import frc.robot.subsystems.Shooter;
 */
 public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final Intake intake;
+	private final Feeder feeder;
 	private final Shooter shooter;
 	private final boolean inverted;
 
-	public FeedShooterCommand(Intake intake, Shooter shooter, boolean inverted) {
-		this.intake = intake;
+	public FeedShooterCommand(Feeder feeder, Shooter shooter, boolean inverted) {
+		this.feeder = feeder;
 		this.shooter = shooter;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(intake);
+		addRequirements(feeder);
 	}
 	
 	// Called when the command is initially scheduled.
@@ -37,13 +37,13 @@ public class FeedShooterCommand extends CommandBase {
 	@Override
 	public void execute() {
 		// if(shooter.getSetpoint() == 0 && !inverted) return;
-		intake.feedShooter(1, inverted);
+		feeder.feedShooter(1, inverted);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.feedShooter(0, inverted);
+		feeder.feedShooter(0, inverted);
 	}
 	
 	// Returns true when the command should end.

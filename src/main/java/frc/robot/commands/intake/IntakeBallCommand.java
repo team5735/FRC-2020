@@ -9,14 +9,14 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
 
 /**
 * An example command that uses an example subsystem.
 */
 public class IntakeBallCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final Intake intake;
+	private final IntakeArm intakeArm;
 	private final double speed;
 	private final boolean inverted;
 	
@@ -26,15 +26,15 @@ public class IntakeBallCommand extends CommandBase {
 	* @param subsystem The subsystem used by this command.
 	*/
 
-	public IntakeBallCommand(Intake intake) {
-		this.intake = intake;
+	public IntakeBallCommand(IntakeArm intakeArm) {
+		this.intakeArm = intakeArm;
 		this.speed = -1;
 		this.inverted = false;
 		// addRequirements(intake);
 	}
 
-	public IntakeBallCommand(Intake intake, double speed, boolean inverted) {
-		this.intake = intake;
+	public IntakeBallCommand(IntakeArm intakeArm, double speed, boolean inverted) {
+		this.intakeArm = intakeArm;
 		this.speed = speed;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -55,12 +55,12 @@ public class IntakeBallCommand extends CommandBase {
 			double rightTrigger = 0.420 * RobotContainer.driverController.triggers.getRight();
 			double leftTrigger = 0.420 * RobotContainer.driverController.triggers.getLeft();
 			if(rightTrigger > 0) {
-				intake.intakeBall(rightTrigger, false);
+				intakeArm.intakeBall(rightTrigger, false);
 			} else if (leftTrigger > 0) {
-				intake.intakeBall(leftTrigger, true);
+				intakeArm.intakeBall(leftTrigger, true);
 			}
 		} else {
-			intake.intakeBall(speed, inverted);
+			intakeArm.intakeBall(speed, inverted);
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class IntakeBallCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("INTAKE BALL COMMAND | END");
-		intake.intakeBall(0, false);
+		intakeArm.intakeBall(0, false);
 	}
 	
 	// Returns true when the command should end.

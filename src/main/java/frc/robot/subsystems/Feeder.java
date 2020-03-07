@@ -10,27 +10,32 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.RobotConstants;
 
-public class Telescope extends SubsystemBase {
-  private final TalonSRX elevatorMaster;
+public class Feeder extends SubsystemBase {
 
-  /**
-   * Creates a new Climber.
-   */
-  public Telescope() {
-    elevatorMaster = new TalonSRX(RobotConstants.TELESCOPE_ID);
-    elevatorMaster.configFactoryDefault();
-    elevatorMaster.setInverted(false);
-  }
+	private final TalonSRX feeder;
+	private final DigitalInput lightSensor;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	/**
+	 * Creates a new Feeder.
+	 */
+	public Feeder() {
+		feeder = Drivetrain.gyroHost; // shared TalonSRX
+		lightSensor = new DigitalInput(9);
 
-  public void moveElevator(double output) {
-    elevatorMaster.set(ControlMode.PercentOutput, output);
-  }
+	}
+
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
+
+	/**
+	 * @return Position, in sensor units
+	 */
+	public void feedShooter(double speed, boolean inverted) {
+		feeder.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
+	}
 }

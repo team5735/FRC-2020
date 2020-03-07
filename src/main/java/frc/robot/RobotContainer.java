@@ -36,8 +36,10 @@ import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Telescope;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
+import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.Vision;
@@ -57,7 +59,9 @@ public class RobotContainer {
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Shooter shooter = new Shooter();
 	public final Banana banana = new Banana();
-	public final Intake intake = new Intake();
+	public final Feeder feeder = new Feeder();
+	public final Conveyer conveyer = new Conveyer();
+	public final IntakeArm intakeArm = new IntakeArm();
 	public final Telescope telescope = new Telescope();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
 	public final Vision vision = new Vision();
@@ -79,7 +83,7 @@ public class RobotContainer {
 	public void stopAll() {
 		CommandScheduler.getInstance().cancelAll();
 		shooter.slowDown();
-		intake.intakeBall(0, false);
+		intakeArm.intakeBall(0, false);
 		vision.disableTracking();
 		drivetrain.drive(DriveSignal.NEUTRAL);
 		drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
@@ -90,18 +94,15 @@ public class RobotContainer {
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
 		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
 		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
-		driverController.bButton.whileHeld(new WinchMoveCommand(winch));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 
-		driverController.rightBumper.whileActiveContinuous(new AngleIntakeCommand(intake, false));
-		driverController.leftBumper.whileActiveContinuous(new AngleIntakeCommand(intake, true));
+		driverController.rightBumper.whileActiveContinuous(new AngleIntakeCommand(intakeArm, false));
+		driverController.leftBumper.whileActiveContinuous(new AngleIntakeCommand(intakeArm, true));
 		
-		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
-		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
+		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intakeArm));
+		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intakeArm));
 
-		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(telescope, false));
-		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(telescope, true));
 		// driverController.Dpad.Right.whileHeld(new IntakeBallCommand(intake, 0.2, false));
 		// driverController.Dpad.Left.whileHeld(new IntakeBallCommand(intake, 0.2, true));
 		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
@@ -116,23 +117,28 @@ public class RobotContainer {
 		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 3750));
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
-		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana));
+		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
-		subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
+		subsystemController.bButton.whileHeld(new WinchMoveCommand(winch));
 		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
+
+		subsystemController.Dpad.Up.whileHeld(new ElevatorMoveCommand(telescope, false));
+		subsystemController.Dpad.Down.whileHeld(new ElevatorMoveCommand(telescope, true));
 
 		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, 3650));
 		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		subsystemController.Dpad.Down.whileActiveContinuous(new ReverseShooterCommand(shooter));
 		
-		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(intake, shooter, 0.420, false));
-		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(intake, shooter, 0.420, true));
+		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(conveyer, feeder, shooter, 0.420, false));
+		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(conveyer, feeder, shooter, 0.420, true));
 
-		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, false));
-		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(intake, shooter, true));
+		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(feeder, shooter, false));
+		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(feeder, shooter, true));
 		
+		subsystemController.startButton.whileActiveContinuous(new ReverseShooterCommand(shooter));
+
 	}
 	
 	/**

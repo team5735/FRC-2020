@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -41,7 +40,7 @@ public class ReverseShooterCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-        shooter.moveExplicit(-0.5);
+        shooter.moveExplicit(-0.3);
 	}
 	
 	// Called once the command ends or is interrupted.
@@ -54,6 +53,5 @@ public class ReverseShooterCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		return false;
-		// return intake.isRetractedLimitHit();
 	}
 }

@@ -11,27 +11,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.intake.AngleIntakeCommand;
-import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.constants.RobotConstants;
 
-public class Intake extends SubsystemBase {
+public class IntakeArm extends SubsystemBase {
 	
 	private final TalonSRX intakeArm;
 	private final VictorSPX intakeRoller;
-	private final VictorSPX conveyorRoller;
-	private final TalonSRX conveyorFeeder;
 
 	// private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
 	
 	/**
 	* Creates a new Intake.
 	*/
-	public Intake() {    
+	public IntakeArm() {    
 		intakeArm = new TalonSRX(RobotConstants.INTAKE_ARM_ID);
 		intakeArm.configFactoryDefault();
 		intakeArm.config_kP(0, RobotConstants.INTAKE_kP);
@@ -44,12 +38,6 @@ public class Intake extends SubsystemBase {
 		intakeRoller.configFactoryDefault();
 		intakeRoller.setInverted(true);
 
-		conveyorFeeder = Drivetrain.gyroHost; // shared TalonSRX
-
-		conveyorRoller = new VictorSPX(RobotConstants.CONVEYOR_ID);
-		conveyorRoller.configFactoryDefault();
-		conveyorRoller.setInverted(true);
-		
 		// retractedLimitSwitch = new DigitalInput(9);
 		// deployedLimitSwitch = new DigitalInput(1);
 
@@ -86,14 +74,6 @@ public class Intake extends SubsystemBase {
 	
 	public void intakeBall(double speed, boolean inverted) {
 		intakeRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
-	}
-
-	public void rollConveyor(double speed, boolean inverted) {
-		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
-	}
-
-	public void feedShooter(double speed, boolean inverted) {
-		conveyorFeeder.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
 	}
 
 	// public boolean isRetractedLimitHit() {

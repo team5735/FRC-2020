@@ -8,7 +8,8 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -16,7 +17,8 @@ import frc.robot.subsystems.Shooter;
 */
 public class MoveConveyorCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final Intake intake;
+	private final Conveyer conveyer;
+	private final Feeder feeder;
 	private final Shooter shooter;
 	private final double speed;
 	private final boolean inverted;
@@ -26,8 +28,9 @@ public class MoveConveyorCommand extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public MoveConveyorCommand(Intake intake, Shooter shooter, double speed, boolean inverted) {
-		this.intake = intake;
+	public MoveConveyorCommand(Conveyer conveyer, Feeder feeder, Shooter shooter, double speed, boolean inverted) {
+		this.conveyer = conveyer;
+		this.feeder = feeder;
 		this.shooter = shooter;
 		this.speed = speed;
 		this.inverted = inverted;
@@ -44,16 +47,16 @@ public class MoveConveyorCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intake.rollConveyor(speed, inverted);
+		conveyer.rollConveyor(speed, inverted);
 		if(shooter.getSetpoint() == 0) {
-			intake.feedShooter(0.1, true);
+			feeder.feedShooter(0.1, true);
 		}
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intake.rollConveyor(0, false);
+		conveyer.rollConveyor(0, false);
 		System.out.println("CONVEYER MOVE COMMAND | END");
 	}
 	

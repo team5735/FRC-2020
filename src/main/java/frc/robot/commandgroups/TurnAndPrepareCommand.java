@@ -13,7 +13,7 @@ import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.Vision;
@@ -25,13 +25,13 @@ public class TurnAndPrepareCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndPrepareCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
+    public TurnAndPrepareCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Shooter shooter, Banana banana) {
         addCommands(
             new ParallelCommandGroup(
                 new TurnToTargetCommand(vision, drivetrain),
-                new RampShooterCommand(shooter, vision, banana, intake, 3600)
+                new RampShooterCommand(shooter, vision, banana, feeder, 3600)
             ), 
-            new RampShooterCommand(shooter, vision, banana, intake, true)
+            new RampShooterCommand(shooter, vision, banana, feeder, true)
         );
     }
 

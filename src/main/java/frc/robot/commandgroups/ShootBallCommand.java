@@ -16,7 +16,9 @@ import frc.robot.commands.intake.FeedShooterCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.commands.intake.MoveConveyorCommand;
 import frc.robot.constants.RobotConstants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -28,7 +30,7 @@ public class ShootBallCommand extends SequentialCommandGroup {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public ShootBallCommand(Intake intake, Shooter shooter, boolean inverted) {
+	public ShootBallCommand(Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, boolean inverted) {
 		super(
 			new PrintCommand("Shoot Ball"),
 			// new ParallelDeadlineGroup(
@@ -37,8 +39,8 @@ public class ShootBallCommand extends SequentialCommandGroup {
 			// 	new IntakeBallCommand(intake, 0.5, inverted)),
 			new ParallelDeadlineGroup(
 				new WaitUntilCommand(() -> shooter.atSpeed(RobotConstants.FLYWHEEL_RPM_DEADBAND)),
-				new MoveConveyorCommand(intake, shooter, 0.6, inverted),
-				new IntakeBallCommand(intake, 0.5, inverted)
+				new MoveConveyorCommand(conveyer, feeder, shooter, 0.6, inverted),
+				new IntakeBallCommand(intakeArm, 0.5, inverted)
 			),
 			// new ParallelDeadlineGroup(
 			// 	new WaitCommand(conveyerTime), 
@@ -46,9 +48,9 @@ public class ShootBallCommand extends SequentialCommandGroup {
 			// 	new IntakeBallCommand(intake, 0.5, inverted)
 			// ),
 			new ParallelDeadlineGroup(
-				new FeedShooterCommand(intake, shooter, inverted).withTimeout(0.15),
-				new MoveConveyorCommand(intake, shooter, 0.6, inverted),
-				new IntakeBallCommand(intake, 0.5, inverted)
+				new FeedShooterCommand(feeder, shooter, inverted).withTimeout(0.08),
+				new MoveConveyorCommand(conveyer, feeder, shooter, 0.6, inverted),
+				new IntakeBallCommand(intakeArm, 0.5, inverted)
 			)
 		);
 	}

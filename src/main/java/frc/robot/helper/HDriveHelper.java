@@ -9,8 +9,6 @@ package frc.robot.helper;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import frc.lib.geometry.Rotation;
-import frc.lib.geometry.Translation;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;

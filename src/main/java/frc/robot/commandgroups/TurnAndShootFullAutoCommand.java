@@ -13,9 +13,11 @@ import frc.robot.commands.vision.TurnOffLimelightCommand;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
+import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Drivetrain.DriveMode;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -23,7 +25,9 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
 
     private Vision vision;
     private Drivetrain drivetrain;
-    private Intake intake;
+    private Feeder feeder;
+    private Conveyer conveyer;
+    private IntakeArm intakeArm;
     private Shooter shooter;
     private Banana banana;
 
@@ -34,10 +38,11 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootFullAutoCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
+    public TurnAndShootFullAutoCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
         this.vision = vision;
         this.drivetrain = drivetrain;
-        this.intake = intake;
+        this.conveyer = conveyer;
+        this.intakeArm = intakeArm;
         this.shooter = shooter;
         this.banana = banana;
         
@@ -48,11 +53,11 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
             //     new TurnToTargetCommand(vision, drivetrain),
             //     new RampShooterCommand(shooter, vision, banana)  
             // )//,
-            new TurnAndPrepareCommand(vision, drivetrain, intake, shooter, banana),
-            new ShootBallCommand(intake, shooter, false),
-            new ShootBallCommand(intake, shooter, false),
-            new ShootBallCommand(intake, shooter, false),
-            // new ShootBallCommand(intake, shooter, false),
+            new TurnAndPrepareCommand(vision, drivetrain, feeder, shooter, banana),
+            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+            // new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
             new StopFlywheel(shooter),
             new TurnOffLimelightCommand(vision)
         );

@@ -8,29 +8,32 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants;
 
-public class Telescope extends SubsystemBase {
-  private final TalonSRX elevatorMaster;
+public class Conveyer extends SubsystemBase {
 
-  /**
-   * Creates a new Climber.
-   */
-  public Telescope() {
-    elevatorMaster = new TalonSRX(RobotConstants.TELESCOPE_ID);
-    elevatorMaster.configFactoryDefault();
-    elevatorMaster.setInverted(false);
-  }
+	private final VictorSPX conveyorRoller;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	// private final DigitalInput retractedLimitSwitch, deployedLimitSwitch;
 
-  public void moveElevator(double output) {
-    elevatorMaster.set(ControlMode.PercentOutput, output);
-  }
+	/**
+	 * Creates a new Intake.
+	 */
+	public Conveyer() {
+		conveyorRoller = new VictorSPX(RobotConstants.CONVEYOR_ID);
+		conveyorRoller.configFactoryDefault();
+		conveyorRoller.setInverted(true);
+	}
+
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
+
+	public void rollConveyor(double speed, boolean inverted) {
+		conveyorRoller.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
+	}
 }

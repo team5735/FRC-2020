@@ -9,23 +9,18 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
-import frc.lib.util.InterpolatingTreeMap;
-import frc.lib.util.InterpolatingDouble;
-
-import java.util.Map;
 
 public class Shooter extends SubsystemBase {
 
-	private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> DistanceToRPM;
+	// private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> DistanceToRPM;
 
 	private CANSparkMax neoMaster, neoSlave;
 	private CANPIDController flywheelPIDController;
@@ -39,7 +34,7 @@ public class Shooter extends SubsystemBase {
 
 		neoMaster = new CANSparkMax(RobotConstants.FLYWHEEL_MASTER_ID, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
-		neoMaster.setInverted(true);
+		neoMaster.setInverted(false);
 		neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
