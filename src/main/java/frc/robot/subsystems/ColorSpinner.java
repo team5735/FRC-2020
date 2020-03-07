@@ -22,9 +22,6 @@ public class ColorSpinner extends SubsystemBase {
   private static final double tolerance = 30;
   private static final int DRIVE_DIAMETER = 4;
 
-  /**
-   * Creates a new ExampleSubsystem.
-   */
   public ColorSpinner() {
     talon = new TalonSRX(RobotConstants.COLOR_SPINNER_MOTOR_ID);
     talon.configFactoryDefault();

@@ -56,6 +56,7 @@ public class Vision extends SubsystemBase {
 
 	/**
 	 * @return Horizontal distance to target, in meters
+	 * distance = height from camera to target / tan(angle to parallell from camera)
 	 */
 	public double getDistanceToTarget() {
 		if (!isTrackingEnabled()) {

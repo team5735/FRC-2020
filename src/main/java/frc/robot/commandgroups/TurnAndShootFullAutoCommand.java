@@ -19,7 +19,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
-public class TurnAndShootCommand extends SequentialCommandGroup {
+public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
 
     private Vision vision;
     private Drivetrain drivetrain;
@@ -34,7 +34,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
+    public TurnAndShootFullAutoCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
         this.vision = vision;
         this.drivetrain = drivetrain;
         this.intake = intake;
@@ -49,14 +49,14 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
             //     new RampShooterCommand(shooter, vision, banana)  
             // )//,
             new TurnAndPrepareCommand(vision, drivetrain, intake, shooter, banana),
-            new ShootBallCommand(intake, shooter, false)
+            new ShootBallCommand(intake, shooter, false),
+            new ShootBallCommand(intake, shooter, false),
+            new ShootBallCommand(intake, shooter, false),
             // new ShootBallCommand(intake, shooter, false),
-            // new ShootBallCommand(intake, shooter, false),
-            // new ShootBallCommand(intake, shooter, false),
-            // new StopFlywheel(shooter),
-            // new TurnOffLimelightCommand(vision)
+            new StopFlywheel(shooter),
+            new TurnOffLimelightCommand(vision)
         );
-    }
+    } 
 
     @Override
     public void initialize() {
@@ -67,8 +67,6 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        new StopFlywheel(shooter).schedule();
-        new TurnOffLimelightCommand(vision).schedule();
         drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
     }
     

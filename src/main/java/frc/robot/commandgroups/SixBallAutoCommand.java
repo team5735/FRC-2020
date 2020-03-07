@@ -28,14 +28,14 @@ public class SixBallAutoCommand extends SequentialCommandGroup {
      */
     public SixBallAutoCommand(Vision vision, Drivetrain drivetrain, Intake intake, Shooter shooter, Banana banana) {
         addCommands(
-            new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana),
+            new TurnAndShootFullAutoCommand(vision, drivetrain, intake, shooter, banana),
             // new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
             new ParallelDeadlineGroup(
                 new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory),
                 new StopFlywheel(shooter),
                 new IntakeBallCommand(intake, 0.5, false) // never ends
             ),
-            new TurnAndShootCommand(vision, drivetrain, intake, shooter, banana)
+            new TurnAndShootFullAutoCommand(vision, drivetrain, intake, shooter, banana)
         );
     }
 

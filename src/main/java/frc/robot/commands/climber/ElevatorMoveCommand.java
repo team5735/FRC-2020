@@ -9,14 +9,14 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Telescope;
 
 /**
 * An example command that uses an example subsystem.
 */
 public class ElevatorMoveCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final Climber climber;
+	private final Telescope telescope;
 	private final boolean inverted;
 	
 	/**
@@ -24,11 +24,11 @@ public class ElevatorMoveCommand extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public ElevatorMoveCommand(Climber climber, boolean inverted) {
-		this.climber = climber;
+	public ElevatorMoveCommand(Telescope telescope, boolean inverted) {
+		this.telescope = telescope;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(climber);
+		addRequirements(telescope);
 	}
 	
 	// Called when the command is initially scheduled.
@@ -39,14 +39,14 @@ public class ElevatorMoveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		climber.moveElevator((inverted ? -1 : 1) * 0.5);
-		// climber.moveWinch(0.75);
+		telescope.moveElevator((inverted ? -1 : 1) * 0.5);
+		// telescope.moveWinch(0.75);
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		climber.moveElevator(0);
+		telescope.moveElevator(0);
 	}
 	
 	// Returns true when the command should end.

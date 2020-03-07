@@ -33,7 +33,7 @@ import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.ReverseShooterCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Telescope;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
 import frc.robot.subsystems.Drivetrain;
@@ -41,6 +41,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TrajectoryGenerator;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
@@ -54,12 +55,13 @@ public class RobotContainer {
 	public final ColorMatcher colorMatcher = new ColorMatcher();
 	public final ColorSpinner colorSpinner = new ColorSpinner();
 	public final Drivetrain drivetrain = new Drivetrain();
-	public final Climber climber = new Climber();
 	public final Shooter shooter = new Shooter();
 	public final Banana banana = new Banana();
 	public final Intake intake = new Intake();
+	public final Telescope telescope = new Telescope();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
 	public final Vision vision = new Vision();
+	public final Winch winch = new Winch();
 	
 	public static final BobXboxController driverController = new BobXboxController(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
@@ -88,7 +90,7 @@ public class RobotContainer {
 		// subsystemController.bButton.whenPressed(new ColorMatchCommand(colorSpinner, colorMatcher));
 		// driverController.aButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED));
 		// driverController.bButton.whenPressed(new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_RETRACTED));
-		driverController.bButton.whileHeld(new WinchMoveCommand(climber));
+		driverController.bButton.whileHeld(new WinchMoveCommand(winch));
 		driverController.yButton.whenPressed(new ResetGyroAngle(drivetrain));
 		driverController.xButton.whenPressed(new ChangeDriveMode(drivetrain));
 
@@ -98,8 +100,8 @@ public class RobotContainer {
 		driverController.rightTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 		driverController.leftTriggerButton.whileActiveContinuous(new IntakeBallCommand(intake));
 
-		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(climber, false));
-		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(climber, true));
+		driverController.Dpad.Up.whileHeld(new ElevatorMoveCommand(telescope, false));
+		driverController.Dpad.Down.whileHeld(new ElevatorMoveCommand(telescope, true));
 		// driverController.Dpad.Right.whileHeld(new IntakeBallCommand(intake, 0.2, false));
 		// driverController.Dpad.Left.whileHeld(new IntakeBallCommand(intake, 0.2, true));
 		// driverController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));

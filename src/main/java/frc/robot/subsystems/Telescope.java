@@ -17,21 +17,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.climber.ElevatorMoveCommand;
 import frc.robot.constants.RobotConstants;
 
-public class Climber extends SubsystemBase {
+public class Telescope extends SubsystemBase {
   private final TalonSRX elevatorMaster;
-  private final CANSparkMax winchMaster;
 
   /**
    * Creates a new Climber.
    */
-  public Climber() {
+  public Telescope() {
     elevatorMaster = new TalonSRX(RobotConstants.TELESCOPE_ID);
     elevatorMaster.configFactoryDefault();
     elevatorMaster.setInverted(false);
-
-    winchMaster = new CANSparkMax(RobotConstants.WINCH_ID, MotorType.kBrushless);
-    winchMaster.restoreFactoryDefaults();
-    winchMaster.setInverted(true);
   }
 
   @Override
@@ -42,9 +37,4 @@ public class Climber extends SubsystemBase {
   public void moveElevator(double output) {
     elevatorMaster.set(ControlMode.PercentOutput, output);
   }
-
-  public void moveWinch(double output) {
-    winchMaster.set(output);
-  }
-
 }

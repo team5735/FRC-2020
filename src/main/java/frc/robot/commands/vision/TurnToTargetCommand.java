@@ -79,10 +79,8 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		System.out.println("TURN TARGET COMMAND | END");
-		// vision.disableTracking();
 		drivetrain.drive(DriveSignal.NEUTRAL);
 
-		// System.out.println("DISTANCE: " + vision.getDistanceToTarget());
 		SmartDashboard.putNumber("DISTANCE", vision.getDistanceToTarget());
 	}
 	
@@ -91,8 +89,6 @@ public class TurnToTargetCommand extends CommandBase {
 	public boolean isFinished() {
 		SmartDashboard.putNumber("InDeadbandTime", inDeadbandTime);
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
-		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getLimelight().getdegRotationToTarget(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
 		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getTX(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
-		// return false;
 	}
 }

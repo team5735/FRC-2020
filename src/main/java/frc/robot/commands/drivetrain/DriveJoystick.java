@@ -49,10 +49,7 @@ public class DriveJoystick extends CommandBase {
 
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
-		// double forward = -RobotContainer.driverController.rightStick.getYCubedWithDeadband(0.07);
-		// double normal = RobotContainer.driverController.rightStick.getXCubedWithDeadband(0.2);
-		// double turn = RobotContainer.driverController.leftStick.getXCubedWithDeadband(0.07);
-		double forward = -Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.07);
+		double forward = Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.07);
 		double normal = Util.deadband(RobotContainer.driverController.rightStick.getX(), 0.2);
 		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.07);
 
@@ -70,6 +67,11 @@ public class DriveJoystick extends CommandBase {
 		forward = Math.copySign(Math.pow(forward, 2), forward);
 		normal = Math.copySign(Math.pow(normal, 2), normal);
 		turn = Math.copySign(Math.pow(turn, 2), turn); */
+
+		/* x^3
+		forward = Math.copySign(Math.pow(forward, 3), forward);
+		normal = Math.copySign(Math.pow(normal, 3), normal);
+		turn = Math.copySign(Math.pow(turn, 3), turn); */
 		
 		if(drivetrain.getDriveMode() == DriveMode.FIELD_CENTRIC) {
 			drivetrain.drive(HDriveHelper.HdriveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle()));

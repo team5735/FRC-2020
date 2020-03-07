@@ -39,14 +39,14 @@ public class Shooter extends SubsystemBase {
 
 		neoMaster = new CANSparkMax(RobotConstants.FLYWHEEL_MASTER_ID, MotorType.kBrushless);
 		neoMaster.restoreFactoryDefaults();
-		neoMaster.setInverted(false);
-		// neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
+		neoMaster.setInverted(true);
+		neoMaster.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
 		neoSlave = new CANSparkMax(RobotConstants.FLYWHEEL_SLAVE_ID, MotorType.kBrushless);
 		neoSlave.restoreFactoryDefaults();
 		neoSlave.follow(neoMaster, true);
-		// neoSlave.enableSoftLimit(SoftLimitDirection.kReverse, true);
+		neoSlave.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 		neoMaster.getEncoder().setVelocityConversionFactor(RobotConstants.FLYWHEEL_PULLEY_RATIO);
 
@@ -56,21 +56,6 @@ public class Shooter extends SubsystemBase {
 		flywheelPIDController.setI(RobotConstants.FLYWHEEL_kI, 0);
 		flywheelPIDController.setD(RobotConstants.FLYWHEEL_kD, 0);
 		flywheelPIDController.setFF(RobotConstants.FLYWHEEL_kF, 0);
-
-		// DistanceToRPM = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>(1000);
-		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_LINE),
-		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_LINE));
-		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_TRENCH),
-		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_TRENCH));
-		// // DistanceToRPM.put(new InterpolatingDouble(RobotConstants.DISTANCE_TO_TARGET_PRESET_BEHINDCOLORWHEEL),
-		// // 		new InterpolatingDouble(RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
-		// DistanceToRPM.put(new InterpolatingDouble(3.04), new InterpolatingDouble(3450.0));
-		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
-		// DistanceToRPM.put(new InterpolatingDouble(4.4367), new InterpolatingDouble(3600.0));
-		// DistanceToRPM.put(new InterpolatingDouble(4.9945), new InterpolatingDouble(3650.0));
-		// DistanceToRPM.put(new InterpolatingDouble(5.5089), new InterpolatingDouble(3850.0));
-		// System.out.println("INTERPOLATED: " + DistanceToRPM.getInterpolated(new InterpolatingDouble(4.50)));
-		// DistanceToRPM.put(new InterpolatingDouble(3.75476), new InterpolatingDouble(3500.0));
 	}
 
 	@Override
@@ -120,12 +105,11 @@ public class Shooter extends SubsystemBase {
 	public double getSpeedFromDistance(double x) {
 		// return DistanceToRPM.getInterpolated(new InterpolatingDouble(distance)).value;
 		// return 52.4826534001*(x*x) - 286.6534831746*(x) + 3836.4028991883;
+		// return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
+
 		System.out.println("X: " + x);
 		SmartDashboard.putNumber("X value given", x);
-		// return 59.4992519392*(x*x) - 357.2897939639*(x) + 3969.1694854952;
 		return 16.1564869793*(x*x) - 22.0935926212*(x) + 3365.2543639255;
-		// return 3850.0;
-		// return 3650.0;
 	}
 
 }
