@@ -5,30 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Telescope;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Shooter;
 
 /**
 * An example command that uses an example subsystem.
 */
-public class ElevatorMoveCommand extends CommandBase {
+public class FeedShooterIfHasBallCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-	private final Telescope telescope;
+	private final Feeder feeder;
+	private final Shooter shooter;
 	private final boolean inverted;
-	
-	/**
-	* Creates a new ExampleCommand.
-	*
-	* @param subsystem The subsystem used by this command.
-	*/
-	public ElevatorMoveCommand(Telescope telescope, boolean inverted) {
-		this.telescope = telescope;
+
+	public FeedShooterIfHasBallCommand(Feeder feeder, Shooter shooter, boolean inverted) {
+		this.feeder = feeder;
+		this.shooter = shooter;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(telescope);
+		addRequirements(feeder);
 	}
 	
 	// Called when the command is initially scheduled.
@@ -39,13 +36,17 @@ public class ElevatorMoveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		telescope.moveElevator((inverted ? -1 : 1) * 0.5);
+    if(feeder.hasBall()) {
+      feeder.feedShooter(1, inverted);
+    } else {
+			feeder.feedShooter(0.1, !inverted);
+    }
 	}
 	
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		telescope.moveElevator(0);
+		feeder.feedShooter(0, inverted);
 	}
 	
 	// Returns true when the command should end.

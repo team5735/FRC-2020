@@ -74,15 +74,15 @@ public class RobotConstants {
     public static final int BANANA_ID = 3; //TODO tune
     
     // PID
-    public static final double LEFT_kP = 0.1;
+    public static final double LEFT_kP = 0.5;
     public static final double LEFT_kI = 0.0;
     public static final double LEFT_kD = 0.0;
-    public static final double LEFT_kF = 1023.0 / 10500.0 * 0.969; // (100% * 1023) / 10500
+    public static final double LEFT_kF = 1023.0 / 10500.0 * 0.655; // 0.969 // (100% * 1023) / 10500
     
-    public static final double RIGHT_kP = 0.1;
+    public static final double RIGHT_kP = 0.5;
     public static final double RIGHT_kI = 0.0;
     public static final double RIGHT_kD = 0.0;
-    public static final double RIGHT_kF = 1023.0 / 10500.0 * 0.969;
+    public static final double RIGHT_kF = 1023.0 / 10500.0 * 0.615; // 0.969
     
     public static final double NORMAL_kP = 0.1;
     public static final double NORMAL_kI = 0.0;
@@ -133,7 +133,7 @@ public class RobotConstants {
     public static final double VISION_STEER_kP = 0.018; //0.024; //0.018; //0.02; //kU = 0.04
     public static final double VISION_STEER_kI = 0.0216 * 1.01;   //0.048; //0.0216;
     public static final double VISION_STEER_kD = 0.0;   //0.003;
-    public static final double VISION_TARGET_DEADBAND = 1.6;//0.8; // degrees
+    public static final double VISION_TARGET_DEADBAND = 1.3; //1.6 //0.8; // degrees
     public static final double VISION_X_OFFSET = 0;
 
     public static final double CAMERA_HEIGHTFROMGROUND = Units.inchesToMeters(15.6); // meters // OLD 11.25 inches

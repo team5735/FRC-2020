@@ -2,12 +2,14 @@ package frc.robot.commandgroups;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
+import frc.robot.commands.intake.FeedShooterIfHasBallCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
 import frc.robot.commands.vision.TurnOffLimelightCommand;
@@ -22,7 +24,7 @@ import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
-public class TurnAndShootCommand extends SequentialCommandGroup {
+public class TurnAndShootCommandSemiAuto extends SequentialCommandGroup {
 
     private Vision vision;
     private Drivetrain drivetrain;
@@ -32,21 +34,20 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
     private Shooter shooter;
     private Banana banana;
 
-
     /**
-     * Turn to target, ramp up shooter, feed the shooter, and go!
+     * Turn to target, ramp up shooter, feed the shooter IF there is a ball ready
      * @param vision
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
+    public TurnAndShootCommandSemiAuto(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
         this.vision = vision;
         this.drivetrain = drivetrain;
         this.conveyer = conveyer;
         this.intakeArm = intakeArm;
         this.shooter = shooter;
         this.banana = banana;
-        
+
         TurnToTargetCommand turnToTargetCommand = new TurnToTargetCommand(vision, drivetrain);
         
         addCommands(
@@ -57,7 +58,9 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
                     new RampShooterCommand(shooter, vision, banana, feeder, 3600),
                     new WaitUntilCommand(turnToTargetCommand),
                     new RampShooterCommand(shooter, vision, banana, feeder, true),
-                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false)
+                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+                    new FeedShooterIfHasBallCommand(feeder, shooter, false)
+
                 )
             )
         );
@@ -72,9 +75,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        // new StopFlywheel(shooter).schedule();
-        // new TurnOffLimelightCommand(vision).schedule();
         drivetrain.setDriveMode(DriveMode.STATIC_DRIVE);
     }
-    
+
 }

@@ -37,7 +37,7 @@ public class WinchMoveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		winch.moveWinch(0.8);
+		winch.moveWinch(0.95);
 	}
 	
 	// Called once the command ends or is interrupted.

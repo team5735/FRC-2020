@@ -18,6 +18,7 @@ import frc.lib.controllers.BobXboxController;
 import frc.lib.util.DriveSignal;
 import frc.robot.commandgroups.SixBallAutoCommand;
 import frc.robot.commandgroups.TurnAndShootCommand;
+import frc.robot.commandgroups.TurnAndShootCommandSemiAuto;
 import frc.robot.commands.climber.ElevatorMoveCommand;
 import frc.robot.commands.climber.WinchMoveCommand;
 import frc.robot.commands.drivetrain.ChangeDriveMode;
@@ -117,7 +118,7 @@ public class RobotContainer {
 		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 3750));
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
-		subsystemController.aButton.whenPressed(new TurnAndShootCommand(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana));
+		subsystemController.aButton.whenPressed(new TurnAndShootCommandSemiAuto(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
 		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
 		subsystemController.bButton.whileHeld(new WinchMoveCommand(winch));

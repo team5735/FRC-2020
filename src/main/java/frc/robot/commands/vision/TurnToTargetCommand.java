@@ -7,6 +7,8 @@
 
 package frc.robot.commands.vision;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -19,7 +21,7 @@ import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
-public class TurnToTargetCommand extends CommandBase {
+public class TurnToTargetCommand extends CommandBase implements BooleanSupplier {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Vision vision;
 	private final Drivetrain drivetrain;
@@ -44,6 +46,7 @@ public class TurnToTargetCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		System.out.println("TURN TO TARGET");
 		vision.enableTracking();
 		inDeadbandTime = -1;
 	}
@@ -88,7 +91,12 @@ public class TurnToTargetCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		SmartDashboard.putNumber("InDeadbandTime", inDeadbandTime);
+		return false;
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
+		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getTX(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
+	}
+
+	public boolean getAsBoolean() {
 		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getTX(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
 	}
 }

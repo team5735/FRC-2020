@@ -45,13 +45,15 @@ public class DriveJoystick extends CommandBase {
 	@Override
 	public void execute() {
 
-		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
-
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
-		double forward = Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.07);
+		double forward = Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.13);
 		double normal = Util.deadband(RobotContainer.driverController.rightStick.getX(), 0.2);
-		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.07);
+		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.13);
+
+		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
+		SmartDashboard.putNumber("Left Velocity", drivetrain.getLeftVelocity());
+		SmartDashboard.putNumber("Right Velocity", drivetrain.getRightVelocity());
 
 		/* 0.5x + 0.5x^3
 		forward = (0.5 * forward) + (0.5 * Math.pow(forward, 3));
@@ -63,10 +65,10 @@ public class DriveJoystick extends CommandBase {
 		normal = Math.atan((Math.PI / 2) * normal);
 		turn = Math.atan((Math.PI / 2) * turn); */
 
-		/* x^2
+		// x^2
 		forward = Math.copySign(Math.pow(forward, 2), forward);
 		normal = Math.copySign(Math.pow(normal, 2), normal);
-		turn = Math.copySign(Math.pow(turn, 2), turn); */
+		turn = Math.copySign(Math.pow(turn, 2), turn);
 
 		/* x^3
 		forward = Math.copySign(Math.pow(forward, 3), forward);
@@ -77,7 +79,7 @@ public class DriveJoystick extends CommandBase {
 			drivetrain.drive(HDriveHelper.HdriveFieldCentric(forward, normal, turn, drivetrain.getGyroAngle()));
 		} else {
 			drivetrain.drive(HDriveHelper.HDrive(forward, normal, turn, false));
-			// drivetrain.drive(ControlMode.Velocity, new DriveSignal(0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
+			// drivetrain.drive(new DriveSignal(ControlMode.Velocity, 0, 0, normal * RobotConstants.MAX_VELOCITY_NORMAL_TICKS));
 		}
 		
 		// System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());

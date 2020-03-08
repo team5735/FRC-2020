@@ -123,7 +123,7 @@ public class Drivetrain extends SubsystemBase{
 	}
 	
 	public double getRightVelocity() {
-		return leftMaster.getSelectedSensorVelocity(); 
+		return rightMaster.getSelectedSensorVelocity(); 
 	}
 	
 	public double getGyroAngle() {

@@ -9,6 +9,7 @@ package frc.robot.helper;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
 import frc.robot.constants.RobotConstants;
@@ -30,6 +31,7 @@ public class HDriveHelper {
      * @param forward
      * @param normal
      * @param angular
+     * @param fc  Is Field Centric 
      * @return DriveSignal
      */
     public static DriveSignal HDrive(double forward, double normal, double angular, boolean fc) {
@@ -37,12 +39,15 @@ public class HDriveHelper {
 		double rightPercentage = forward * (1 - ANGULAR_PERCENTAGE) - angular * ANGULAR_PERCENTAGE;
         double normalPercentage = normal * (1 - ANGULAR_PERCENTAGE);
         
-        // leftPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
-        // rightPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
-        // normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
-		
-        // return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
-        return new DriveSignal(ControlMode.PercentOutput, leftPercentage, rightPercentage, normalPercentage);
+        leftPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        rightPercentage *= (fc ? RobotConstants.MAX_VELOCITY_NORMAL_TICKS : RobotConstants.MAX_VELOCITY_DT_TICKS);
+        normalPercentage *= RobotConstants.MAX_VELOCITY_NORMAL_TICKS;
+        
+        SmartDashboard.putNumber("Left Velocity Setpoint", leftPercentage);
+        SmartDashboard.putNumber("Right Velocity Setpoint", rightPercentage);
+
+        return new DriveSignal(ControlMode.Velocity, leftPercentage, rightPercentage, normalPercentage);
+        // return new DriveSignal(ControlMode.PercentOutput, leftPercentage, rightPercentage, normalPercentage);
     }
 
     /**

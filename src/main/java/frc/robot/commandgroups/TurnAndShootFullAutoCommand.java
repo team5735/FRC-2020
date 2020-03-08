@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
@@ -46,20 +47,23 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
         this.shooter = shooter;
         this.banana = banana;
         
-        // double distance = vision.getDistanceToTarget();
+        TurnToTargetCommand turnToTargetCommand = new TurnToTargetCommand(vision, drivetrain);
+        
         addCommands(
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
-            // new ParallelCommandGroup( 
-            //     new TurnToTargetCommand(vision, drivetrain),
-            //     new RampShooterCommand(shooter, vision, banana)  
-            // )//,
-            new TurnAndPrepareCommand(vision, drivetrain, feeder, shooter, banana),
-            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-            new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-            // new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-            new StopFlywheel(shooter),
-            new TurnOffLimelightCommand(vision)
+            new ParallelCommandGroup(
+                turnToTargetCommand,
+                new SequentialCommandGroup(
+                    new RampShooterCommand(shooter, vision, banana, feeder, 3600),
+                    new WaitUntilCommand(turnToTargetCommand),
+                    new RampShooterCommand(shooter, vision, banana, feeder, true),
+                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+                    new StopFlywheel(shooter),
+                    new TurnOffLimelightCommand(vision)
+                )
+            )
         );
     } 
 
