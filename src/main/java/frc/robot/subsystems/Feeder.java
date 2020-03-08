@@ -16,20 +16,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Feeder extends SubsystemBase {
 
 	private final TalonSRX feeder;
-	private final DigitalInput lightSensor;
+	private final DigitalInput beambreak;
 
 	/**
 	 * Creates a new Feeder.
 	 */
 	public Feeder() {
 		feeder = Drivetrain.gyroHost; // shared TalonSRX
-		lightSensor = new DigitalInput(9);
+		beambreak = new DigitalInput(9);
 
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		// System.out.println(hasBall());
 	}
 
 	/**
@@ -37,5 +38,9 @@ public class Feeder extends SubsystemBase {
 	 */
 	public void feedShooter(double speed, boolean inverted) {
 		feeder.set(ControlMode.PercentOutput, (inverted ? -1 : 1) * speed);
+	}
+
+	public boolean hasBall() {
+		return !beambreak.get();
 	}
 }

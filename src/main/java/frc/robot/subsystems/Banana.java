@@ -18,7 +18,7 @@ import frc.robot.constants.RobotConstants;
 public class Banana extends SubsystemBase {
 
 	private final TalonSRX banana;
-	private final DigitalInput retractedLimitSwitch;
+	// private final DigitalInput retractedLimitSwitch;
 
 	/**
 	 * Creates a new Banana.
@@ -32,7 +32,7 @@ public class Banana extends SubsystemBase {
 
 		banana.setSelectedSensorPosition(0);
 
-		retractedLimitSwitch = new DigitalInput(9);
+		// retractedLimitSwitch = new DigitalInput(9);
 	}
 
 	public double getPosition() {
@@ -46,8 +46,8 @@ public class Banana extends SubsystemBase {
 	}
 
 	public boolean isRetractedLimitHit() {
-		// return false;
-		return !retractedLimitSwitch.get();
+		return false;
+		// return !retractedLimitSwitch.get();
 	}
 
 	public void retract() {
