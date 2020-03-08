@@ -13,7 +13,7 @@ import frc.robot.commands.shooter.StopFlywheel;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
-import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeArm;
@@ -28,16 +28,16 @@ public class SixBallAutoCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public SixBallAutoCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
+    public SixBallAutoCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyor conveyor, IntakeArm intakeArm, Shooter shooter, Banana banana) {
         addCommands(
-            new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana),
+            new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana),
             // new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
             new ParallelDeadlineGroup(
                 new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory),
                 new StopFlywheel(shooter),
                 new IntakeBallCommand(intakeArm, 0.5, false) // never ends
             ),
-            new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana)
+            new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana)
         );
     }
 

@@ -55,16 +55,11 @@ public class TurnToTargetCommand extends CommandBase implements BooleanSupplier 
 	@Override
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
-		if(vision.hasValidTarget()) {
+		if(vision.hasValidTarget() && false) {
 			double degreeError = vision.getTX() + RobotConstants.VISION_X_OFFSET;
 			SmartDashboard.putNumber("Degree Error", degreeError);
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
-
-			// // if(Util.deadband(degreesRotate, RobotConstants.VISION_TARGET_DEADBAND) == 0) end(true);
 			
-			// double steer_cmd = -RobotConstants.VISION_STEER_kP * degreeError;
-			// double steer_cmd = Math.copySign(0.08, degreesRotate);
-			// System.out.println("vTURN TO TARGET: " + vision.getTX()+ "  " +steer_cmd);
 			drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
 			if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 				if(inDeadbandTime < 0) {

@@ -3,6 +3,7 @@ package frc.robot.commandgroups;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -14,7 +15,7 @@ import frc.robot.commands.vision.TurnOffLimelightCommand;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
-import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Drivetrain.DriveMode;
@@ -27,7 +28,7 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
     private Vision vision;
     private Drivetrain drivetrain;
     private Feeder feeder;
-    private Conveyer conveyer;
+    private Conveyor conveyor;
     private IntakeArm intakeArm;
     private Shooter shooter;
     private Banana banana;
@@ -39,10 +40,10 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootFullAutoCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
+    public TurnAndShootFullAutoCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyor conveyor, IntakeArm intakeArm, Shooter shooter, Banana banana) {
         this.vision = vision;
         this.drivetrain = drivetrain;
-        this.conveyer = conveyer;
+        this.conveyor = conveyor;
         this.intakeArm = intakeArm;
         this.shooter = shooter;
         this.banana = banana;
@@ -51,15 +52,15 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
         
         addCommands(
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
-            new ParallelCommandGroup(
+            new ParallelDeadlineGroup(
                 turnToTargetCommand,
                 new SequentialCommandGroup(
                     new RampShooterCommand(shooter, vision, banana, feeder, 3600),
                     new WaitUntilCommand(turnToTargetCommand),
-                    new RampShooterCommand(shooter, vision, banana, feeder, true),
-                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
-                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false),
+                    // new RampShooterCommand(shooter, vision, banana, feeder, true),
+                    new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
+                    new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
+                    new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
                     new StopFlywheel(shooter),
                     new TurnOffLimelightCommand(vision)
                 )

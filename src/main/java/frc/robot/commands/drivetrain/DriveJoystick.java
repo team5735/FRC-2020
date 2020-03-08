@@ -47,9 +47,9 @@ public class DriveJoystick extends CommandBase {
 
 		if(drivetrain.getDriveMode() == DriveMode.DISABLED) return;
 
-		double forward = Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.13);
+		double forward = Util.deadband(RobotContainer.driverController.rightStick.getY(), 0.16);
 		double normal = Util.deadband(RobotContainer.driverController.rightStick.getX(), 0.2);
-		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.13);
+		double turn = Util.deadband(RobotContainer.driverController.leftStick.getX(), 0.16);
 
 		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
 		SmartDashboard.putNumber("Left Velocity", drivetrain.getLeftVelocity());

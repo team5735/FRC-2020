@@ -14,7 +14,7 @@ import frc.robot.commands.vision.TurnOffLimelightCommand;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
-import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Drivetrain.DriveMode;
@@ -27,7 +27,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
     private Vision vision;
     private Drivetrain drivetrain;
     private Feeder feeder;
-    private Conveyer conveyer;
+    private Conveyor conveyor;
     private IntakeArm intakeArm;
     private Shooter shooter;
     private Banana banana;
@@ -39,10 +39,10 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
      * @param drivetrain
      * @param shooter
      */
-    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyer conveyer, IntakeArm intakeArm, Shooter shooter, Banana banana) {
+    public TurnAndShootCommand(Vision vision, Drivetrain drivetrain, Feeder feeder, Conveyor conveyor, IntakeArm intakeArm, Shooter shooter, Banana banana) {
         this.vision = vision;
         this.drivetrain = drivetrain;
-        this.conveyer = conveyer;
+        this.conveyor = conveyor;
         this.intakeArm = intakeArm;
         this.shooter = shooter;
         this.banana = banana;
@@ -57,7 +57,7 @@ public class TurnAndShootCommand extends SequentialCommandGroup {
                     new RampShooterCommand(shooter, vision, banana, feeder, 3600),
                     new WaitUntilCommand(turnToTargetCommand),
                     new RampShooterCommand(shooter, vision, banana, feeder, true),
-                    new ShootBallCommand(feeder, conveyer, intakeArm, shooter, false)
+                    new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false)
                 )
             )
         );

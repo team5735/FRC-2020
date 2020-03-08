@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants;
 
-public class Conveyer extends SubsystemBase {
+public class Conveyor extends SubsystemBase {
 
 	private final VictorSPX conveyorRoller;
 
@@ -22,7 +22,7 @@ public class Conveyer extends SubsystemBase {
 	/**
 	 * Creates a new Intake.
 	 */
-	public Conveyer() {
+	public Conveyor() {
 		conveyorRoller = new VictorSPX(RobotConstants.CONVEYOR_ID);
 		conveyorRoller.configFactoryDefault();
 		conveyorRoller.setInverted(true);

@@ -39,7 +39,7 @@ public class ElevatorMoveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		telescope.moveElevator((inverted ? -1 : 1) * 0.5);
+		telescope.moveElevator((inverted ? -1 : 1) * 0.45);
 	}
 	
 	// Called once the command ends or is interrupted.

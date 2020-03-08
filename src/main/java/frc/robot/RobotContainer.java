@@ -37,7 +37,7 @@ import frc.robot.subsystems.Banana;
 import frc.robot.subsystems.Telescope;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.ColorSpinner;
-import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeArm;
@@ -61,7 +61,7 @@ public class RobotContainer {
 	public final Shooter shooter = new Shooter();
 	public final Banana banana = new Banana();
 	public final Feeder feeder = new Feeder();
-	public final Conveyer conveyer = new Conveyer();
+	public final Conveyor conveyor = new Conveyor();
 	public final IntakeArm intakeArm = new IntakeArm();
 	public final Telescope telescope = new Telescope();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
@@ -118,7 +118,7 @@ public class RobotContainer {
 		// subsystemController.aButton.whenPressed(new RampShooterCommand(shooter, 3750));
 		// subsystemController.aButton.whenReleased(new RampShooterCommand(shooter, 0));
 
-		subsystemController.aButton.whenPressed(new TurnAndShootCommandSemiAuto(vision, drivetrain, feeder, conveyer, intakeArm , shooter, banana));
+		subsystemController.aButton.whenPressed(new TurnAndShootCommandSemiAuto(vision, drivetrain, feeder, conveyor, intakeArm , shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
 		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
 		subsystemController.bButton.whileHeld(new WinchMoveCommand(winch));
@@ -132,8 +132,8 @@ public class RobotContainer {
 		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		
-		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(conveyer, feeder, shooter, 0.420, false));
-		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(conveyer, feeder, shooter, 0.420, true));
+		subsystemController.rightBumper.whileActiveContinuous(new MoveConveyorCommand(conveyor, feeder, shooter, 0.420, false));
+		subsystemController.leftBumper.whileActiveContinuous(new MoveConveyorCommand(conveyor, feeder, shooter, 0.420, true));
 
 		subsystemController.rightTriggerButton.whileActiveContinuous(new FeedShooterCommand(feeder, shooter, false));
 		subsystemController.leftTriggerButton.whileActiveContinuous(new FeedShooterCommand(feeder, shooter, true));
@@ -148,8 +148,8 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory);
-		// return new SixBallAutoCommand(vision, drivetrain, intake, shooter, banana);
+		// return new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory);
+		return new SixBallAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana);
 	}
 	
 }
