@@ -21,7 +21,7 @@ public class StopFlywheel extends CommandBase {
 		this.shooter = shooter;
 		
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(this.shooter);
+		// addRequirements(this.shooter);
 	}
 
   // Called when the command is initially scheduled.

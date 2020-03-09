@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -53,17 +54,18 @@ public class TurnAndShootFullAutoCommand extends SequentialCommandGroup {
         addCommands(
             // https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
             new ParallelDeadlineGroup(
-                turnToTargetCommand,
                 new SequentialCommandGroup(
                     new RampShooterCommand(shooter, vision, banana, feeder, 3600),
-                    new WaitUntilCommand(turnToTargetCommand),
+                    // new WaitUntilCommand(turnToTargetCommand),
                     // new RampShooterCommand(shooter, vision, banana, feeder, true),
                     new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
+                    new PrintCommand("Ball 1"),
                     new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
+                    new PrintCommand("Ball 2"),
                     new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
-                    new StopFlywheel(shooter),
-                    new TurnOffLimelightCommand(vision)
+                    new PrintCommand("Ball 3")
                 )
+                // turnToTargetCommand
             )
         );
     } 

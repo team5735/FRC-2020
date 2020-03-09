@@ -59,8 +59,7 @@ public class TurnAndShootCommandSemiAuto extends SequentialCommandGroup {
                     new WaitUntilCommand(turnToTargetCommand),
                     new RampShooterCommand(shooter, vision, banana, feeder, true),
                     new ShootBallCommand(feeder, conveyor, intakeArm, shooter, false),
-                    new FeedShooterIfHasBallCommand(feeder, shooter, false)
-
+                    new FeedShooterIfHasBallCommand(feeder, shooter, false, false)
                 )
             )
         );

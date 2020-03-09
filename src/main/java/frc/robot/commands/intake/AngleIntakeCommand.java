@@ -19,7 +19,7 @@ public class AngleIntakeCommand extends CommandBase {
 	@SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 	private final IntakeArm intakeArm;
 	private final double position;
-	private final boolean inverted;
+	private final boolean inverted; // inverted = up
 
 	/**
 	 * Creates a new ExampleCommand.

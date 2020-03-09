@@ -17,7 +17,7 @@ public class TurnOffLimelightCommand extends CommandBase {
 	public TurnOffLimelightCommand(Vision vision) {
         this.vision = vision;
 		// Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(vision);
+        // addRequirements(vision);
 	}
 	
 	// Called when the command is initially scheduled.

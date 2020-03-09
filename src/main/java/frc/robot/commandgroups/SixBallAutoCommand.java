@@ -8,8 +8,10 @@ import frc.robot.commands.drivetrain.DriveFollowTrajectory;
 import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.FeedShooterCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
+import frc.robot.commands.intake.MoveConveyorCommand;
 import frc.robot.commands.shooter.RampShooterCommand;
 import frc.robot.commands.shooter.StopFlywheel;
+import frc.robot.commands.vision.TurnOffLimelightCommand;
 import frc.robot.commands.vision.TurnToTargetCommand;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.Banana;
@@ -34,8 +36,12 @@ public class SixBallAutoCommand extends SequentialCommandGroup {
             // new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
             new ParallelDeadlineGroup(
                 new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory),
-                new StopFlywheel(shooter),
-                new IntakeBallCommand(intakeArm, 0.5, false) // never ends
+                // new StopFlywheel(shooter),
+                new TurnOffLimelightCommand(vision),
+                new AngleIntakeCommand(intakeArm, false).withTimeout(0.69),
+                new IntakeBallCommand(intakeArm, 0.69, false), // never ends
+                new MoveConveyorCommand(conveyor, feeder, shooter, 0.8, false),
+                new FeedShooterCommand(feeder, shooter, 0.1, true)
             ),
             new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana)
         );

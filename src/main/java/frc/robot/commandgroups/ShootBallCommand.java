@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.util.Util;
 import frc.robot.commands.intake.FeedShooterCommand;
+import frc.robot.commands.intake.FeedShooterIfHasBallCommand;
 import frc.robot.commands.intake.IntakeBallCommand;
 import frc.robot.commands.intake.MoveConveyorCommand;
 import frc.robot.constants.RobotConstants;
@@ -42,8 +43,9 @@ public class ShootBallCommand extends SequentialCommandGroup {
 				new IntakeBallCommand(intakeArm, 0.5, inverted)
 			),
 			new ParallelDeadlineGroup(
-				new FeedShooterCommand(feeder, shooter, inverted).withTimeout(0.08),
-				new MoveConveyorCommand(conveyor, feeder, shooter, 0.6, inverted),
+				// new FeedShooterCommand(feeder, shooter, inverted).withTimeout(0.08),
+				new FeedShooterIfHasBallCommand(feeder, shooter, inverted, true),
+				// new MoveConveyorCommand(conveyor, feeder, shooter, 0.2, inverted),
 				new IntakeBallCommand(intakeArm, 0.5, inverted)
 			)
 		);

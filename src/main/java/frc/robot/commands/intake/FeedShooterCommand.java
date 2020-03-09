@@ -18,16 +18,27 @@ public class FeedShooterCommand extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Feeder feeder;
 	private final Shooter shooter;
+	private final double speed;
 	private final boolean inverted;
 
 	public FeedShooterCommand(Feeder feeder, Shooter shooter, boolean inverted) {
 		this.feeder = feeder;
 		this.shooter = shooter;
+		this.speed = 1.0;
 		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(feeder);
 	}
 	
+	public FeedShooterCommand(Feeder feeder, Shooter shooter, double speed, boolean inverted) {
+		this.feeder = feeder;
+		this.shooter = shooter;
+		this.speed = speed;
+		this.inverted = inverted;
+		// Use addRequirements() here to declare subsystem dependencies.
+		addRequirements(feeder);
+	}
+
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
@@ -37,7 +48,7 @@ public class FeedShooterCommand extends CommandBase {
 	@Override
 	public void execute() {
 		// if(shooter.getSetpoint() == 0 && !inverted) return;
-		feeder.feedShooter(1, inverted);
+		feeder.feedShooter(speed, inverted);
 	}
 	
 	// Called once the command ends or is interrupted.

@@ -20,7 +20,7 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class HDriveHelper {
 
-	public static double ANGULAR_PERCENTAGE = 0.33;
+	public static double ANGULAR_PERCENTAGE = 0.2;//0.33;
 
     public static DriveSignal xyLockedDrive(double x, double y) {
         return HDrive(x, y, 0, false);

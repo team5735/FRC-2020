@@ -42,6 +42,7 @@ public class Feeder extends SubsystemBase {
 	}
 
 	public boolean hasBall() {
+		if(beambreak.get() == false) System.out.println("################ BALL INSIDE FEEDER | BEAM BREAK");
 		return !beambreak.get();
 	}
 }

@@ -19,11 +19,13 @@ public class FeedShooterIfHasBallCommand extends CommandBase {
 	private final Feeder feeder;
 	private final Shooter shooter;
 	private final boolean inverted;
+	private final boolean ends;
 
-	public FeedShooterIfHasBallCommand(Feeder feeder, Shooter shooter, boolean inverted) {
+	public FeedShooterIfHasBallCommand(Feeder feeder, Shooter shooter, boolean inverted, boolean ends) {
 		this.feeder = feeder;
 		this.shooter = shooter;
 		this.inverted = inverted;
+		this.ends = ends;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(feeder);
 	}
@@ -52,6 +54,6 @@ public class FeedShooterIfHasBallCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return false;
+		return ends == true && !feeder.hasBall();
 	}
 }
