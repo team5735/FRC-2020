@@ -29,13 +29,11 @@ public class TrajectoryGenerator {
         long timenow = System.currentTimeMillis();
         System.out.println("@@@@@@ GENERATING TRAJECTORIES @@@@@@" + timenow);
 
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 
-                                                    0.02, 0.69 * RobotConstants.MAX_VELOCITY_DT, 0.8, 8);
+        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.02, 0.69 * RobotConstants.MAX_VELOCITY_DT, 0.8, 8);
         Trajectory trajectory = Pathfinder.generate(points, config);
         TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.DRIVETRAIN_TRACK_WIDTH);
-        trajectories[0] = modifier.getLeftTrajectory();
-        trajectories[1] = modifier.getRightTrajectory();
-    }
+        leftTrajectory = modifier.getLeftTrajectory();
+        rightTrajectory = modifier.getRightTrajectory();
 
         System.out.println(System.currentTimeMillis() - timenow);
         return new Trajectory[] {leftTrajectory, rightTrajectory};

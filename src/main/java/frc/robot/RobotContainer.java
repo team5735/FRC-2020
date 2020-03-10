@@ -75,7 +75,7 @@ public class RobotContainer {
 	public static final BobXboxController driverController = new BobXboxController(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
 
-	public static final Trajectory[] trajectoryA = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
+	public static final Trajectory[] sixBall = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
         new Waypoint(3.138, -2.45, 0),
         new Waypoint(5.45, -0.718, 0),
         new Waypoint(8.04, -0.718, 0)
@@ -87,7 +87,7 @@ public class RobotContainer {
         // new Waypoint(2.5, 0.2, 0),
 	});
 	
-	public static final Trajectory[] sixBall = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
+	public static final Trajectory[] moveOneMeter = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
 		new Waypoint(0, 0, 0),
 		new Waypoint(1, 0, 0)
     });
@@ -169,7 +169,7 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new DriveFollowTrajectory(drivetrain, trajectoryA[0], trajectoryA[1]);
+		return new DriveFollowTrajectory(drivetrain, moveOneMeter[0], moveOneMeter[1]);
 		// return new SixBallAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana);
 	}
 	
