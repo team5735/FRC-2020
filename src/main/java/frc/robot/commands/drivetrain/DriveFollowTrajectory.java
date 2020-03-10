@@ -9,6 +9,7 @@ package frc.robot.commands.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.trajectory.EncoderFollower;
@@ -73,6 +74,7 @@ public class DriveFollowTrajectory extends CommandBase {
 		
 		double gyro_heading = s_drivetrain.getGyroAngle();    // Assuming the gyro is giving a value in degrees
 		double desired_heading = Pathfinder.r2d(left.getHeading());  // Should also be in degrees
+		SmartDashboard.putNumber("Gyro Angle", gyro_heading);
 		// System.out.println("Heading: " + gyro_heading + " | Wanted: " + desired_heading);
 		
 		// This allows the angle difference to respect 'wrapping', where 360 and 0 are the same value
