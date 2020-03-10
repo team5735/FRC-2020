@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.RobotContainer;
 import frc.robot.commands.drivetrain.DriveFollowTrajectory;
 import frc.robot.commands.intake.AngleIntakeCommand;
 import frc.robot.commands.intake.FeedShooterCommand;
@@ -35,7 +36,7 @@ public class SixBallAutoCommand extends SequentialCommandGroup {
             new TurnAndShootFullAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana),
             // new AngleIntakeCommand(intake, RobotConstants.INTAKE_POSITION_DEPLOYED),
             new ParallelDeadlineGroup(
-                new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory),
+                new DriveFollowTrajectory(drivetrain, RobotContainer.sixBall[0], RobotContainer.sixBall[1]),
                 // new StopFlywheel(shooter),
                 new TurnOffLimelightCommand(vision),
                 new AngleIntakeCommand(intakeArm, false).withTimeout(0.69),

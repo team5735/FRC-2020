@@ -47,6 +47,10 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+
+
 /**
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
 * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -70,6 +74,23 @@ public class RobotContainer {
 	
 	public static final BobXboxController driverController = new BobXboxController(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
+
+	public static final Trajectory[] trajectoryA = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
+        new Waypoint(3.138, -2.45, 0),
+        new Waypoint(5.45, -0.718, 0),
+        new Waypoint(8.04, -0.718, 0)
+        // new Waypoint(1.5, 0.3, Pathfinder.d2r(0)),
+        // new Waypoint(3, 1.75, Pathfinder.d2r(0))
+        // new Waypoint(1.5, -1.5, Pathfinder.d2r(-90))
+        // new Waypoint(3, 0, 0)    
+        // new Waypoint(1.75, 0.2, 0), // positive ° = rotate left
+        // new Waypoint(2.5, 0.2, 0),
+	});
+	
+	public static final Trajectory[] sixBall = TrajectoryGenerator.generateTrajectoryWithWaypoints(new Waypoint[] {
+		new Waypoint(0, 0, 0),
+		new Waypoint(1, 0, 0)
+    });
 	
 	/**
 	* The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -148,7 +169,7 @@ public class RobotContainer {
 	* @return the command to run in autonomous
 	*/
 	public Command getAutonomousCommand() {
-		return new DriveFollowTrajectory(drivetrain, TrajectoryGenerator.leftTrajectory, TrajectoryGenerator.rightTrajectory);
+		return new DriveFollowTrajectory(drivetrain, trajectoryA[0], trajectoryA[1]);
 		// return new SixBallAutoCommand(vision, drivetrain, feeder, conveyor, intakeArm, shooter, banana);
 	}
 	
