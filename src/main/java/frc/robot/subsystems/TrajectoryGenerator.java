@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.constants.RobotConstants;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -20,15 +21,6 @@ public class TrajectoryGenerator {
 
     public TrajectoryGenerator() {
     }
-
-    // public static Trajectory[] generateTrajectoryWithWaypoints(Waypoint... waypoints) {
-    //     ArrayList<Waypoint> points = new ArrayList<Waypoint>();
-
-    //     for (Waypoint waypoint : waypoints) {
-    //         points.add(waypoint);
-    //     }
-    //     return generateTrajectoryWithWaypoints(points.toArray());
-    // }
 
     public static Trajectory[] generateTrajectoryWithWaypoints(Waypoint[] points) {
         Trajectory leftTrajectory;
@@ -41,8 +33,9 @@ public class TrajectoryGenerator {
                                                     0.02, 0.69 * RobotConstants.MAX_VELOCITY_DT, 0.8, 8);
         Trajectory trajectory = Pathfinder.generate(points, config);
         TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.DRIVETRAIN_TRACK_WIDTH);
-        leftTrajectory = modifier.getLeftTrajectory();
-        rightTrajectory = modifier.getRightTrajectory();
+        trajectories[0] = modifier.getLeftTrajectory();
+        trajectories[1] = modifier.getRightTrajectory();
+    }
 
         System.out.println(System.currentTimeMillis() - timenow);
         return new Trajectory[] {leftTrajectory, rightTrajectory};
