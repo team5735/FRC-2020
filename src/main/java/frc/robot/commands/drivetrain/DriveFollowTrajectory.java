@@ -12,7 +12,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.lib.trajectory.EncoderFollower;
+import frc.lib.trajectory.jaci.CFEncoderFollower;
+import frc.lib.trajectory.jaci.EncoderFollower;
+import frc.lib.trajectory.jaci.ReverseEncoderFollower;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Units;
 import frc.robot.constants.RobotConstants;
@@ -27,7 +29,11 @@ public class DriveFollowTrajectory extends CommandBase {
 	@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 	private final Drivetrain s_drivetrain;
 	private Trajectory leftTraj, rightTraj;
-	private EncoderFollower left, right;
+	private final boolean inverted;
+
+	private double initial_gyro_angle;
+
+	private CFEncoderFollower left, right;
 	private boolean isTrajDone = false;
 	
 	/**
@@ -35,10 +41,11 @@ public class DriveFollowTrajectory extends CommandBase {
 	*
 	* @param subsystem The subsystem used by this command.
 	*/
-	public DriveFollowTrajectory(Drivetrain subsystem, Trajectory leftTraj, Trajectory rightTraj) {
+	public DriveFollowTrajectory(Drivetrain subsystem, Trajectory leftTraj, Trajectory rightTraj, boolean inverted) {
 		s_drivetrain = subsystem;
 		this.leftTraj = leftTraj;
 		this.rightTraj = rightTraj;
+		this.inverted = inverted;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements((Subsystem) subsystem);
 	}
@@ -48,14 +55,20 @@ public class DriveFollowTrajectory extends CommandBase {
 	public void initialize() {
 		System.out.println("========== INITIALIZING ==========");
 		
-		s_drivetrain.reset();
-		
-		left = new EncoderFollower(leftTraj);
+		initial_gyro_angle = s_drivetrain.getGyroAngle();
+
+		if(inverted) {
+			left = new ReverseEncoderFollower(leftTraj);
+			right = new ReverseEncoderFollower(rightTraj);
+		} else {
+			left = new EncoderFollower(leftTraj);
+			right = new EncoderFollower(rightTraj);
+		}
+
 		left.configureEncoder(s_drivetrain.getLeftSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
 		// left.configurePIDVA(0.0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
 		left.configurePIDVA(0.0, 0.0, 0.0, 1, 0);
-		
-		right = new EncoderFollower(rightTraj);
+
 		right.configureEncoder(s_drivetrain.getRightSidePosition(), (int) RobotConstants.ENCODER_TICKS_PER_DT_WHEEL_REV, RobotConstants.DT_WHEEL_DIAMETER);
 		// right.configurePIDVA(0.0, 0, 0, 1 / RobotConstants.MAX_VELOCITY_DT, 0);
 		right.configurePIDVA(0.0, 0.0, 0.0, 1, 0);
@@ -69,10 +82,10 @@ public class DriveFollowTrajectory extends CommandBase {
 		int rightPos = s_drivetrain.getRightSidePosition();
 		System.out.println("Left E: " + leftPos + ", Right E: " + rightPos);
 		// RETURNS in PERCENT OUTPUT
-		double l = left.calculate(leftPos);
-		double r = right.calculate(rightPos);
+		double l = left.calculate((inverted ? -1 : 1) * leftPos);
+		double r = right.calculate((inverted ? -1 : 1) * rightPos);
 		
-		double gyro_heading = s_drivetrain.getGyroAngle();    // Assuming the gyro is giving a value in degrees
+		double gyro_heading = s_drivetrain.getGyroAngle() - initial_gyro_angle;
 		double desired_heading = Pathfinder.r2d(left.getHeading());  // Should also be in degrees
 		SmartDashboard.putNumber("Gyro Angle", gyro_heading);
 		// System.out.println("Heading: " + gyro_heading + " | Wanted: " + desired_heading);
@@ -94,7 +107,11 @@ public class DriveFollowTrajectory extends CommandBase {
 		r = Units.dtRpmToTicks(Units.dtMetersPerSecondToRpm(r));
 
 		// s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
-		s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
+		if(inverted) {
+			s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, -(l + turn), -(r - turn), 0));
+		} else {
+			s_drivetrain.drive(new DriveSignal(ControlMode.Velocity, l + turn, r - turn, 0));
+		}	
 	}
 	
 	// Called once the command ends or is interrupted.

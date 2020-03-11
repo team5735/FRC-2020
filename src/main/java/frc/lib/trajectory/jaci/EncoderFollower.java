@@ -1,4 +1,4 @@
-package frc.lib.trajectory;
+package frc.lib.trajectory.jaci;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Trajectory;
@@ -9,7 +9,7 @@ import jaci.pathfinder.Trajectory;
  *
  * @author Jaci
  */
-public class EncoderFollower {
+public class EncoderFollower implements CFEncoderFollower{
 
     int encoder_offset, encoder_tick_count;
     double wheel_circumference;

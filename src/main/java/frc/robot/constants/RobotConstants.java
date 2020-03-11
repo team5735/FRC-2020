@@ -45,7 +45,7 @@ public class RobotConstants {
     public static final double MAX_VELOCITY_NORMAL_TICKS = 9000.0; // ticks / 100ms
     public static final double MAX_VELOCITY_NORMAL_RPM = MAX_VELOCITY_NORMAL_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
     public static final double MAX_VELOCITY_NORMAL = MAX_VELOCITY_NORMAL_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO * (Math.PI * NORMAL_WHEEL_DIAMETER); // m/s
-    public static final double kTURN_CORRECTION = -150; // Turn in in SENSOR TICKS
+    public static final double kTURN_CORRECTION = 150; // Turn in in SENSOR TICKS;
     
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
