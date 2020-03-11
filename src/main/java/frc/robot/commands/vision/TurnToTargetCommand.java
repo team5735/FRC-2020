@@ -48,6 +48,7 @@ public class TurnToTargetCommand extends CommandBase implements BooleanSupplier 
 	public void initialize() {
 		System.out.println("TURN TO TARGET");
 		vision.enableTracking();
+		drivetrain.setPreviousGyroAngle();
 		inDeadbandTime = -1;
 	}
 	
@@ -55,7 +56,7 @@ public class TurnToTargetCommand extends CommandBase implements BooleanSupplier 
 	@Override
 	public void execute() {
 		if(!vision.isTrackingEnabled()) vision.enableTracking();
-		if(vision.hasValidTarget() && false) {
+		if(vision.hasValidTarget()) {
 			double degreeError = vision.getTX() + RobotConstants.VISION_X_OFFSET;
 			SmartDashboard.putNumber("Degree Error", degreeError);
 			double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0

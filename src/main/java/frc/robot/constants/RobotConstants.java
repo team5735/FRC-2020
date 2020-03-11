@@ -38,14 +38,12 @@ public class RobotConstants {
     public static final double DT_WHEEL_DIAMETER = Units.inchesToMeters(6.0); // m
     public static final double NORMAL_WHEEL_DIAMETER = Units.inchesToMeters(3.25); // m
     
-    // Pathfinder Limiting
     public static final double MAX_VELOCITY_DT_TICKS = 10500.0; // ticks / 100ms
     public static final double MAX_VELOCITY_DT_RPM = MAX_VELOCITY_DT_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO; //496.156; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
     public static final double MAX_VELOCITY_DT = MAX_VELOCITY_DT_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / DRIVETRAIN_GEAR_RATIO * (Math.PI * DT_WHEEL_DIAMETER); //3.896; // MAX_VELOCITY_TICKS * 10 / 2048 / DRIVETRAIN_GEAR_RATIO * (Math.PI * 0.15) // m/s, used in generator
     public static final double MAX_VELOCITY_NORMAL_TICKS = 9000.0; // ticks / 100ms
     public static final double MAX_VELOCITY_NORMAL_RPM = MAX_VELOCITY_NORMAL_TICKS * 10 * 60 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO; // MAX_VELOCITY_TICKS * 10 * 60 / 2048 / DRIVETRAIN_GEAR_RATIO; // RPM, with gear ratio in account
     public static final double MAX_VELOCITY_NORMAL = MAX_VELOCITY_NORMAL_TICKS * 10 / ENCODER_TICKS_PER_FALCON_REV / NORMAL_GEAR_RATIO * (Math.PI * NORMAL_WHEEL_DIAMETER); // m/s
-    public static final double kTURN_CORRECTION = 150; // Turn in in SENSOR TICKS;
     
     // Motor Identification
     public static final int COLOR_SPINNER_MOTOR_ID = 1;
@@ -93,6 +91,10 @@ public class RobotConstants {
     public static final double FLYWHEEL_kI = 0.0;
     public static final double FLYWHEEL_kD = 0.2;//0.15;//0.004;
     public static final double FLYWHEEL_kF = 0.7 / 4900.0 * 0.79;//0.78;
+
+    // Drivetrain
+    public static final double kTURN_CORRECTION = 150; // Turn in in SENSOR TICKS;
+    public static final double TURN_TO_ANGLE_DEADBAND = 1.0;
     
     // Flywheel
     public static final double FLYWHEEL_PULLEY_RATIO = 62.0 / 36.0;

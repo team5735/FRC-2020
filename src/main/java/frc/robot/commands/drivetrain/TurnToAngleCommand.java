@@ -29,13 +29,14 @@ public class TurnToAngleCommand extends CommandBase {
 	private final PIDController turnPID;
 	
 	private double inDeadbandTime = -1;
+	private double degreeError = 0;
 	
 	public TurnToAngleCommand(Drivetrain drivetrain, double gyroSetpoint) {
 		this.drivetrain = drivetrain;
 		this.gyroSetpoint = gyroSetpoint;
 
 		this.turnPID = new PIDController(RobotConstants.VISION_STEER_kP, RobotConstants.VISION_STEER_kI, RobotConstants.VISION_STEER_kD);
-		turnPID.setTolerance(RobotConstants.VISION_TARGET_DEADBAND);
+		turnPID.setTolerance(RobotConstants.TURN_TO_ANGLE_DEADBAND);
 		//pid.setIntegratorRange(-0.5, 0.5); use this if it "winds up" and overshoots
 		
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -52,16 +53,17 @@ public class TurnToAngleCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		// double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); // sensor value is limelight, setpoint is 0
+		degreeError = gyroSetpoint - drivetrain.getGyroAngle();
+		double steer_cmd = Util.limit(turnPID.calculate(degreeError, 0), -1, 1); 
 		
-		// drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
-		// if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
+		drivetrain.drive(new DriveSignal(ControlMode.PercentOutput, -steer_cmd, steer_cmd, 0));
+		if(Util.deadband(degreeError, RobotConstants.VISION_TARGET_DEADBAND) == 0) {
 			if(inDeadbandTime < 0) {
 				inDeadbandTime = Timer.getFPGATimestamp();	
 			}
-		// } else {
+		} else {
 			inDeadbandTime = -1;
-		// }
+		}
 
 		SmartDashboard.putNumber("Gyro Angle", drivetrain.getGyroAngle());
 	}
@@ -79,9 +81,9 @@ public class TurnToAngleCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		SmartDashboard.putNumber("InDeadbandTime", inDeadbandTime);
-		return false;
+		// return false;
 		//		if greater than 0 and	80 milliseconds have passed		and		we are at setpoint
-		// return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(vision.getTX(), RobotConstants.VISION_TARGET_DEADBAND) == 0;
+		return (inDeadbandTime > 0) && (inDeadbandTime + 0.08 < Timer.getFPGATimestamp()) && Util.deadband(degreeError, RobotConstants.TURN_TO_ANGLE_DEADBAND) == 0;
 	}
 
 	// public boolean getAsBoolean() {

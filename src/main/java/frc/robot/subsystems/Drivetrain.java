@@ -23,6 +23,8 @@ public class Drivetrain extends SubsystemBase{
 	private TalonFX leftMaster, rightMaster, leftFollower, rightFollower, normalMaster;
 	public static TalonSRX gyroHost;
 	private PigeonIMU gyro;
+
+	private double previousGyroAngle = 0.0; // previous gyro angle before turn to target
 		
 	public enum DriveMode {
 		STATIC_DRIVE, FIELD_CENTRIC, DISABLED
@@ -132,6 +134,14 @@ public class Drivetrain extends SubsystemBase{
 	
 	public void resetGyroAngle() {
 		gyro.setFusedHeading(0);
+	}
+
+	public void setPreviousGyroAngle() {
+		previousGyroAngle = getGyroAngle();
+	}
+
+	public double getPreviousGyroAngle() {
+		return previousGyroAngle;
 	}
 	
 	public void setDriveMode(DriveMode driveMode) {
