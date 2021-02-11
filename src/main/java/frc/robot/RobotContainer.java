@@ -60,18 +60,18 @@ import jaci.pathfinder.Waypoint;
 */
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
-	public final ColorMatcher colorMatcher = new ColorMatcher();
-	public final ColorSpinner colorSpinner = new ColorSpinner();
+	// public final ColorMatcher colorMatcher = new ColorMatcher();
+	// public final ColorSpinner colorSpinner = new ColorSpinner();
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Shooter shooter = new Shooter();
 	public final Banana banana = new Banana();
 	public final Feeder feeder = new Feeder();
 	public final Conveyor conveyor = new Conveyor();
 	public final IntakeArm intakeArm = new IntakeArm();
-	public final Telescope telescope = new Telescope();
+	// public final Telescope telescope = new Telescope();
 	public final TrajectoryGenerator trajectoryGenerator = new TrajectoryGenerator();
 	public final Vision vision = new Vision();
-	public final Winch winch = new Winch();
+	// public final Winch winch = new Winch();
 	
 	public static final BobXboxController driverController = new BobXboxController(0);
 	public static final BobXboxController subsystemController = new BobXboxController(1);
@@ -128,14 +128,19 @@ public class RobotContainer {
 		subsystemController.aButton.whenPressed(new TurnAndShootCommandSemiAuto(vision, drivetrain, feeder, conveyor, intakeArm , shooter, banana));
 		// subsystemController.aButton.whenPressed(new MoveBananaCommand(banana, 1000));
 		// subsystemController.bButton.whenPressed(new MoveBananaCommand(banana, 2500));
-		subsystemController.bButton.whileHeld(new WinchMoveCommand(winch));
+		
 		// subsystemController.yButton.whenPressed(new MoveBananaCommand(banana, 0));
 		// subsystemController.yButton.whenPressed();
 
-		subsystemController.Dpad.Up.whileHeld(new ElevatorMoveCommand(telescope, false));
-		subsystemController.Dpad.Down.whileHeld(new ElevatorMoveCommand(telescope, true));
+		// disabled for infinite recharge at home
+		// subsystemController.bButton.whileHeld(new WinchMoveCommand(winch));
+		// subsystemController.Dpad.Up.whileHeld(new ElevatorMoveCommand(telescope, false));
+		// subsystemController.Dpad.Down.whileHeld(new ElevatorMoveCommand(telescope, true));
 
-		// subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, banana, 3650));
+		// Enabled for testing purposes
+		subsystemController.Dpad.Up.whenPressed(new RampShooterCommand(shooter, vision, banana, feeder, 5000.00));
+		subsystemController.Dpad.Down.whenPressed(new RampShooterCommand(shooter, vision, banana, feeder, 0.0));
+
 		// subsystemController.Dpad.Right.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_TRENCH));
 		// subsystemController.Dpad.Left.whenPressed(new RampShooterCommand(shooter, banana, RobotConstants.FLYWHEEL_PRESET_BEHINDCOLORWHEEL));
 		
